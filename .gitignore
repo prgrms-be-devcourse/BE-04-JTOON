@@ -36,10 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-## Custom
-gradlew
-gradlew.bat
-
 ## Window
 Thumbs.db
 Thumbs.db:encryptable
