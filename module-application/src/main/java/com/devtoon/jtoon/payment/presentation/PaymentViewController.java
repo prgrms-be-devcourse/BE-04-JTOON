@@ -1,12 +1,12 @@
 package com.devtoon.jtoon.payment.presentation;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
 
 import com.siot.IamportRestClient.IamportClient;
 
-@RestController
-public class PaymentApiController {
+@Controller
+public class PaymentViewController {
 
 	@Value("${pg.kg-inicis.rest-api-key}")
 	private String REST_API_KEY;
@@ -16,7 +16,7 @@ public class PaymentApiController {
 
 	private final IamportClient iamportClient;
 
-	public PaymentApiController() {
+	public PaymentViewController() {
 		this.iamportClient = new IamportClient(REST_API_KEY, REST_API_SECRET);
 	}
 }

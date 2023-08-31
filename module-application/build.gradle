@@ -7,8 +7,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     // I-AM-PORT
-    implementation 'com.github.iamport:iamport-rest-client-java:0.2.0'
-    
+    implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
+
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
