@@ -1,5 +1,6 @@
 package com.devtoon.jtoon;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -17,11 +18,11 @@ public class S3Uploader {
 
 	private final S3Template s3Template;
 
-	@Value("${cloud.aws.s3.bucket}")
+	@Value("${spring.cloud.aws.s3.bucket}")
 	private String BUCKET;
 
 	public void upload(String directory, MultipartFile file) {
-		String key = directory + "/" + UUID.randomUUID();
+		String key = directory + File.separator + UUID.randomUUID();
 
 		try {
 			s3Template.upload(

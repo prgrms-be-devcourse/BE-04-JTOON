@@ -13,13 +13,13 @@ import software.amazon.awssdk.services.s3.S3Client;
 @Configuration
 public class S3Config {
 
-	@Value("${cloud.aws.credentials.access-key}")
+	@Value("${spring.cloud.aws.credentials.access-key}")
 	private String ACCESS_KEY_ID;
 
-	@Value("${cloud.aws.credentials.secret-key}")
+	@Value("${spring.cloud.aws.credentials.secret-key}")
 	private String SECRET_ACCESS_KEY;
 
-	@Value("${cloud.aws.region.static}")
+	@Value("${spring.cloud.aws.region.static}")
 	private String REGION;
 
 	@Bean
