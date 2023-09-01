@@ -1,6 +1,6 @@
 package com.devtoon.jtoon.member.entity;
 
-import com.devtoon.jtoon.common.BaseEntity;
+import com.devtoon.jtoon.common.BaseTimeEntity;
 import com.devtoon.jtoon.exception.ExceptionCode;
 import com.devtoon.jtoon.exception.MemberException;
 import jakarta.persistence.Column;
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseEntity {
+public class Member extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

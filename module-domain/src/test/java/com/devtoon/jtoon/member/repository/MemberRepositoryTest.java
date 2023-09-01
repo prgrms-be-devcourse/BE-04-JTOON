@@ -88,5 +88,4 @@ class MemberRepositoryTest extends JpaHelper {
 				.build()).isInstanceOf(MemberException.class);
 		}
 	}
-
 }

@@ -29,6 +29,9 @@ subprojects {
     }
 
     dependencies {
+        // Lombok
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
     }
 
     test {

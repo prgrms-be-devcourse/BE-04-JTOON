@@ -7,9 +7,4 @@ public class MemberException extends RuntimeException {
 	public MemberException(ExceptionCode exceptionCode) {
 		this.exceptionCode = exceptionCode;
 	}
-
-	@Override
-	public String getMessage() {
-		return super.getMessage();
-	}
 }

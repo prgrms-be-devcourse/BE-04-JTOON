@@ -6,14 +6,9 @@ dependencies {
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // Lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-
     // H2
     testImplementation 'com.h2database:h2'
 
     // Bean Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-
 }

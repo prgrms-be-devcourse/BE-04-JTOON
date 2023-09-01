@@ -33,5 +33,4 @@ public record SignUpDto(
 			.loginType(LoginType.generate(loginType))
 			.build();
 	}
-
 }
