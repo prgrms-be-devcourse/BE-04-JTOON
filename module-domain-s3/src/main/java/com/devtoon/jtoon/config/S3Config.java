@@ -14,21 +14,21 @@ import software.amazon.awssdk.services.s3.S3Client;
 public class S3Config {
 
 	@Value("${cloud.aws.credentials.access-key}")
-	private String accessKeyId;
+	private String ACCESS_KEY_ID;
 
 	@Value("${cloud.aws.credentials.secret-key}")
-	private String secretAccessKey;
+	private String SECRET_ACCESS_KEY;
 
 	@Value("${cloud.aws.region.static}")
-	private String region;
+	private String REGION;
 
 	@Bean
 	public S3Client s3Client() {
-		AwsCredentials credentials = AwsBasicCredentials.create(accessKeyId, secretAccessKey);
+		AwsCredentials credentials = AwsBasicCredentials.create(ACCESS_KEY_ID, SECRET_ACCESS_KEY);
 
 		return S3Client.builder()
 			.credentialsProvider(StaticCredentialsProvider.create(credentials))
-			.region(Region.of(region))
+			.region(Region.of(REGION))
 			.build();
 	}
 }

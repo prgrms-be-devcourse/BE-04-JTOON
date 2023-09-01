@@ -18,14 +18,14 @@ public class S3Uploader {
 	private final S3Template s3Template;
 
 	@Value("${cloud.aws.s3.bucket}")
-	private String bucket;
+	private String BUCKET;
 
 	public void upload(String directory, MultipartFile file) {
 		String key = directory + "/" + UUID.randomUUID();
 
 		try {
 			s3Template.upload(
-				bucket,
+				BUCKET,
 				key,
 				file.getInputStream(),
 				ObjectMetadata.builder().contentType("multipart/form-data").build()
