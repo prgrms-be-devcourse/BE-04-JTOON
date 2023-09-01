@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.moduledomain.member.entity;
+package com.devtoon.jtoon.member.entity;
 
 public enum Gender {
 	MALE, FEMALE

@@ -1,6 +1,8 @@
 package com.devtoon.jtoon.member.entity;
 
 import com.devtoon.jtoon.common.BaseEntity;
+import com.devtoon.jtoon.exception.ExceptionCode;
+import com.devtoon.jtoon.exception.MemberException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,13 +11,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Table(name = "members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
@@ -25,42 +28,33 @@ public class Member extends BaseEntity {
 	@Column(name = "member_id")
 	private Long id;
 
-	@NotNull
 	@Column(name = "email", nullable = false, unique = true, length = 40, updatable = false)
 	private String email;
 
-	@NotNull
 	@Column(name = "password", nullable = false)
 	private String password;
 
-	@NotNull
 	@Column(name = "name", nullable = false, length = 10, updatable = false)
 	private String name;
 
-	@NotNull
 	@Column(name = "nickname", nullable = false, unique = true, length = 30)
 	private String nickname;
 
-	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(name = "gender", nullable = false, updatable = false)
 	private Gender gender;
 
-	@NotNull
 	@Column(name = "phone", nullable = false, unique = true, length = 11)
 	private String phone;
 
-	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false)
 	private Role role;
 
-	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(name = "login_type", nullable = false)
 	private LoginType loginType;
 
-	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
 	private Status status = Status.NORMAL;
@@ -69,15 +63,61 @@ public class Member extends BaseEntity {
 	private LocalDateTime lastLoginDate;
 
 	@Builder
-	public Member(String email, String password, String name, String nickname, Gender gender, String phone, Role role,
+	private Member(String email, String password, String name, String nickname, Gender gender, String phone, Role role,
 		LoginType loginType) {
-		this.email = email;
-		this.password = password;
-		this.name = name;
-		this.nickname = nickname;
-		this.gender = gender;
-		this.phone = phone;
-		this.role = role;
-		this.loginType = loginType;
+		this.email = validateEmailNotNullAndGet(email);
+		this.password = validatePasswordNotNullAndGet(password);
+		this.name = validateNameNotNullAndGet(name);
+		this.nickname = validateNicknameNotNullAndGet(nickname);
+		this.gender = validateGenderNotNullAndGet(gender);
+		this.phone = validatePhoneNotNullAndGet(phone);
+		this.role = validateRoleNotNullAndGet(role);
+		this.loginType = validateLoginTypeNotNullAndGet(loginType);
+	}
+
+	private String validateEmailNotNullAndGet(String data) {
+		validateNotNull(data, ExceptionCode.MEMBER_EMAIL_INVALID_FORMAT);
+		return data;
+	}
+
+	private String validatePasswordNotNullAndGet(String data) {
+		validateNotNull(data, ExceptionCode.MEMBER_PASSWORD_INVALID_FORMAT);
+		return data;
+	}
+
+	private String validateNameNotNullAndGet(String data) {
+		validateNotNull(data, ExceptionCode.MEMBER_NAME_INVALID_FORMAT);
+		return data;
+	}
+
+	private String validateNicknameNotNullAndGet(String data) {
+		validateNotNull(data, ExceptionCode.MEMBER_NICKNAME_INVALID_FORMAT);
+		return data;
+	}
+
+	private Gender validateGenderNotNullAndGet(Gender gender) {
+		validateNotNull(gender, ExceptionCode.MEMBER_GENDER_INVALID_FORMAT);
+		return gender;
+	}
+
+	private String validatePhoneNotNullAndGet(String data) {
+		validateNotNull(data, ExceptionCode.MEMBER_PHONE_INVALID_FORMAT);
+		return data;
+	}
+
+	private Role validateRoleNotNullAndGet(Role role) {
+		validateNotNull(role, ExceptionCode.MEMBER_ROLE_INVALID_FORMAT);
+		return role;
+	}
+
+	private LoginType validateLoginTypeNotNullAndGet(LoginType loginType) {
+		validateNotNull(loginType, ExceptionCode.MEMBER_LOGIN_TYPE_INVALID_FORMAT);
+		return loginType;
+	}
+
+	private <T> void validateNotNull(T data, ExceptionCode exceptionCode) {
+		if (data == null) {
+			throw new MemberException(exceptionCode);
+		}
 	}
 }
