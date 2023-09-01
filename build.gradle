@@ -29,6 +29,8 @@ subprojects {
     }
 
     dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
     }
 
     test {
@@ -39,6 +41,7 @@ subprojects {
 project(':module-application') {
     dependencies {
         implementation project(':module-core')
+        implementation project(':module-domain-s3')
     }
 }
 
