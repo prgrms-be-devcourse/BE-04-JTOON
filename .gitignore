@@ -122,3 +122,4 @@ application-*.yml
 !application.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle
+/module-application/src/main/resources/application-local-payment.yml
