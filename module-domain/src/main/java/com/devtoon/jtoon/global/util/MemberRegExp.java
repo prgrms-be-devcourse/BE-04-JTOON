@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.member.util;
+package com.devtoon.jtoon.global.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

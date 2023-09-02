@@ -1,6 +1,6 @@
 package com.devtoon.jtoon.member.request;
 
-import static com.devtoon.jtoon.member.util.MemberRegExp.*;
+import static com.devtoon.jtoon.global.util.MemberRegExp.*;
 
 import com.devtoon.jtoon.member.entity.Gender;
 import com.devtoon.jtoon.member.entity.LoginType;
