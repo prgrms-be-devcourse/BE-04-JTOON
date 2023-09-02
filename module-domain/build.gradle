@@ -11,4 +11,7 @@ dependencies {
 
     // Bean Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // SMTP
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
