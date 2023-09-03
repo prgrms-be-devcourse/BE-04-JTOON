@@ -51,6 +51,7 @@ project(':module-domain') {
 
     dependencies {
         implementation project(':module-core')
+        implementation project(':module-internal')
     }
 }
 
