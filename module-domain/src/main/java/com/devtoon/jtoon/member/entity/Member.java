@@ -1,8 +1,8 @@
 package com.devtoon.jtoon.member.entity;
 
-import com.devtoon.jtoon.global.common.BaseTimeEntity;
 import com.devtoon.jtoon.exception.ExceptionCode;
 import com.devtoon.jtoon.exception.MemberException;
+import com.devtoon.jtoon.global.common.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -65,49 +66,43 @@ public class Member extends BaseTimeEntity {
 	@Builder
 	private Member(String email, String password, String name, String nickname, Gender gender, String phone, Role role,
 		LoginType loginType) {
-		this.email = validateEmailNotNullAndGet(email);
-		this.password = validatePasswordNotNullAndGet(password);
-		this.name = validateNameNotNullAndGet(name);
-		this.nickname = validateNicknameNotNullAndGet(nickname);
-		this.gender = validateGenderNotNullAndGet(gender);
-		this.phone = validatePhoneNotNullAndGet(phone);
+		this.email = Objects.requireNonNull(email, ExceptionCode.MEMBER_EMAIL_INVALID_FORMAT.getMessage());
+		this.password = Objects.requireNonNull(password, ExceptionCode.MEMBER_PASSWORD_INVALID_FORMAT.getMessage());
+		this.name = Objects.requireNonNull(name, ExceptionCode.MEMBER_NAME_INVALID_FORMAT.getMessage());
+		this.nickname = Objects.requireNonNull(nickname, ExceptionCode.MEMBER_NICKNAME_INVALID_FORMAT.getMessage());
+		this.gender = Objects.requireNonNull(gender, ExceptionCode.MEMBER_GENDER_INVALID_FORMAT.getMessage());
+		this.phone = Objects.requireNonNull(phone, ExceptionCode.MEMBER_PHONE_INVALID_FORMAT.getMessage());
 		this.role = role;
 		this.loginType = loginType;
 	}
 
-	private String validateEmailNotNullAndGet(String data) {
-		validateNotNull(data, ExceptionCode.MEMBER_EMAIL_INVALID_FORMAT);
-		return data;
+	private void valid() {
+		this.email = Objects.requireNonNullElseGet(email, () -> {
+			throw new MemberException(ExceptionCode.MEMBER_EMAIL_INVALID_FORMAT);
+		});
+		this.password = Objects.requireNonNull(password, () -> {
+			throw new MemberException(ExceptionCode.MEMBER_PASSWORD_INVALID_FORMAT);
+		});
+		this.name = Objects.requireNonNull(name, () -> {
+			throw new MemberException(ExceptionCode.MEMBER_NAME_INVALID_FORMAT);
+		});
+		this.nickname = Objects.requireNonNull(nickname, () -> {
+			throw new MemberException(ExceptionCode.MEMBER_NICKNAME_INVALID_FORMAT);
+		});
 	}
 
-	private String validatePasswordNotNullAndGet(String data) {
-		validateNotNull(data, ExceptionCode.MEMBER_PASSWORD_INVALID_FORMAT);
-		return data;
-	}
 
-	private String validateNameNotNullAndGet(String data) {
-		validateNotNull(data, ExceptionCode.MEMBER_NAME_INVALID_FORMAT);
-		return data;
-	}
 
-	private String validateNicknameNotNullAndGet(String data) {
-		validateNotNull(data, ExceptionCode.MEMBER_NICKNAME_INVALID_FORMAT);
-		return data;
-	}
-
-	private Gender validateGenderNotNullAndGet(Gender gender) {
-		validateNotNull(gender, ExceptionCode.MEMBER_GENDER_INVALID_FORMAT);
-		return gender;
-	}
-
-	private String validatePhoneNotNullAndGet(String data) {
-		validateNotNull(data, ExceptionCode.MEMBER_PHONE_INVALID_FORMAT);
-		return data;
-	}
-
-	private <T> void validateNotNull(T data, ExceptionCode exceptionCode) {
-		if (data == null) {
-			throw new MemberException(exceptionCode);
+	private void valid2() {
+		try {
+			Objects.requireNonNull(email, ExceptionCode.MEMBER_EMAIL_INVALID_FORMAT.getMessage());
+			Objects.requireNonNull(password, ExceptionCode.MEMBER_PASSWORD_INVALID_FORMAT.getMessage());
+			Objects.requireNonNull(name, ExceptionCode.MEMBER_NAME_INVALID_FORMAT.getMessage());
+			Objects.requireNonNull(nickname, ExceptionCode.MEMBER_NICKNAME_INVALID_FORMAT.getMessage());
+			Objects.requireNonNull(gender, ExceptionCode.MEMBER_GENDER_INVALID_FORMAT.getMessage());
+			Objects.requireNonNull(phone, ExceptionCode.MEMBER_PHONE_INVALID_FORMAT.getMessage());
+		} catch (NullPointerException exception) {
+			throw new MemberException(exception.getMessage());
 		}
 	}
 }
