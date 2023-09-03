@@ -14,6 +14,7 @@ public enum ExceptionCode {
 	MEMBER_PHONE_INVALID_FORMAT("올바른 전화번호 형식이 아닙니다."),
 	MEMBER_ROLE_INVALID_FORMAT("올바른 회원 역할이 아닙니다"),
 	MEMBER_LOGIN_TYPE_INVALID_FORMAT("올바른 로그인 타입이 아닙니다."),
+	MEMBER_MESSAGE_SEND_FAILED("이메일 인증 메세지 전송 실패")
 	;
 
 	private final String message;

@@ -2,6 +2,7 @@ package com.devtoon.jtoon.member.util;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.devtoon.jtoon.global.util.MemberRegExp;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

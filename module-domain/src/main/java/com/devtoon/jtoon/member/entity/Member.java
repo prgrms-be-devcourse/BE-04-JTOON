@@ -1,6 +1,6 @@
 package com.devtoon.jtoon.member.entity;
 
-import com.devtoon.jtoon.common.BaseTimeEntity;
+import com.devtoon.jtoon.global.common.BaseTimeEntity;
 import com.devtoon.jtoon.exception.ExceptionCode;
 import com.devtoon.jtoon.exception.MemberException;
 import jakarta.persistence.Column;
@@ -71,8 +71,8 @@ public class Member extends BaseTimeEntity {
 		this.nickname = validateNicknameNotNullAndGet(nickname);
 		this.gender = validateGenderNotNullAndGet(gender);
 		this.phone = validatePhoneNotNullAndGet(phone);
-		this.role = validateRoleNotNullAndGet(role);
-		this.loginType = validateLoginTypeNotNullAndGet(loginType);
+		this.role = role;
+		this.loginType = loginType;
 	}
 
 	private String validateEmailNotNullAndGet(String data) {
@@ -103,16 +103,6 @@ public class Member extends BaseTimeEntity {
 	private String validatePhoneNotNullAndGet(String data) {
 		validateNotNull(data, ExceptionCode.MEMBER_PHONE_INVALID_FORMAT);
 		return data;
-	}
-
-	private Role validateRoleNotNullAndGet(Role role) {
-		validateNotNull(role, ExceptionCode.MEMBER_ROLE_INVALID_FORMAT);
-		return role;
-	}
-
-	private LoginType validateLoginTypeNotNullAndGet(LoginType loginType) {
-		validateNotNull(loginType, ExceptionCode.MEMBER_LOGIN_TYPE_INVALID_FORMAT);
-		return loginType;
 	}
 
 	private <T> void validateNotNull(T data, ExceptionCode exceptionCode) {
