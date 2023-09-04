@@ -1,6 +1,6 @@
 package com.devtoon.jtoon.payment.request;
 
-import static com.devtoon.jtoon.global.util.MemberRegExp.*;
+import static com.devtoon.jtoon.global.util.RegExp.*;
 
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.payment.entity.PG;

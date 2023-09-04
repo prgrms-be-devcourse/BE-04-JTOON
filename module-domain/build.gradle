@@ -5,6 +5,7 @@ repositories {
 dependencies {
     // JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation project(path: ':module-internal')
 
     // I-AM-PORT
     implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
@@ -14,4 +15,10 @@ dependencies {
     
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // H2
+    testImplementation 'com.h2database:h2'
+
+    // Bean Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }

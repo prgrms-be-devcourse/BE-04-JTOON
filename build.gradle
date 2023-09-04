@@ -43,6 +43,7 @@ project(':module-application') {
         implementation project(':module-core')
         implementation project(':module-domain')
         implementation project(':module-domain-s3')
+        implementation project(':module-domain')
     }
 }
 
