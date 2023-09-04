@@ -2,6 +2,6 @@ rootProject.name = 'jtoon'
 include 'module-application'
 include 'module-domain'
 include 'module-domain-s3'
+include 'module-domain-smtp'
 include 'module-internal'
 include 'module-core'
-

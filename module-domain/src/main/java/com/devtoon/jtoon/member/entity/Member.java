@@ -1,8 +1,9 @@
 package com.devtoon.jtoon.member.entity;
 
-import com.devtoon.jtoon.global.common.BaseTimeEntity;
+import static java.util.Objects.*;
+
 import com.devtoon.jtoon.exception.ExceptionCode;
-import com.devtoon.jtoon.exception.MemberException;
+import com.devtoon.jtoon.global.common.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -65,49 +66,13 @@ public class Member extends BaseTimeEntity {
 	@Builder
 	private Member(String email, String password, String name, String nickname, Gender gender, String phone, Role role,
 		LoginType loginType) {
-		this.email = validateEmailNotNullAndGet(email);
-		this.password = validatePasswordNotNullAndGet(password);
-		this.name = validateNameNotNullAndGet(name);
-		this.nickname = validateNicknameNotNullAndGet(nickname);
-		this.gender = validateGenderNotNullAndGet(gender);
-		this.phone = validatePhoneNotNullAndGet(phone);
+		this.email = requireNonNull(email, ExceptionCode.MEMBER_EMAIL_INVALID_FORMAT.getMessage());
+		this.password = requireNonNull(password, ExceptionCode.MEMBER_PASSWORD_INVALID_FORMAT.getMessage());
+		this.name = requireNonNull(name, ExceptionCode.MEMBER_NAME_INVALID_FORMAT.getMessage());
+		this.nickname = requireNonNull(nickname, ExceptionCode.MEMBER_NICKNAME_INVALID_FORMAT.getMessage());
+		this.gender = requireNonNull(gender, ExceptionCode.MEMBER_GENDER_INVALID_FORMAT.getMessage());
+		this.phone = requireNonNull(phone, ExceptionCode.MEMBER_PHONE_INVALID_FORMAT.getMessage());
 		this.role = role;
 		this.loginType = loginType;
-	}
-
-	private String validateEmailNotNullAndGet(String data) {
-		validateNotNull(data, ExceptionCode.MEMBER_EMAIL_INVALID_FORMAT);
-		return data;
-	}
-
-	private String validatePasswordNotNullAndGet(String data) {
-		validateNotNull(data, ExceptionCode.MEMBER_PASSWORD_INVALID_FORMAT);
-		return data;
-	}
-
-	private String validateNameNotNullAndGet(String data) {
-		validateNotNull(data, ExceptionCode.MEMBER_NAME_INVALID_FORMAT);
-		return data;
-	}
-
-	private String validateNicknameNotNullAndGet(String data) {
-		validateNotNull(data, ExceptionCode.MEMBER_NICKNAME_INVALID_FORMAT);
-		return data;
-	}
-
-	private Gender validateGenderNotNullAndGet(Gender gender) {
-		validateNotNull(gender, ExceptionCode.MEMBER_GENDER_INVALID_FORMAT);
-		return gender;
-	}
-
-	private String validatePhoneNotNullAndGet(String data) {
-		validateNotNull(data, ExceptionCode.MEMBER_PHONE_INVALID_FORMAT);
-		return data;
-	}
-
-	private <T> void validateNotNull(T data, ExceptionCode exceptionCode) {
-		if (data == null) {
-			throw new MemberException(exceptionCode);
-		}
 	}
 }

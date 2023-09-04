@@ -22,16 +22,16 @@ public record SignUpDto(
 	@NotNull String loginType
 ) {
 
-	public Member toEntity() {
+	public Member toEntity(String encryptedPassword) {
 		return Member.builder()
 			.email(email)
-			.password(password)
+			.password(encryptedPassword)
 			.name(name)
 			.nickname(nickname)
-			.gender(Gender.generate(gender))
+			.gender(Gender.from(gender))
 			.phone(phone)
 			.role(Role.USER)
-			.loginType(LoginType.generate(loginType))
+			.loginType(LoginType.from(loginType))
 			.build();
 	}
 }
