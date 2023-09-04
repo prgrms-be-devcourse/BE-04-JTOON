@@ -37,7 +37,7 @@ public class MemberService {
 		isEmailExist(email);
 
 		UUID uuid = UUID.randomUUID();
-		String randomUuid = uuid.toString().substring(0,6);
+		String randomUuid = uuid.toString().substring(0, 6);
 		Mail mail = Mail.createAuthentication(email, randomUuid);
 		smtpService.sendMail(mail);
 

@@ -1,7 +1,6 @@
 package com.devtoon.jtoon.member.entity;
 
 import com.devtoon.jtoon.exception.ExceptionCode;
-import com.devtoon.jtoon.exception.MemberException;
 import com.devtoon.jtoon.global.common.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -74,35 +73,5 @@ public class Member extends BaseTimeEntity {
 		this.phone = Objects.requireNonNull(phone, ExceptionCode.MEMBER_PHONE_INVALID_FORMAT.getMessage());
 		this.role = role;
 		this.loginType = loginType;
-	}
-
-	private void valid() {
-		this.email = Objects.requireNonNullElseGet(email, () -> {
-			throw new MemberException(ExceptionCode.MEMBER_EMAIL_INVALID_FORMAT);
-		});
-		this.password = Objects.requireNonNull(password, () -> {
-			throw new MemberException(ExceptionCode.MEMBER_PASSWORD_INVALID_FORMAT);
-		});
-		this.name = Objects.requireNonNull(name, () -> {
-			throw new MemberException(ExceptionCode.MEMBER_NAME_INVALID_FORMAT);
-		});
-		this.nickname = Objects.requireNonNull(nickname, () -> {
-			throw new MemberException(ExceptionCode.MEMBER_NICKNAME_INVALID_FORMAT);
-		});
-	}
-
-
-
-	private void valid2() {
-		try {
-			Objects.requireNonNull(email, ExceptionCode.MEMBER_EMAIL_INVALID_FORMAT.getMessage());
-			Objects.requireNonNull(password, ExceptionCode.MEMBER_PASSWORD_INVALID_FORMAT.getMessage());
-			Objects.requireNonNull(name, ExceptionCode.MEMBER_NAME_INVALID_FORMAT.getMessage());
-			Objects.requireNonNull(nickname, ExceptionCode.MEMBER_NICKNAME_INVALID_FORMAT.getMessage());
-			Objects.requireNonNull(gender, ExceptionCode.MEMBER_GENDER_INVALID_FORMAT.getMessage());
-			Objects.requireNonNull(phone, ExceptionCode.MEMBER_PHONE_INVALID_FORMAT.getMessage());
-		} catch (NullPointerException exception) {
-			throw new MemberException(exception.getMessage());
-		}
 	}
 }

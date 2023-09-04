@@ -29,7 +29,7 @@ public class MemberController {
     }
 
     @GetMapping("/email-authorize")
-    public ResponseEntity<String> emailAuthentication(@RequestParam(value = "email", required = true) String email) {
+    public ResponseEntity<String> authenticateEmail(@RequestParam(value = "email", required = true) String email) {
         String authenticationUuid = memberService.sendEmailAuthentication(email);
 
         return ResponseEntity.status(HttpStatus.OK).body(authenticationUuid);
