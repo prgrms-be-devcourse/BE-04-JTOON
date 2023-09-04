@@ -21,10 +21,6 @@ import lombok.RequiredArgsConstructor;
 public class PaymentInfoController {
 	private final PaymentInfoService paymentInfoService;
 
-	public IamportResponse<Payment> paymentLookup(String impUid) throws IamportResponseException, IOException {
-		return paymentInfoService.paymentLookup(impUid);
-	}
-
 	@PostMapping
 	public IamportResponse<Payment> verifyIamport(@RequestBody PaymentInfoDto paymentInfoDto)
 		throws IamportResponseException, IOException {

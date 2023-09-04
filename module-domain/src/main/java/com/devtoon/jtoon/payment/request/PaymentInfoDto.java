@@ -8,6 +8,7 @@ import com.devtoon.jtoon.payment.entity.PaymentInfo;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -19,7 +20,7 @@ public record PaymentInfoDto(
 	@NotBlank String productName,
 	@Min(1) int amount,
 	@Pattern(regexp = EMAIL_PATTERN) String buyerEmail,
-	@NotBlank @Size(max = 10) String buyerName,
+	@NotEmpty @Size(max = 10) String buyerName,
 	@Pattern(regexp = PHONE_PATTERN) String buyerPhone
 ) {
 
