@@ -1,11 +1,12 @@
 package com.devtoon.jtoon.member.request;
 
-import static com.devtoon.jtoon.global.util.MemberRegExp.*;
+import static com.devtoon.jtoon.global.util.RegExp.*;
 
 import com.devtoon.jtoon.member.entity.Gender;
 import com.devtoon.jtoon.member.entity.LoginType;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.entity.Role;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

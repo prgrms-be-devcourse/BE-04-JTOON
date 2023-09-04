@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.application;
+package com.devtoon.jtoon.member.application;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
