@@ -27,10 +27,10 @@ public record SignUpDto(
 			.password(encryptedPassword)
 			.name(name)
 			.nickname(nickname)
-			.gender(Gender.generate(gender))
+			.gender(Gender.from(gender))
 			.phone(phone)
 			.role(Role.USER)
-			.loginType(LoginType.generate(loginType))
+			.loginType(LoginType.from(loginType))
 			.build();
 	}
 }

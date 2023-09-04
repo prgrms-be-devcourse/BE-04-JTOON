@@ -6,23 +6,25 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Gender {
-	MALE, FEMALE;
+	MALE,
+	FEMALE;
 
 	private static final Map<String, Gender> GENDER_MAP;
 
 	static {
 		GENDER_MAP = Collections.unmodifiableMap(
 			Arrays.stream(Gender.values())
-				.collect(Collectors.toMap(Enum::name, gender -> gender)));
+				.collect(Collectors.toMap(Enum::name, Function.identity())));
 	}
 
-	public static Gender generate(String gender) {
+	public static Gender from(String gender) {
 		return Optional.ofNullable(GENDER_MAP.get(gender))
 			.orElseThrow(() -> new MemberException(ExceptionCode.MEMBER_GENDER_INVALID_FORMAT));
 	}

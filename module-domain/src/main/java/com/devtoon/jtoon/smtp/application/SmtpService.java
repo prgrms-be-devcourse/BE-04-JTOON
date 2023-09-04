@@ -27,7 +27,6 @@ public class SmtpService {
             mimeMessageHelper.setSubject(mail.getSubject());
             mimeMessageHelper.setText(mail.getText());
             javaMailSender.send(mimeMessage);
-
         } catch (MessagingException | MailException e) {
             throw new MemberException(ExceptionCode.MEMBER_MESSAGE_SEND_FAILED);
         }

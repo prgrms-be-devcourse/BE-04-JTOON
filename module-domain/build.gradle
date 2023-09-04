@@ -13,7 +13,6 @@ dependencies {
 
     // SMTP
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-    testImplementation 'com.icegreen:greenmail:2.1.0-alpha-2'
 
     // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'

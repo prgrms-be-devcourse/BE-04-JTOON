@@ -25,17 +25,14 @@ public class MemberService {
 
 	@Transactional
 	public void createMember(SignUpDto signUpDto) {
-		isEmailExist(signUpDto.email());
-
-		String encryptedPassword = passwordEncoder.encode(signUpDto.password());
+		validateDuplicateEmail(signUpDto.email());
+		String encryptedPassword = encodePassword(signUpDto.password());
 		Member member = signUpDto.toEntity(encryptedPassword);
-
 		memberRepository.save(member);
 	}
 
 	public String sendEmailAuthentication(String email) {
-		isEmailExist(email);
-
+		validateDuplicateEmail(email);
 		UUID uuid = UUID.randomUUID();
 		String randomUuid = uuid.toString().substring(0, 6);
 		Mail mail = Mail.createAuthentication(email, randomUuid);
@@ -44,7 +41,11 @@ public class MemberService {
 		return randomUuid;
 	}
 
-	private void isEmailExist(String email) {
+	private String encodePassword(String password) {
+		return passwordEncoder.encode(password);
+	}
+
+	private void validateDuplicateEmail(String email) {
 		if (memberRepository.existsByEmail(email)) {
 			throw new MemberException(ExceptionCode.MEMBER_EMAIL_CONFLICT);
 		}

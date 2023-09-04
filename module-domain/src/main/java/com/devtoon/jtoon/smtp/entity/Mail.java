@@ -1,5 +1,6 @@
 package com.devtoon.jtoon.smtp.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -11,21 +12,25 @@ public class Mail {
 	private String to;
 	private String text;
 
-	private Mail(String to, String text) {
+	@Builder
+	private Mail(String subject, String to, String text) {
+		this.subject = subject;
 		this.to = to;
 		this.text = text;
 	}
 
-	private Mail(String subject, String to, String text) {
-		this(to, text);
-		this.subject = subject;
-	}
-
 	public static Mail createEvent(String subject, String to, String text) {
-		return new Mail(subject, to, text);
+		return Mail.builder()
+			.subject(subject)
+			.to(to)
+			.text(text)
+			.build();
 	}
 
 	public static Mail createAuthentication(String to, String text) {
-		return new Mail(to, text);
+		return Mail.builder()
+			.to(to)
+			.text(text)
+			.build();
 	}
 }

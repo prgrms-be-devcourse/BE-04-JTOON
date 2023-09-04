@@ -22,16 +22,14 @@ public class MailConfig {
 
     @Value("${smtp.port}")
     private Integer port;
-    
+
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-
         javaMailSender.setHost(host);
         javaMailSender.setUsername(username);
         javaMailSender.setPassword(password);
         javaMailSender.setPort(port);
-
         javaMailSender.setJavaMailProperties(getMailProperties());
 
         return javaMailSender;
@@ -43,7 +41,9 @@ public class MailConfig {
         properties.setProperty("mail.smtp.auth", "true");
         properties.setProperty("mail.smtp.starttls.enable", "true");
         properties.setProperty("mail.debug", "true");
-       properties.setProperty("mail.smtp.ssl.trust","smtp.google.com");
+        properties.setProperty("mail.smtp.ssl.trust","smtp.google.com");
+        properties.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
         return properties;
     }
 }

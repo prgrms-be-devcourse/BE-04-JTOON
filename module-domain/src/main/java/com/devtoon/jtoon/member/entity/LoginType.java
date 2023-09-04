@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,11 +22,11 @@ public enum LoginType {
 	static {
 		LOGIN_TYPE_MAP = Collections.unmodifiableMap(
 			Arrays.stream(LoginType.values())
-				.collect(Collectors.toMap(LoginType::name, loginType -> loginType))
+				.collect(Collectors.toMap(LoginType::name, Function.identity()))
 		);
 	}
 
-	public static LoginType generate(String loginType) {
+	public static LoginType from(String loginType) {
 		return Optional.ofNullable(LOGIN_TYPE_MAP.get(loginType))
 			.orElseThrow(() -> new MemberException(ExceptionCode.MEMBER_LOGIN_TYPE_INVALID_FORMAT));
 	}

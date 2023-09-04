@@ -1,5 +1,7 @@
 package com.devtoon.jtoon.member.entity;
 
+import static java.util.Objects.*;
+
 import com.devtoon.jtoon.exception.ExceptionCode;
 import com.devtoon.jtoon.global.common.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -11,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -65,12 +66,12 @@ public class Member extends BaseTimeEntity {
 	@Builder
 	private Member(String email, String password, String name, String nickname, Gender gender, String phone, Role role,
 		LoginType loginType) {
-		this.email = Objects.requireNonNull(email, ExceptionCode.MEMBER_EMAIL_INVALID_FORMAT.getMessage());
-		this.password = Objects.requireNonNull(password, ExceptionCode.MEMBER_PASSWORD_INVALID_FORMAT.getMessage());
-		this.name = Objects.requireNonNull(name, ExceptionCode.MEMBER_NAME_INVALID_FORMAT.getMessage());
-		this.nickname = Objects.requireNonNull(nickname, ExceptionCode.MEMBER_NICKNAME_INVALID_FORMAT.getMessage());
-		this.gender = Objects.requireNonNull(gender, ExceptionCode.MEMBER_GENDER_INVALID_FORMAT.getMessage());
-		this.phone = Objects.requireNonNull(phone, ExceptionCode.MEMBER_PHONE_INVALID_FORMAT.getMessage());
+		this.email = requireNonNull(email, ExceptionCode.MEMBER_EMAIL_INVALID_FORMAT.getMessage());
+		this.password = requireNonNull(password, ExceptionCode.MEMBER_PASSWORD_INVALID_FORMAT.getMessage());
+		this.name = requireNonNull(name, ExceptionCode.MEMBER_NAME_INVALID_FORMAT.getMessage());
+		this.nickname = requireNonNull(nickname, ExceptionCode.MEMBER_NICKNAME_INVALID_FORMAT.getMessage());
+		this.gender = requireNonNull(gender, ExceptionCode.MEMBER_GENDER_INVALID_FORMAT.getMessage());
+		this.phone = requireNonNull(phone, ExceptionCode.MEMBER_PHONE_INVALID_FORMAT.getMessage());
 		this.role = role;
 		this.loginType = loginType;
 	}
