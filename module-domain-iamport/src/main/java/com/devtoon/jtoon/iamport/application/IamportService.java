@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.devtoon.jtoon.iamport.request.IamportReq;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
@@ -25,10 +26,11 @@ public class IamportService {
 		this.iamportClient = new IamportClient(REST_API_KEY, REST_API_SECRET);
 	}
 
-	public IamportResponse<Payment> validateIamport(String impUid, int amount)
+	public IamportResponse<Payment> validateIamport(IamportReq iamportReq, int cookieAmount)
 		throws IamportResponseException, IOException {
-		IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(impUid);
-		validateAmount(iamportResponse, amount);
+		IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(iamportReq.impUid());
+		validateAmount(iamportResponse, iamportReq.amount());
+		validateAmount(iamportResponse, cookieAmount);
 
 		return iamportResponse;
 	}

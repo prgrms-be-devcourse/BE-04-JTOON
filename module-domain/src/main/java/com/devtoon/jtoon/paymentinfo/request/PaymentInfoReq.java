@@ -3,6 +3,7 @@ package com.devtoon.jtoon.paymentinfo.request;
 import static com.devtoon.jtoon.global.util.RegExp.*;
 
 import com.devtoon.jtoon.member.entity.Member;
+import com.devtoon.jtoon.paymentinfo.entity.CookieItem;
 import com.devtoon.jtoon.paymentinfo.entity.PG;
 import com.devtoon.jtoon.paymentinfo.entity.PaymentInfo;
 
@@ -16,7 +17,7 @@ public record PaymentInfoReq(
 	@NotBlank String merchantUid,
 	@NotBlank String pg,
 	@NotBlank String payMethod,
-	@NotBlank String productName,
+	@NotBlank String cookieItem,
 	@Min(1) int amount,
 	@Pattern(regexp = EMAIL_PATTERN) String buyerEmail,
 	@NotBlank @Size(max = 10) String buyerName,
@@ -29,7 +30,7 @@ public record PaymentInfoReq(
 			.merchantUid(this.merchantUid)
 			.pg(PG.from(this.pg))
 			.payMethod(this.payMethod)
-			.productName(this.productName)
+			.cookieItem(CookieItem.from(this.cookieItem))
 			.amount(this.amount)
 			.member(member)
 			.build();

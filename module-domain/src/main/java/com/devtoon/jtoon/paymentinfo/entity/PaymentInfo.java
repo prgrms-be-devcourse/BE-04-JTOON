@@ -6,6 +6,8 @@ import com.devtoon.jtoon.member.entity.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,14 +37,16 @@ public class PaymentInfo {
 	@Column(name = "merchant_uid", length = 100, nullable = false, unique = true, updatable = false)
 	private String merchantUid;    // 가맹점 주문번호
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "pg", length = 20, nullable = false)
 	private PG pg;    // 결제사
 
 	@Column(name = "pay_method", length = 20, nullable = false)
 	private String payMethod;    // 결제 방법
 
-	@Column(name = "product_name", length = 15, nullable = false)
-	private String productName;        // 상품명
+	@Enumerated(EnumType.STRING)
+	@Column(name = "cookie_item", nullable = false)
+	private CookieItem cookieItem;        // 상품명
 
 	@Column(name = "amount", nullable = false)
 	private int amount;        // 결제 금액
@@ -57,7 +61,7 @@ public class PaymentInfo {
 		String merchantUid,
 		PG pg,
 		String payMethod,
-		String productName,
+		CookieItem cookieItem,
 		int amount,
 		Member member
 	) {
@@ -69,7 +73,7 @@ public class PaymentInfo {
 		this.merchantUid = requireNonNull(merchantUid, "merchantUid is null");
 		this.pg = requireNonNull(pg, "pg is null");
 		this.payMethod = requireNonNull(payMethod, "payMethod is null");
-		this.productName = requireNonNull(productName, "productName is null");
+		this.cookieItem = requireNonNull(cookieItem, "cookieItem is null");
 		this.amount = amount;
 		this.member = requireNonNull(member, "member is null");
 	}

@@ -18,7 +18,7 @@
                 pg: $("#pg").val(),
                 pay_method: $("#pay-method").val(),
                 merchant_uid: "IMP" + new Date().getTime(),
-                name: '쿠키',
+                name: $('#amount option:selected').text(),
                 amount: Number($("#amount").val()),
                 buyer_email: $("#buyer-email").val(),
                 buyer_name: $("#buyer-name").val(),
@@ -84,14 +84,14 @@
 이메일: <input type="text" id="buyer-email" value="example@naver.com"><br>
 전화번호: <input type="text" id="buyer-tel" value="010-1717-1237"><br>
 
-상품:
+구매할 쿠키 갯수 :
 <select id='amount'>
-    <option value='1000'>쿠키 10개 - 1000원</option>
-    <option value='2000'>쿠키 20개 - 2000원</option>
-    <option value='3000'>쿠키 30개 - 3000원</option>
-    <option value='5000'>쿠키 50개 - 5000원</option>
-    <option value='10000'>쿠키 100개 - 10000원</option>
-</select><br>
+    <option value='1000'>쿠키 10개</option>
+    <option value='2000'>쿠키 20개</option>
+    <option value='3000'>쿠키 30개</option>
+    <option value='5000'>쿠키 50개</option>
+    <option value='10000'>쿠키 100개</option>
+</select> (개당 100원) <br>
 
 결제 방법:
 <select id='pay-method'>
