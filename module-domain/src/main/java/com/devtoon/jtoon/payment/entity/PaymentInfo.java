@@ -32,7 +32,7 @@ public class PaymentInfo {
 	@Column(name = "imp_uid", length = 100, nullable = false, unique = true, updatable = false)
 	private String impUid;    // 포트원 결제 고유번호
 
-	@Column(name = "pay_method", length = 100, nullable = false, unique = true, updatable = false)
+	@Column(name = "merchant_uid", length = 100, nullable = false, unique = true, updatable = false)
 	private String merchantUid;    // 가맹점 주문번호
 
 	@Column(name = "pg", length = 20, nullable = false)
