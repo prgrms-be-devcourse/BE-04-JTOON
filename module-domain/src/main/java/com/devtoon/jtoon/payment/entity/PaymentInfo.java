@@ -53,7 +53,6 @@ public class PaymentInfo {
 
 	@Builder
 	private PaymentInfo(
-		Long id,
 		String impUid,
 		String merchantUid,
 		PG pg,
@@ -63,7 +62,6 @@ public class PaymentInfo {
 		Member member
 	) {
 		validateFieldNotNull(impUid, merchantUid, pg, payMethod, productName, amount, member);
-		this.id = id;
 		this.impUid = impUid;
 		this.pg = pg;
 		this.payMethod = payMethod;

@@ -7,4 +7,8 @@ import com.devtoon.jtoon.payment.entity.PaymentInfo;
 
 @Repository
 public interface PaymentInfoRepository extends JpaRepository<PaymentInfo, Long> {
+
+	boolean existsByImpUid(String impUid);
+
+	boolean existsByMerchantUid(String merchantUid);
 }
