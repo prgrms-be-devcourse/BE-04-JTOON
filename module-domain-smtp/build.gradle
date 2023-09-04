@@ -1,0 +1,4 @@
+dependencies {
+    // SMTP
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+}
