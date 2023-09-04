@@ -41,6 +41,7 @@ subprojects {
 project(':module-application') {
     dependencies {
         implementation project(':module-domain')
+        implementation project(':module-domain-iamport')
         implementation project(':module-domain-s3')
         implementation project(':module-domain-smtp')
         implementation project(':module-core')
@@ -51,9 +52,17 @@ project(':module-domain') {
     bootJar.enabled = false
 
     dependencies {
-        implementation project(':module-core')
         implementation project(':module-domain-smtp')
         implementation project(':module-internal')
+        implementation project(':module-core')
+    }
+}
+
+project(':module-domain-iamport') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-core')
     }
 }
 
@@ -69,8 +78,8 @@ project(':module-domain-smtp') {
     bootJar.enabled = false
 
     dependencies {
-        implementation project(':module-core')
         implementation project(':module-internal')
+        implementation project(':module-core')
     }
 }
 
