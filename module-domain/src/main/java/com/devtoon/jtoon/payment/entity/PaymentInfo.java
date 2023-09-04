@@ -22,24 +22,24 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "payments")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Payment {
+public class PaymentInfo {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "payment_id")
 	private Long id;
 
-	@Column(name = "imp_uid", length = 15, nullable = false, updatable = false)
+	@Column(name = "imp_uid", length = 100, nullable = false, unique = true, updatable = false)
 	private String impUid;    // 포트원 결제 고유번호
+
+	@Column(name = "pay_method", length = 100, nullable = false, unique = true, updatable = false)
+	private String merchantUid;    // 가맹점 주문번호
 
 	@Column(name = "pg", length = 20, nullable = false)
 	private PG pg;    // 결제사
 
 	@Column(name = "pay_method", length = 20, nullable = false)
 	private String payMethod;    // 결제 방법
-
-	@Column(name = "pay_method", length = 39, nullable = false, unique = true, updatable = false)
-	private String merchantUid;    // 가맹점 주문번호
 
 	@Column(name = "product_name", length = 15, nullable = false)
 	private String productName;        // 상품명
@@ -52,17 +52,17 @@ public class Payment {
 	private Member member;
 
 	@Builder
-	private Payment(
+	private PaymentInfo(
 		Long id,
 		String impUid,
+		String merchantUid,
 		PG pg,
 		String payMethod,
-		String merchantUid,
 		String productName,
 		int amount,
 		Member member
 	) {
-		validateFieldNotNull(impUid, pg, payMethod, merchantUid, productName, amount, member);
+		validateFieldNotNull(impUid, merchantUid, pg, payMethod, productName, amount, member);
 		this.id = id;
 		this.impUid = impUid;
 		this.pg = pg;
@@ -75,17 +75,17 @@ public class Payment {
 
 	private void validateFieldNotNull(
 		String impUid,
+		String merchantUid,
 		PG pg,
 		String payMethod,
-		String merchantUid,
 		String productName,
 		int amount,
 		Member member
 	) {
 		Objects.requireNonNull(impUid, "impUid is null");
+		Objects.requireNonNull(merchantUid, "merchantUid is null");
 		Objects.requireNonNull(pg, "pg is null");
 		Objects.requireNonNull(payMethod, "payMethod is null");
-		Objects.requireNonNull(merchantUid, "merchantUid is null");
 		Objects.requireNonNull(productName, "productName is null");
 		Objects.requireNonNull(member, "member is null");
 
