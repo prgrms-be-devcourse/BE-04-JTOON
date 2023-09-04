@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devtoon.jtoon.iamport.application.IamportService;
-import com.devtoon.jtoon.payment.application.PaymentInfoService;
-import com.devtoon.jtoon.payment.request.PaymentInfoDto;
+import com.devtoon.jtoon.paymentinfo.application.PaymentInfoService;
+import com.devtoon.jtoon.paymentinfo.request.PaymentInfoReq;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
@@ -25,13 +25,13 @@ public class PaymentController {
 	private final PaymentInfoService paymentInfoService;
 
 	@PostMapping("/validation")
-	public IamportResponse<Payment> validateIamport(@RequestBody PaymentInfoDto paymentInfoDto)
+	public IamportResponse<Payment> validateIamport(@RequestBody PaymentInfoReq paymentInfoReq)
 		throws IamportResponseException, IOException {
-		return iamportService.validateIamport(paymentInfoDto.impUid(), paymentInfoDto.amount());
+		return iamportService.validateIamport(paymentInfoReq.impUid(), paymentInfoReq.amount());
 	}
 
 	@PostMapping
-	public void createPaymentInfo(@RequestBody PaymentInfoDto paymentInfoDto) {
-		paymentInfoService.createPaymentInfo(paymentInfoDto);
+	public void createPaymentInfo(@RequestBody PaymentInfoReq paymentInfoReq) {
+		paymentInfoService.createPaymentInfo(paymentInfoReq);
 	}
 }

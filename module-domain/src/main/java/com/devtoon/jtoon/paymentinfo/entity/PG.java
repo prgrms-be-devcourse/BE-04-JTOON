@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.payment.entity;
+package com.devtoon.jtoon.paymentinfo.entity;
 
 import java.util.Arrays;
 import java.util.Collections;

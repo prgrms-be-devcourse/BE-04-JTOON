@@ -1,6 +1,6 @@
-package com.devtoon.jtoon.payment.entity;
+package com.devtoon.jtoon.paymentinfo.entity;
 
-import java.util.Objects;
+import static java.util.Objects.*;
 
 import com.devtoon.jtoon.member.entity.Member;
 
@@ -61,34 +61,16 @@ public class PaymentInfo {
 		int amount,
 		Member member
 	) {
-		validateFieldNotNull(impUid, merchantUid, pg, payMethod, productName, amount, member);
-		this.impUid = impUid;
-		this.pg = pg;
-		this.payMethod = payMethod;
-		this.merchantUid = merchantUid;
-		this.productName = productName;
-		this.amount = amount;
-		this.member = member;
-	}
-
-	private void validateFieldNotNull(
-		String impUid,
-		String merchantUid,
-		PG pg,
-		String payMethod,
-		String productName,
-		int amount,
-		Member member
-	) {
-		Objects.requireNonNull(impUid, "impUid is null");
-		Objects.requireNonNull(merchantUid, "merchantUid is null");
-		Objects.requireNonNull(pg, "pg is null");
-		Objects.requireNonNull(payMethod, "payMethod is null");
-		Objects.requireNonNull(productName, "productName is null");
-		Objects.requireNonNull(member, "member is null");
-
 		if (amount <= 0) {
 			throw new RuntimeException("amount is zero or negative number");
 		}
+
+		this.impUid = requireNonNull(impUid, "impUid is null");
+		this.merchantUid = requireNonNull(merchantUid, "merchantUid is null");
+		this.pg = requireNonNull(pg, "pg is null");
+		this.payMethod = requireNonNull(payMethod, "payMethod is null");
+		this.productName = requireNonNull(productName, "productName is null");
+		this.amount = amount;
+		this.member = requireNonNull(member, "member is null");
 	}
 }

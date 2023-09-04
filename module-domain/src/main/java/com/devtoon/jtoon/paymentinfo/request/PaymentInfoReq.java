@@ -1,17 +1,17 @@
-package com.devtoon.jtoon.payment.request;
+package com.devtoon.jtoon.paymentinfo.request;
 
 import static com.devtoon.jtoon.global.util.RegExp.*;
 
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.payment.entity.PG;
-import com.devtoon.jtoon.payment.entity.PaymentInfo;
+import com.devtoon.jtoon.paymentinfo.entity.PG;
+import com.devtoon.jtoon.paymentinfo.entity.PaymentInfo;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record PaymentInfoDto(
+public record PaymentInfoReq(
 	@NotBlank String impUid,
 	@NotBlank String merchantUid,
 	@NotBlank String pg,
