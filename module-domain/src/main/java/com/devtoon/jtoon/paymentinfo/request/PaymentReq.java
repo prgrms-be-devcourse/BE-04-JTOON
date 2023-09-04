@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record PaymentInfoReq(
+public record PaymentReq(
 	@NotBlank String impUid,
 	@NotBlank String merchantUid,
 	@NotBlank String pg,
