@@ -3,7 +3,6 @@ package com.devtoon.jtoon.webtoon.entity;
 import static java.util.Objects.*;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -41,9 +40,9 @@ public class Episode extends BaseTimeEntity {
 	@Column(name = "title", nullable = false, unique = true, length = 30)
 	private String title;
 
-	@ColumnDefault("default thumbnail url")
+	@ColumnDefault("'default thumbnail url'")
 	@Column(name = "thumbnail_url", nullable = false, length = 65535)
-	private String thumbnailUrl;
+	private String thumbnailUrl = "default thumbnail url";
 
 	@Column(name = "webtoon_url", nullable = false, length = 65535)
 	private String webtoonUrl;
@@ -75,7 +74,7 @@ public class Episode extends BaseTimeEntity {
 
 		this.no = no;
 		this.title = requireNonNull(title, "title is null");
-		this.thumbnailUrl = Optional.ofNullable(thumbnailUrl).orElse("default thumbnail url");
+		this.thumbnailUrl = thumbnailUrl;
 		this.webtoonUrl = requireNonNull(webtoonUrl, "webtoonUrl is null");
 		this.hasComment = hasComment;
 		this.openedAt = requireNonNull(openedAt, "openedAt is null");

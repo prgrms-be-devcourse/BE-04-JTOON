@@ -23,20 +23,19 @@ public enum DayOfWeek {
 	SAT("토"),
 	SUN("일");
 
-	private final String name;
+	private final String value;
 
 	private static final Map<String, DayOfWeek> DAY_OF_WEEK_MAP;
 
 	static {
 		DAY_OF_WEEK_MAP = Collections.unmodifiableMap(
 			Arrays.stream(values())
-				.collect(Collectors.toMap(DayOfWeek::getName, Function.identity())
-				)
+				.collect(Collectors.toMap(DayOfWeek::getValue, Function.identity()))
 		);
 	}
 
-	public static DayOfWeek from(String name) {
-		return Optional.ofNullable(DAY_OF_WEEK_MAP.get(name))
+	public static DayOfWeek from(String value) {
+		return Optional.ofNullable(DAY_OF_WEEK_MAP.get(value))
 			.orElseThrow(() -> new RuntimeException("올바른 요일 타입이 아닙니다."));
 	}
 }

@@ -19,7 +19,7 @@ public class DayOfWeekConverter implements AttributeConverter<Set<DayOfWeek>, St
 		}
 
 		return dayOfWeeks.stream()
-			.map(DayOfWeek::getName)
+			.map(DayOfWeek::getValue)
 			.collect(Collectors.joining(DELIMITER));
 	}
 

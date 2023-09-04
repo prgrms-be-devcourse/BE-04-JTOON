@@ -19,7 +19,7 @@ public class GenreConverter implements AttributeConverter<Set<Genre>, String> {
 		}
 
 		return genres.stream()
-			.map(Genre::getName)
+			.map(Genre::getValue)
 			.collect(Collectors.joining(DELIMITER));
 	}
 

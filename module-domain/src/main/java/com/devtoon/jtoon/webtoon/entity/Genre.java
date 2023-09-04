@@ -17,17 +17,19 @@ public enum Genre {
 
 	ROMANCE("로맨스");
 
-	private final String name;
+	private final String value;
 
 	private static final Map<String, Genre> GENRE_MAP;
 
 	static {
-		GENRE_MAP = Collections.unmodifiableMap(Arrays.stream(values())
-			.collect(Collectors.toMap(Genre::getName, Function.identity())));
+		GENRE_MAP = Collections.unmodifiableMap(
+			Arrays.stream(values())
+				.collect(Collectors.toMap(Genre::getValue, Function.identity()))
+		);
 	}
 
-	public static Genre from(String name) {
-		return Optional.ofNullable(GENRE_MAP.get(name))
+	public static Genre from(String value) {
+		return Optional.ofNullable(GENRE_MAP.get(value))
 			.orElseThrow(() -> new RuntimeException("올바른 장르 타입이 아닙니다."));
 	}
 }

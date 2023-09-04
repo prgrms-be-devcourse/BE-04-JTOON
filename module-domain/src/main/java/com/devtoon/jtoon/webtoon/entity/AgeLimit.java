@@ -15,22 +15,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum AgeLimit {
 
-	ALL(0),
-	AGE_12(12),
-	AGE_15(15),
-	AGE_19(19);
+	ALL("전체"),
+	AGE_12("12세"),
+	AGE_15("15세"),
+	ADULT("19세");
 
-	private final int age;
+	private final String value;
 
-	private static final Map<Integer, AgeLimit> AGE_LIMIT_MAP;
+	private static final Map<String, AgeLimit> AGE_LIMIT_MAP;
 
 	static {
-		AGE_LIMIT_MAP = Collections.unmodifiableMap(Arrays.stream(values())
-			.collect(Collectors.toMap(AgeLimit::getAge, Function.identity())));
+		AGE_LIMIT_MAP = Collections.unmodifiableMap(
+			Arrays.stream(values())
+				.collect(Collectors.toMap(AgeLimit::getValue, Function.identity()))
+		);
 	}
 
-	public static AgeLimit from(int age) {
-		return Optional.ofNullable(AGE_LIMIT_MAP.get(age))
+	public static AgeLimit from(String value) {
+		return Optional.ofNullable(AGE_LIMIT_MAP.get(value))
 			.orElseThrow(() -> new RuntimeException("올바른 연령가 타입이 아닙니다."));
 	}
 }

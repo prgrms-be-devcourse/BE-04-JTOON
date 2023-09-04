@@ -8,19 +8,19 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter
-public class AgeLimitConverter implements AttributeConverter<AgeLimit, Integer> {
+public class AgeLimitConverter implements AttributeConverter<AgeLimit, String> {
 
 	@Override
-	public Integer convertToDatabaseColumn(AgeLimit ageLimit) {
+	public String convertToDatabaseColumn(AgeLimit ageLimit) {
 		if (isNull(ageLimit)) {
 			return null;
 		}
 
-		return ageLimit.getAge();
+		return ageLimit.getValue();
 	}
 
 	@Override
-	public AgeLimit convertToEntityAttribute(Integer dbData) {
+	public AgeLimit convertToEntityAttribute(String dbData) {
 		return AgeLimit.from(dbData);
 	}
 }

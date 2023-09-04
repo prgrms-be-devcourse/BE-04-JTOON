@@ -2,7 +2,6 @@ package com.devtoon.jtoon.webtoon.entity;
 
 import static java.util.Objects.*;
 
-import java.util.Optional;
 import java.util.Set;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -91,7 +90,7 @@ public class Webtoon extends BaseTimeEntity {
 		this.dayOfWeeks = requireNonNull(dayOfWeeks, "dayOfWeeks is null");
 		this.genres = requireNonNull(genres, "genres is null");
 		this.ageLimit = requireNonNull(ageLimit, "ageLimit is null");
-		this.thumbnailUrl = Optional.ofNullable(thumbnailUrl).orElse("default thumbnail url");
+		this.thumbnailUrl = thumbnailUrl;
 		this.cookieCount = cookieCount;
 		this.author = requireNonNull(author, "author is null");
 	}
