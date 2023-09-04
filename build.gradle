@@ -41,6 +41,7 @@ subprojects {
 project(':module-application') {
     dependencies {
         implementation project(':module-core')
+        implementation project(':module-domain')
         implementation project(':module-domain-s3')
         implementation project(':module-domain')
     }
