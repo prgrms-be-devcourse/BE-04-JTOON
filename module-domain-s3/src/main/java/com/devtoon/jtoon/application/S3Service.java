@@ -20,10 +20,21 @@ public class S3Service {
 	@Value("${spring.cloud.aws.cloud-front.url}")
 	private String IMAGE_URL;
 
-	public String upload(ImageType imageType, MultipartFile image) {
-		String uuid = UUID.randomUUID().toString();
-		//TODO 확장자 포함 + 파일명 변경
-		String key = imageType.getPath(uuid);
+	//TODO 확장자 포함 + 파일명 변경
+	public String upload(ImageType imageType, String webtoonTitle, MultipartFile image) {
+		String fileName = UUID.randomUUID().toString();
+		return uploadInternal(imageType, webtoonTitle, fileName, image);
+	}
+
+	public String upload(ImageType imageType, String webtoonTitle, int no, MultipartFile image) {
+		UUID uuid = UUID.randomUUID();
+		String fileName = String.format("%04d_", no) + uuid;
+
+		return uploadInternal(imageType, webtoonTitle, fileName, image);
+	}
+
+	private String uploadInternal(ImageType imageType, String webtoonTitle, String fileName, MultipartFile image) {
+		String key = imageType.getPath(webtoonTitle, fileName);
 		s3Uploader.upload(key, image);
 
 		return IMAGE_URL + key;

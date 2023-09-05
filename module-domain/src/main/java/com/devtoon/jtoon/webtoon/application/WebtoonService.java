@@ -26,8 +26,8 @@ public class WebtoonService {
 	@Transactional
 	public void createEpisode(Long webtoonId, CreateEpisodeReq req) {
 		Webtoon webtoon = getWebtoonById(webtoonId);
-		String mainUrl = s3Service.upload(EPISODE_MAIN, req.mainImage());
-		String thumbnailUrl = s3Service.upload(EPISODE_THUMBNAIL, req.thumbnailImage());
+		String mainUrl = s3Service.upload(EPISODE_MAIN, webtoon.getTitle(), req.no(), req.mainImage());
+		String thumbnailUrl = s3Service.upload(EPISODE_THUMBNAIL, webtoon.getTitle(), req.no(), req.thumbnailImage());
 		Episode episode = req.toEntity(webtoon, mainUrl, thumbnailUrl);
 		episodeRepository.save(episode);
 	}
