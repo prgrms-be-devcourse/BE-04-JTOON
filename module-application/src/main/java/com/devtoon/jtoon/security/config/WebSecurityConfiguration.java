@@ -31,6 +31,9 @@ public class WebSecurityConfiguration {
 	public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests(request -> request
+				.requestMatchers("/members").permitAll()
+				.requestMatchers("/members/email-authorization").permitAll()
+				.requestMatchers("/members/**").hasAuthority("USER")
 				.anyRequest().permitAll())
 			.csrf(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)

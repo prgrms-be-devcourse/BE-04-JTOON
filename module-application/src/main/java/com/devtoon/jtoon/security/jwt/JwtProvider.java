@@ -15,12 +15,13 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
@@ -64,7 +65,7 @@ public class JwtProvider {
 		Jws<Claims> claimsJws = Jwts.parserBuilder()
 			.setSigningKey(secretKey)
 			.build().parseClaimsJws(token);
-		if (claimsJws.getBody().getExpiration().before(Date.valueOf(LocalDate.now()))) {
+		if (claimsJws.getBody().getExpiration().before(new Date())) {
 			throw new RuntimeException("Token Expired");
 		}
 	}
@@ -80,16 +81,15 @@ public class JwtProvider {
 	}
 
 	private Claims getClaims(String email) {
-		Date now = Date.valueOf(LocalDate.now());
+		Date now = new Date();
 		return Jwts.claims()
 			.setSubject(email)
 			.setIssuer(iss)
-			.setExpiration(getExpireTime())
+			.setExpiration(getExpireTime(now))
 			.setIssuedAt(now);
 	}
 
-	private Date getExpireTime() {
-		Date now = Date.valueOf(LocalDate.now());
+	private Date getExpireTime(Date now) {
 		return new Date(now.getTime() + 1000 * 60 * expire);
 	}
 }
