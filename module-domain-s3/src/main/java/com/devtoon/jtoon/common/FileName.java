@@ -17,6 +17,6 @@ public class FileName {
 	}
 
 	public static FileName forEpisode(int no) {
-		return new FileName(String.format("%04d", no) + UUID.randomUUID());
+		return new FileName(String.format("%04d_", no) + UUID.randomUUID());
 	}
 }
