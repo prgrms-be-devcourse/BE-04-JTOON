@@ -1,8 +1,6 @@
-package com.devtoon.jtoon;
+package com.devtoon.jtoon.util;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,9 +19,7 @@ public class S3Uploader {
 	@Value("${spring.cloud.aws.s3.bucket}")
 	private String BUCKET;
 
-	public void upload(String directory, MultipartFile file) {
-		String key = directory + File.separator + UUID.randomUUID();
-
+	public void upload(String key, MultipartFile file) {
 		try {
 			s3Template.upload(
 				BUCKET,
@@ -35,4 +31,6 @@ public class S3Uploader {
 			throw new RuntimeException(e);
 		}
 	}
+
+	//TODO 업로드는 성공했지만, 비즈니스 로직 실패 시 delete 처리 추가
 }

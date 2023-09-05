@@ -37,15 +37,15 @@ public class Episode extends BaseTimeEntity {
 	@Column(name = "no", nullable = false)
 	private int no;
 
-	@Column(name = "title", nullable = false, unique = true, length = 30)
+	@Column(name = "title", nullable = false, length = 30)
 	private String title;
+
+	@Column(name = "main_url", nullable = false, length = 65535)
+	private String mainUrl;
 
 	@ColumnDefault("'default thumbnail url'")
 	@Column(name = "thumbnail_url", nullable = false, length = 65535)
 	private String thumbnailUrl = "default thumbnail url";
-
-	@Column(name = "webtoon_url", nullable = false, length = 65535)
-	private String webtoonUrl;
 
 	@ColumnDefault("1")
 	@Column(name = "has_comment", nullable = false)
@@ -62,8 +62,8 @@ public class Episode extends BaseTimeEntity {
 	private Episode(
 		int no,
 		String title,
+		String mainUrl,
 		String thumbnailUrl,
-		String webtoonUrl,
 		boolean hasComment,
 		LocalDateTime openedAt,
 		Webtoon webtoon
@@ -74,8 +74,8 @@ public class Episode extends BaseTimeEntity {
 
 		this.no = no;
 		this.title = requireNonNull(title, "title is null");
+		this.mainUrl = requireNonNull(mainUrl, "mainUrl is null");
 		this.thumbnailUrl = thumbnailUrl;
-		this.webtoonUrl = requireNonNull(webtoonUrl, "webtoonUrl is null");
 		this.hasComment = hasComment;
 		this.openedAt = requireNonNull(openedAt, "openedAt is null");
 		this.webtoon = requireNonNull(webtoon, "webtoon is null");
