@@ -51,6 +51,7 @@ project(':module-domain') {
     bootJar.enabled = false
 
     dependencies {
+        implementation project(':module-domain-s3')
         implementation project(':module-domain-smtp')
         implementation project(':module-internal')
         implementation project(':module-core')
