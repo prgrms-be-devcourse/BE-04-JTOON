@@ -9,11 +9,11 @@ dependencies {
     // I-AM-PORT
     implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
 
-    // Bean Validation
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Bean Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
