@@ -8,6 +8,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import com.devtoon.jtoon.security.jwt.JwtProvider;
+import com.devtoon.jtoon.security.jwt.domain.CustomUserDetails;
+import com.devtoon.jtoon.security.jwt.domain.MemberThreadLocal;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +38,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				String token = header.split(" ")[1];
 				jwtProvider.validateToken(token);
 				Authentication auth = jwtProvider.getAuthentication(token);
+				CustomUserDetails customUserDetails = (CustomUserDetails)auth.getPrincipal();
+
 				SecurityContextHolder.getContext().setAuthentication(auth);
+				MemberThreadLocal.setMember(customUserDetails.getMember());
 			} catch (RuntimeException e) {
 				log.error("Invalid Token", e);
 				handlerExceptionResolver.resolveException(request, response, null, e);
