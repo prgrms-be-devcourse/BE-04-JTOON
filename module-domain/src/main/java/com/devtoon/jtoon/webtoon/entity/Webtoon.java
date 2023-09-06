@@ -57,7 +57,7 @@ public class Webtoon extends BaseTimeEntity {
 	private AgeLimit ageLimit;
 
 	@ColumnDefault("'default thumbnail url'")
-	@Column(name = "thumbnail_url", nullable = false, length = 65535)
+	@Column(name = "thumbnail_url", nullable = false, length = 500)
 	private String thumbnailUrl = "default thumbnail url";
 
 	@Column(name = "cookie_count", nullable = false)
