@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import com.devtoon.jtoon.security.filter.JwtAuthenticationFilter;
 import com.devtoon.jtoon.security.jwt.JwtProvider;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 public class WebSecurityConfiguration {
 
+	private final HandlerExceptionResolver handlerExceptionResolver;
 	private final JwtProvider jwtProvider;
 
 	@Bean
@@ -38,7 +40,7 @@ public class WebSecurityConfiguration {
 			.csrf(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new JwtAuthenticationFilter(handlerExceptionResolver, jwtProvider), UsernamePasswordAuthenticationFilter.class)
 		;
 		return http.build();
 	}

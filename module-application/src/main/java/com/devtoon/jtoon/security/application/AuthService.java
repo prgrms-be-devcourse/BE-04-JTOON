@@ -22,15 +22,15 @@ public class AuthService {
 
 	@Transactional
 	public String login(LogInReq logInReq) {
-		Member member = memberRepository.findByEmail(logInReq.email()).orElseThrow(
-			() -> new BadCredentialsException("너 안돼!")
-		);
+		Member member = memberRepository.findByEmail(logInReq.email())
+			.orElseThrow(() -> new BadCredentialsException("너 안돼!"));
 
 		if (!isPasswordSame(logInReq.password(), member.getPassword())) {
 			throw new BadCredentialsException("너 안돼!");
 		}
 
 		member.updateLastLogin();
+
 		return jwtProvider.generateToken(logInReq.email());
 	}
 

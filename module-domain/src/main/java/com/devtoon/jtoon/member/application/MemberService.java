@@ -28,6 +28,7 @@ public class MemberService {
 		validateDuplicateEmail(signUpReq.email());
 		String encryptedPassword = encodePassword(signUpReq.password());
 		Member member = signUpReq.toEntity(encryptedPassword);
+
 		memberRepository.save(member);
 	}
 

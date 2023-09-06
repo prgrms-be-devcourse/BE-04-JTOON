@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -27,13 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtProvider {
 
 	@Value("${jwt.secret.key}")
-	private String salt;
+	private String SALT;
 
 	@Value("${jwt.iss}")
-	private String iss;
+	private String ISS;
 
 	@Value("${jwt.expire}")
-	private long expire;
+	private long EXPIRE;
 
 	private Key secretKey;
 
@@ -41,7 +40,7 @@ public class JwtProvider {
 
 	@PostConstruct
 	private void init() {
-		secretKey = Keys.hmacShaKeyFor(salt.getBytes(StandardCharsets.UTF_8));
+		secretKey = Keys.hmacShaKeyFor(SALT.getBytes(StandardCharsets.UTF_8));
 	}
 
 	public String generateToken(String email) {
@@ -58,39 +57,43 @@ public class JwtProvider {
 		Map<String, Object> headers = new HashMap<>();
 		headers.put("alg", "HS256");
 		headers.put("typ", "JWT");
+
 		return headers;
 	}
 
 	public void validateToken(String token) {
-		Jws<Claims> claimsJws = Jwts.parserBuilder()
-			.setSigningKey(secretKey)
-			.build().parseClaimsJws(token);
-		if (claimsJws.getBody().getExpiration().before(new Date())) {
+		Date claimsExpiration = parseClaimsBody(token).getExpiration();
+
+		if (claimsExpiration.before(new Date())) {
 			throw new RuntimeException("Token Expired");
 		}
 	}
 
 	public Authentication getAuthentication(String token) {
-		String email = Jwts.parserBuilder()
-			.setSigningKey(secretKey)
-			.build().parseClaimsJws(token).getBody().getSubject();
-
-		UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+		String ClaimsEmail = parseClaimsBody(token).getSubject();
+		UserDetails userDetails = userDetailsService.loadUserByUsername(ClaimsEmail);
 
 		return new UsernamePasswordAuthenticationToken(userDetails, " ", userDetails.getAuthorities());
 	}
 
+	private Claims parseClaimsBody(String token) {
+		return Jwts.parserBuilder()
+			.setSigningKey(secretKey)
+			.build().parseClaimsJws(token).getBody();
+	}
+
 	private Claims getClaims(String email) {
 		Date now = new Date();
+
 		return Jwts.claims()
 			.setSubject(email)
-			.setIssuer(iss)
+			.setIssuer(ISS)
 			.setExpiration(getExpireTime(now))
 			.setIssuedAt(now);
 	}
 
 	private Date getExpireTime(Date now) {
-		return new Date(now.getTime() + 1000 * 60 * expire);
+		return new Date(now.getTime() + 1000 * 60 * EXPIRE);
 	}
 }
 
