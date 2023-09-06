@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: s3, smtp, iamport
+    include: s3, smtp, iamport, jwt
 
   data:
     web:
