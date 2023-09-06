@@ -1,11 +1,15 @@
-package com.devtoon.jtoon.payment.entity;
+package com.devtoon.jtoon.paymentinfo.entity;
 
-import java.util.Objects;
+import static java.util.Objects.*;
+
+import java.math.BigDecimal;
 
 import com.devtoon.jtoon.member.entity.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,60 +39,36 @@ public class PaymentInfo {
 	@Column(name = "merchant_uid", length = 100, nullable = false, unique = true, updatable = false)
 	private String merchantUid;    // 가맹점 주문번호
 
-	@Column(name = "pg", length = 20, nullable = false)
-	private PG pg;    // 결제사
-
 	@Column(name = "pay_method", length = 20, nullable = false)
 	private String payMethod;    // 결제 방법
 
-	@Column(name = "product_name", length = 15, nullable = false)
-	private String productName;        // 상품명
+	@Enumerated(EnumType.STRING)
+	@Column(name = "cookie_item", nullable = false)
+	private CookieItem cookieItem;        // 상품명
 
 	@Column(name = "amount", nullable = false)
-	private int amount;        // 결제 금액
+	private BigDecimal amount;        // 결제 금액
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false)
+	// @JoinColumn(name = "member_id", nullable = false) (임시)
+	@JoinColumn(name = "member_id")
 	private Member member;
 
 	@Builder
 	private PaymentInfo(
 		String impUid,
 		String merchantUid,
-		PG pg,
 		String payMethod,
-		String productName,
-		int amount,
+		CookieItem cookieItem,
+		BigDecimal amount,
 		Member member
 	) {
-		validateFieldNotNull(impUid, merchantUid, pg, payMethod, productName, amount, member);
-		this.impUid = impUid;
-		this.pg = pg;
-		this.payMethod = payMethod;
-		this.merchantUid = merchantUid;
-		this.productName = productName;
-		this.amount = amount;
+		this.impUid = requireNonNull(impUid, "impUid is null");
+		this.merchantUid = requireNonNull(merchantUid, "merchantUid is null");
+		this.payMethod = requireNonNull(payMethod, "payMethod is null");
+		this.cookieItem = requireNonNull(cookieItem, "cookieItem is null");
+		this.amount = requireNonNull(amount, "amount is null");
 		this.member = member;
-	}
-
-	private void validateFieldNotNull(
-		String impUid,
-		String merchantUid,
-		PG pg,
-		String payMethod,
-		String productName,
-		int amount,
-		Member member
-	) {
-		Objects.requireNonNull(impUid, "impUid is null");
-		Objects.requireNonNull(merchantUid, "merchantUid is null");
-		Objects.requireNonNull(pg, "pg is null");
-		Objects.requireNonNull(payMethod, "payMethod is null");
-		Objects.requireNonNull(productName, "productName is null");
-		Objects.requireNonNull(member, "member is null");
-
-		if (amount <= 0) {
-			throw new RuntimeException("amount is zero or negative number");
-		}
+		// this.member = requireNonNull(member, "member is null");
 	}
 }
