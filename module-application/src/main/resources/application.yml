@@ -1,3 +1,8 @@
 spring:
   profiles:
-    include: s3, smtp
+    include: s3, smtp, iamport
+
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
