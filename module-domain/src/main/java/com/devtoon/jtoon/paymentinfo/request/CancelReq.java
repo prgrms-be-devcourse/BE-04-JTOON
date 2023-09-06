@@ -1,18 +1,30 @@
 package com.devtoon.jtoon.paymentinfo.request;
 
-import static com.devtoon.jtoon.global.util.RegExp.*;
+import java.math.BigDecimal;
 
-import jakarta.validation.constraints.Min;
+import com.siot.IamportRestClient.request.CancelData;
+import com.siot.IamportRestClient.response.IamportResponse;
+import com.siot.IamportRestClient.response.Payment;
+
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CancelReq(
 	@NotBlank String impUid,
+	@NotBlank String merchantUid,
 	@NotBlank String reason,
-	@Min(1) int checksum,
-	@Pattern(regexp = EMAIL_PATTERN) String buyerEmail,
-	@NotBlank @Size(max = 10) String buyerName,
-	@Pattern(regexp = PHONE_PATTERN) String buyerPhone
+	@NotNull @DecimalMin("1") BigDecimal checksum,
+	@NotBlank @Size(max = 10) String refundHolder
 ) {
+
+	public CancelData toCancelData(IamportResponse<Payment> iamportResponse) {
+		CancelData cancelData = new CancelData(iamportResponse.getResponse().getImpUid(), true);
+		cancelData.setReason(this.reason);
+		cancelData.setChecksum(this.checksum);
+		cancelData.setRefund_holder(this.refundHolder);
+
+		return cancelData;
+	}
 }

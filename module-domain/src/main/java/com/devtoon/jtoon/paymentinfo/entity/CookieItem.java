@@ -1,5 +1,6 @@
 package com.devtoon.jtoon.paymentinfo.entity;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -14,14 +15,14 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum CookieItem {
-	COOKIE_ONE("쿠키 10개", 1000),
-	COOKIE_TWO("쿠키 20개", 2000),
-	COOKIE_THREE("쿠키 30개", 3000),
-	COOKIE_FOUR("쿠키 50개", 5000),
-	COOKIE_FIVE("쿠키 100개", 10000);
+	COOKIE_ONE("쿠키 10개", BigDecimal.valueOf(1000)),
+	COOKIE_TWO("쿠키 20개", BigDecimal.valueOf(2000)),
+	COOKIE_THREE("쿠키 30개", BigDecimal.valueOf(3000)),
+	COOKIE_FOUR("쿠키 50개", BigDecimal.valueOf(5000)),
+	COOKIE_FIVE("쿠키 100개", BigDecimal.valueOf(10000));
 
 	private String itemName;
-	private int amount;
+	private BigDecimal amount;
 
 	private static final Map<String, CookieItem> COOKIE_MAP;
 

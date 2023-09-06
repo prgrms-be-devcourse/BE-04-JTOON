@@ -14,6 +14,7 @@ import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -24,18 +25,20 @@ public class PaymentController {
 	private final PaymentInfoService paymentInfoService;
 
 	@PostMapping("/validation")
-	public IamportResponse<Payment> validateIamport(@RequestBody PaymentReq paymentReq)
+	public IamportResponse<Payment> validatePayment(@RequestBody @Valid PaymentReq paymentReq)
 		throws IamportResponseException, IOException {
-		return paymentInfoService.validateIamport(paymentReq);
-	}
+		IamportResponse<Payment> iamportResponse = paymentInfoService.paymentLookUp(paymentReq.impUid());
+		paymentInfoService.validateIamport(paymentReq, iamportResponse);
+		paymentInfoService.createPaymentInfo(paymentReq);
 
-	@PostMapping
-	public int createPaymentInfo(@RequestBody PaymentReq paymentReq) {
-		return paymentInfoService.createPaymentInfo(paymentReq);
+		return iamportResponse;
 	}
 
 	@PostMapping("/cancel")
-	private IamportResponse<Payment> cancelPayments(@RequestBody CancelReq cancelReq) {
-		return paymentInfoService.cancelPayments(cancelReq);
+	public IamportResponse<Payment> cancelPayment(@RequestBody @Valid CancelReq cancelReq)
+		throws IamportResponseException, IOException {
+		IamportResponse<Payment> iamportResponse = paymentInfoService.paymentLookUp(cancelReq.impUid());
+
+		return paymentInfoService.cancelPayment(cancelReq, iamportResponse);
 	}
 }

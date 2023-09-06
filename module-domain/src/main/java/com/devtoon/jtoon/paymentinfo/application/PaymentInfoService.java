@@ -1,13 +1,13 @@
 package com.devtoon.jtoon.paymentinfo.application;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.member.repository.MemberRepository;
 import com.devtoon.jtoon.paymentinfo.entity.CookieItem;
 import com.devtoon.jtoon.paymentinfo.entity.PaymentInfo;
 import com.devtoon.jtoon.paymentinfo.repository.PaymentInfoRepository;
@@ -15,6 +15,7 @@ import com.devtoon.jtoon.paymentinfo.request.CancelReq;
 import com.devtoon.jtoon.paymentinfo.request.PaymentReq;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 
@@ -22,28 +23,26 @@ import com.siot.IamportRestClient.response.Payment;
 @Transactional(readOnly = true)
 public class PaymentInfoService {
 
-	@Value("${pg.kg-inicis.rest-api-key}")
-	private String REST_API_KEY;
-
-	@Value("${pg.kg-inicis.rest-api-secret}")
-	private String REST_API_SECRET;
-
 	private final IamportClient iamportClient;
-	private final MemberRepository memberRepository;
 	private final PaymentInfoRepository paymentInfoRepository;
 
-	public PaymentInfoService(MemberRepository memberRepository, PaymentInfoRepository paymentInfoRepository) {
-		this.memberRepository = memberRepository;
+	public PaymentInfoService(
+		@Value("${pg.kg-inicis.rest-api-key}") String restApiKey,
+		@Value("${pg.kg-inicis.rest-api-secret}") String restSecretKey,
+		PaymentInfoRepository paymentInfoRepository
+	) {
+		this.iamportClient = new IamportClient(restApiKey, restSecretKey);
 		this.paymentInfoRepository = paymentInfoRepository;
-		this.iamportClient = new IamportClient(REST_API_KEY, REST_API_SECRET);
 	}
 
-	public IamportResponse<Payment> validateIamport(PaymentReq paymentReq)
-		throws IamportResponseException, IOException {
-		IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(paymentReq.impUid());
-		validateAmount(iamportResponse, paymentReq.amount());
+	public IamportResponse<Payment> paymentLookUp(String impUid) throws IamportResponseException, IOException {
+		return iamportClient.paymentByImpUid(impUid);
+	}
+
+	public IamportResponse<Payment> validateIamport(PaymentReq paymentReq, IamportResponse<Payment> iamportResponse) {
 		CookieItem cookieItem = CookieItem.from(paymentReq.cookieItem());
 		validateAmount(iamportResponse, cookieItem.getAmount());
+		validateAmount(iamportResponse, paymentReq.amount());
 		validateImpUid(paymentReq);
 		validateMerchantUid(paymentReq);
 
@@ -51,25 +50,26 @@ public class PaymentInfoService {
 	}
 
 	@Transactional
-	public int createPaymentInfo(PaymentReq paymentReq) {
-		Member member = memberRepository.findByPhone(paymentReq.buyerPhone())
-			.orElseThrow(() -> new RuntimeException("member is not found"));
+	public BigDecimal createPaymentInfo(PaymentReq paymentReq) {
+		Member member = null;
 		PaymentInfo paymentInfo = paymentReq.toEntity(member);
+		PaymentInfo save = paymentInfoRepository.save(paymentInfo);
 
-		return paymentInfoRepository.save(paymentInfo)
-			.getAmount();
+		return save.getAmount();
 	}
 
-	public IamportResponse<Payment> cancelPayments(CancelReq cancelReq) {
-		return null;
+	public IamportResponse<Payment> cancelPayment(CancelReq cancelReq, IamportResponse<Payment> iamportResponse)
+		throws IamportResponseException, IOException {
+		validateAmount(iamportResponse, cancelReq.checksum());
+		CancelData cancelData = cancelReq.toCancelData(iamportResponse);
+
+		return iamportClient.cancelPaymentByImpUid(cancelData);
 	}
 
-	private void validateAmount(IamportResponse<Payment> iamportResponse, int amount) {
-		int realAmount = iamportResponse.getResponse()
-			.getAmount()
-			.intValue();
+	public void validateAmount(IamportResponse<Payment> iamportResponse, BigDecimal amount) {
+		BigDecimal realAmount = iamportResponse.getResponse().getAmount();
 
-		if (realAmount != amount) {
+		if (!realAmount.equals(amount)) {
 			throw new RuntimeException("verify iamport exception");
 		}
 	}

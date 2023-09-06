@@ -2,6 +2,8 @@ package com.devtoon.jtoon.paymentinfo.entity;
 
 import static java.util.Objects.*;
 
+import java.math.BigDecimal;
+
 import com.devtoon.jtoon.member.entity.Member;
 
 import jakarta.persistence.Column;
@@ -37,10 +39,6 @@ public class PaymentInfo {
 	@Column(name = "merchant_uid", length = 100, nullable = false, unique = true, updatable = false)
 	private String merchantUid;    // 가맹점 주문번호
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "pg", length = 20, nullable = false)
-	private PG pg;    // 결제사
-
 	@Column(name = "pay_method", length = 20, nullable = false)
 	private String payMethod;    // 결제 방법
 
@@ -49,32 +47,28 @@ public class PaymentInfo {
 	private CookieItem cookieItem;        // 상품명
 
 	@Column(name = "amount", nullable = false)
-	private int amount;        // 결제 금액
+	private BigDecimal amount;        // 결제 금액
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false)
+	// @JoinColumn(name = "member_id", nullable = false) (임시)
+	@JoinColumn(name = "member_id")
 	private Member member;
 
 	@Builder
 	private PaymentInfo(
 		String impUid,
 		String merchantUid,
-		PG pg,
 		String payMethod,
 		CookieItem cookieItem,
-		int amount,
+		BigDecimal amount,
 		Member member
 	) {
-		if (amount <= 0) {
-			throw new RuntimeException("amount is zero or negative number");
-		}
-
 		this.impUid = requireNonNull(impUid, "impUid is null");
 		this.merchantUid = requireNonNull(merchantUid, "merchantUid is null");
-		this.pg = requireNonNull(pg, "pg is null");
 		this.payMethod = requireNonNull(payMethod, "payMethod is null");
 		this.cookieItem = requireNonNull(cookieItem, "cookieItem is null");
-		this.amount = amount;
-		this.member = requireNonNull(member, "member is null");
+		this.amount = requireNonNull(amount, "amount is null");
+		this.member = member;
+		// this.member = requireNonNull(member, "member is null");
 	}
 }

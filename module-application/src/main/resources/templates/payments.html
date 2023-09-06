@@ -2,6 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta id="_csrf" name="_csrf" content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}"/>
     <title>Sample Payment</title>
 
     <!-- jQuery -->
@@ -25,78 +27,58 @@
                 buyer_tel: $("#buyer-tel").val()
             }, function (rsp) {
                 // 결제 성공 시
+                console.log("결제는 성공");
                 if (rsp.success) {
-                    let data = {
-                        impUid: rsp.imp_uid,
-                        merchantUid: rsp.merchant_uid,
-                        pg: rsp.pg,
-                        payMethod: rsp.pay_method,
-                        productName: rsp.name,
-                        amount: rsp.amount,
-                        buyerEmail: rsp.buyer_email,
-                        buyerName: rsp.buyer_name,
-                        buyerPhone: rsp.buyer_tel
-                    };
-
-                    // 서버로 해당 정보로 검증 및 주문서 생성 요청
+                    console.log("결제 검증 위해 payments/validation 호출");
                     $.ajax({
+                        url: 'http://localhost:8080/api/v1/payments/validation',
                         type: "POST",
-                        url: 'api/v1/payments/validation',
-                        data: JSON.stringify(data),
-                        contentType: "application/json",
-                        dataType: "json",
-
-                        success: function (result) {
-                            $.ajax({
-                                type: "POST",
-                                url: 'api/v1/payments',
-                                data: JSON.stringify(data),
-                                contentType: "application/json",
-
-                                success: function (result) {
-                                    alert("결제 검증 완료");
-                                },
-
-                                error: function (result) {
-                                    alert("2. 결제 실패 : " + result.responseText);
-                                    cancelPayments(rsp);
-                                }
-                            });
-                        },
-
-                        error: function (result) {
-                            alert("2. 결제 실패 : " + result.responseText);
-                            cancelPayments(rsp);
-                        }
+                        contentType: "application/json; charset=UTF-8",
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            impUid: rsp.imp_uid,
+                            merchantUid: rsp.merchant_uid,
+                            payMethod: rsp.pay_method,
+                            cookieItem: rsp.name,
+                            amount: rsp.paid_amount,
+                            buyerEmail: rsp.buyer_email,
+                            buyerName: rsp.buyer_name,
+                            buyerPhone: rsp.buyer_tel
+                        })
+                    }).done(function (data, textStatus, xhr) {
+                        console.log("결제 검증 및 저장 성공");
+                    }).fail(function (xhr, textStatus, errorThrown) {
+                        console.log("결제 검증 및 저장 실패 : ");
+                        alert('결제 검증 실패 : ' + rsp.error_msg);
+                        cancelPayments(rsp);
                     });
                 } else {
-                    // 결제 실패 시,
-                    alert('1. 결제 실패 : ' + rsp.error_msg);
+                    console.log("결제 실패");
+                    alert('- 결제 실패 : ' + rsp.error_msg);
                 }
             });
         }
 
         function cancelPayments(rsp) {
-            let data = {
-                impUid: rsp.imp_uid,
-                reason: "결제 금액 위/변조 - 결제 금액 불일치",
-                checksum: rsp.paid_amount,
-                buyerEmail: rsp.buyer_email,
-                buyerName: rsp.buyer_name,
-                buyerPhone: rsp.buyer_tel
-            };
-
+            console.log("결제 취소 호출");
             $.ajax({
-                type: "POST",
-                url: 'api/v1/payments/cancel',
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                success: function (result) {
-                    alert("환불 완료");
-                },
-                error: function (result) {
-                    alert("환불 실패 : " + result.responseText);
-                }
+                type: 'POST',
+                url: 'http://localhost:8080/api/v1/payments/cancel',
+                contentType: "application/json; charset=UTF-8",
+                withCredentials: true,
+                data: JSON.stringify({
+                    impUid: rsp.imp_uid,
+                    merchantUid: rsp.merchant_uid,
+                    reason: '결제 금액 위/변조 - 결제 금액 불일치',
+                    checksum: rsp.paid_amount,
+                    refundHolder: rsp.buyer_name
+                }),
+            }).done(function (data, textStatus, xhr) {
+                console.log("결제 취소 성공");
+                alert('결제 취소 성공');
+            }).fail(function (xhr, textStatus, errorThrown) {
+                console.log("결제 취소 실패");
+                alert('결제 취소 실패 : ' + rsp.error_msg);
             });
         }
     </script>
@@ -104,7 +86,7 @@
 <body>
 이름: <input type="text" id="buyer-name" value="hhj"><br>
 이메일: <input type="text" id="buyer-email" value="example@naver.com"><br>
-전화번호: <input type="text" id="buyer-tel" value="010-1717-1237"><br>
+전화번호: <input type="text" id="buyer-tel" value="01017171237"><br>
 
 구매할 쿠키 갯수 :
 <select id='amount'>
@@ -113,6 +95,7 @@
     <option value='3000'>쿠키 30개</option>
     <option value='5000'>쿠키 50개</option>
     <option value='10000'>쿠키 100개</option>
+    <option value='500'>쿠키 10개</option>
 </select> (개당 100원) <br>
 
 결제 방법:
