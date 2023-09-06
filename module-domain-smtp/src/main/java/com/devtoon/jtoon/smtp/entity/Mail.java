@@ -19,7 +19,7 @@ public class Mail {
 		this.text = text;
 	}
 
-	public static Mail createEvent(String subject, String to, String text) {
+	public static Mail forEvent(String subject, String to, String text) {
 		return Mail.builder()
 			.subject(subject)
 			.to(to)
@@ -27,7 +27,7 @@ public class Mail {
 			.build();
 	}
 
-	public static Mail createAuthentication(String to, String text) {
+	public static Mail forAuthentication(String to, String text) {
 		return Mail.builder()
 			.to(to)
 			.text(text)

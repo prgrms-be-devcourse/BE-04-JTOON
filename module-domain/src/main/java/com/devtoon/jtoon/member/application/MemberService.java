@@ -8,7 +8,7 @@ import com.devtoon.jtoon.exception.ExceptionCode;
 import com.devtoon.jtoon.exception.MemberException;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.repository.MemberRepository;
-import com.devtoon.jtoon.member.request.SignUpDto;
+import com.devtoon.jtoon.member.request.SignUpReq;
 import com.devtoon.jtoon.smtp.application.SmtpService;
 import com.devtoon.jtoon.smtp.entity.Mail;
 import java.util.UUID;
@@ -24,10 +24,11 @@ public class MemberService {
 	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
-	public void createMember(SignUpDto signUpDto) {
-		validateDuplicateEmail(signUpDto.email());
-		String encryptedPassword = encodePassword(signUpDto.password());
-		Member member = signUpDto.toEntity(encryptedPassword);
+	public void createMember(SignUpReq signUpReq) {
+		validateDuplicateEmail(signUpReq.email());
+		String encryptedPassword = encodePassword(signUpReq.password());
+		Member member = signUpReq.toEntity(encryptedPassword);
+
 		memberRepository.save(member);
 	}
 
@@ -35,7 +36,7 @@ public class MemberService {
 		validateDuplicateEmail(email);
 		UUID uuid = UUID.randomUUID();
 		String randomUuid = uuid.toString().substring(0, 6);
-		Mail mail = Mail.createAuthentication(email, randomUuid);
+		Mail mail = Mail.forAuthentication(email, randomUuid);
 		smtpService.sendMail(mail);
 
 		return randomUuid;

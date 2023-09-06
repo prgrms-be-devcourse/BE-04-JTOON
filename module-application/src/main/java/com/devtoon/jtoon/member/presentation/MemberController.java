@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devtoon.jtoon.member.application.MemberService;
-import com.devtoon.jtoon.member.request.SignUpDto;
+import com.devtoon.jtoon.member.request.SignUpReq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -23,8 +23,8 @@ public class MemberController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody @Valid SignUpDto signUpDto) {
-        memberService.createMember(signUpDto);
+    public void signUp(@RequestBody @Valid SignUpReq signUpReq) {
+        memberService.createMember(signUpReq);
     }
 
     @GetMapping("/email-authorization")

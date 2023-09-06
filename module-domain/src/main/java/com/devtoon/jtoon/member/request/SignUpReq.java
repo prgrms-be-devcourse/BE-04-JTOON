@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record SignUpDto(
+public record SignUpReq(
 	@Pattern(regexp = EMAIL_PATTERN) String email,
 	@Pattern(regexp = PASSWORD_PATTERN) String password,
 	@NotBlank @Size(max = 10) String name,
