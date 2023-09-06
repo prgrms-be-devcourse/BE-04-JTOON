@@ -25,7 +25,7 @@ public class S3Uploader {
 				BUCKET,
 				key,
 				file.getInputStream(),
-				ObjectMetadata.builder().contentType("multipart/form-data").build()
+				ObjectMetadata.builder().contentType("image/png").build()
 			);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
