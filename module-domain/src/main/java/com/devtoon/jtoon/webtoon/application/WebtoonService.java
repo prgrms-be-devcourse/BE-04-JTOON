@@ -1,23 +1,24 @@
 package com.devtoon.jtoon.webtoon.application;
 
 import static com.devtoon.jtoon.common.ImageType.*;
+import static java.util.stream.Collectors.*;
 
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.devtoon.jtoon.application.S3Service;
 import com.devtoon.jtoon.common.FileName;
-import com.devtoon.jtoon.global.common.PageRes;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.repository.MemberRepository;
 import com.devtoon.jtoon.webtoon.entity.DayOfWeekWebtoon;
 import com.devtoon.jtoon.webtoon.entity.Episode;
 import com.devtoon.jtoon.webtoon.entity.GenreWebtoon;
 import com.devtoon.jtoon.webtoon.entity.Webtoon;
+import com.devtoon.jtoon.webtoon.entity.enums.DayOfWeek;
 import com.devtoon.jtoon.webtoon.repository.DayOfWeekWebtoonRepository;
 import com.devtoon.jtoon.webtoon.repository.EpisodeRepository;
 import com.devtoon.jtoon.webtoon.repository.GenreWebtoonRepository;
@@ -28,6 +29,7 @@ import com.devtoon.jtoon.webtoon.request.CreateWebtoonReq;
 import com.devtoon.jtoon.webtoon.request.GetWebtoonsReq;
 import com.devtoon.jtoon.webtoon.response.GenreRes;
 import com.devtoon.jtoon.webtoon.response.WebtoonInfoRes;
+import com.devtoon.jtoon.webtoon.response.WebtoonItemRes;
 
 import lombok.RequiredArgsConstructor;
 
@@ -62,29 +64,36 @@ public class WebtoonService {
 	}
 
 	@Transactional
-	public void createEpisode(Long webtoonId, CreateEpisodeReq req) {
+	public void createEpisode(
+		Long webtoonId,
+		CreateEpisodeReq request,
+		MultipartFile mainImage,
+		MultipartFile thumbnailImage
+	) {
 		Webtoon webtoon = getWebtoonById(webtoonId);
 		String mainUrl = s3Service.upload(
 			EPISODE_MAIN,
 			webtoon.getTitle(),
-			FileName.forEpisode(req.no()),
-			req.mainImage()
+			FileName.forEpisode(request.no()),
+			mainImage
 		);
 		String thumbnailUrl = s3Service.upload(
 			EPISODE_THUMBNAIL,
 			webtoon.getTitle(),
-			FileName.forEpisode(req.no()),
-			req.thumbnailImage()
+			FileName.forEpisode(request.no()),
+			thumbnailImage
 		);
-		Episode episode = req.toEntity(webtoon, mainUrl, thumbnailUrl);
+		Episode episode = request.toEntity(webtoon, mainUrl, thumbnailUrl);
 		episodeRepository.save(episode);
 	}
 
-	public PageRes<Webtoon> getWebtoons(GetWebtoonsReq req, Pageable pageable) {
-		long totalCount = webtoonSearchRepository.countBy(req.day(), req.keyword());
-		List<Webtoon> webtoons = webtoonSearchRepository.findWebtoons(req.day(), req.keyword(), pageable);
-
-		return PageRes.from(totalCount, webtoons);
+	public Map<DayOfWeek, List<WebtoonItemRes>> getWebtoons(GetWebtoonsReq request) {
+		return webtoonSearchRepository.findWebtoons(request.day(), request.keyword())
+			.stream()
+			.collect(groupingBy(
+				DayOfWeekWebtoon::getDayOfWeek,
+				mapping(dayOfWeekWebtoon -> WebtoonItemRes.from(dayOfWeekWebtoon.getWebtoon()), toList())
+			));
 	}
 
 	public WebtoonInfoRes getWebtoon(Long webtoonId) {
@@ -98,11 +107,6 @@ public class WebtoonService {
 	private Webtoon getWebtoonById(Long webtoonId) {
 		return webtoonRepository.findById(webtoonId)
 			.orElseThrow(() -> new RuntimeException("존재하는 웹툰이 아닙니다."));
-	}
-
-	private Member getMemberById(Long memberId) {
-		return memberRepository.findById(memberId)
-			.orElseThrow(() -> new RuntimeException("존재하는 회원이 아닙니다."));
 	}
 
 	private List<String> getDayOfWeeks(Long webtoonId) {

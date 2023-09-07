@@ -1,9 +1,8 @@
 package com.devtoon.jtoon.webtoon.presentation;
 
-import static org.springframework.data.domain.Sort.*;
+import java.util.List;
+import java.util.Map;
 
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,15 +13,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.devtoon.jtoon.global.common.PageRes;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.security.jwt.domain.MemberThreadLocal;
 import com.devtoon.jtoon.webtoon.application.WebtoonService;
-import com.devtoon.jtoon.webtoon.entity.Webtoon;
+import com.devtoon.jtoon.webtoon.entity.enums.DayOfWeek;
 import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.CreateWebtoonReq;
 import com.devtoon.jtoon.webtoon.request.GetWebtoonsReq;
 import com.devtoon.jtoon.webtoon.response.WebtoonInfoRes;
+import com.devtoon.jtoon.webtoon.response.WebtoonItemRes;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,16 +42,18 @@ public class WebtoonController {
 
 	@PostMapping("/{webtoonId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createEpisode(@PathVariable Long webtoonId, @Valid CreateEpisodeReq req) {
-		webtoonService.createEpisode(webtoonId, req);
+	public void createEpisode(
+		@PathVariable Long webtoonId,
+		@RequestPart @Valid CreateEpisodeReq request,
+		@RequestPart MultipartFile mainImage,
+		@RequestPart(required = false) MultipartFile thumbnailImage
+	) {
+		webtoonService.createEpisode(webtoonId, request, mainImage, thumbnailImage);
 	}
 
 	@GetMapping
-	public PageRes<Webtoon> getWebtoons(
-		GetWebtoonsReq req,
-		@PageableDefault(sort = "createdAt", direction = Direction.DESC) Pageable pageable
-	) {
-		return webtoonService.getWebtoons(req, pageable);
+	public Map<DayOfWeek, List<WebtoonItemRes>> getWebtoons(GetWebtoonsReq request) {
+		return webtoonService.getWebtoons(request);
 	}
 
 	@GetMapping("/{webtoonId}")
