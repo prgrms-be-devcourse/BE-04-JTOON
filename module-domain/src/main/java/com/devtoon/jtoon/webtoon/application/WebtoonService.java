@@ -14,14 +14,19 @@ import com.devtoon.jtoon.common.FileName;
 import com.devtoon.jtoon.global.common.PageRes;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.repository.MemberRepository;
+import com.devtoon.jtoon.webtoon.entity.DayOfWeekWebtoon;
 import com.devtoon.jtoon.webtoon.entity.Episode;
+import com.devtoon.jtoon.webtoon.entity.GenreWebtoon;
 import com.devtoon.jtoon.webtoon.entity.Webtoon;
+import com.devtoon.jtoon.webtoon.repository.DayOfWeekWebtoonRepository;
 import com.devtoon.jtoon.webtoon.repository.EpisodeRepository;
+import com.devtoon.jtoon.webtoon.repository.GenreWebtoonRepository;
 import com.devtoon.jtoon.webtoon.repository.WebtoonRepository;
 import com.devtoon.jtoon.webtoon.repository.WebtoonSearchRepository;
 import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.CreateWebtoonReq;
 import com.devtoon.jtoon.webtoon.request.GetWebtoonsReq;
+import com.devtoon.jtoon.webtoon.response.GenreRes;
 import com.devtoon.jtoon.webtoon.response.WebtoonInfoRes;
 
 import lombok.RequiredArgsConstructor;
@@ -35,6 +40,8 @@ public class WebtoonService {
 	private final WebtoonSearchRepository webtoonSearchRepository;
 	private final MemberRepository memberRepository;
 	private final EpisodeRepository episodeRepository;
+	private final DayOfWeekWebtoonRepository dayOfWeekWebtoonRepository;
+	private final GenreWebtoonRepository genreWebtoonRepository;
 	private final S3Service s3Service;
 
 	@Transactional
@@ -46,14 +53,12 @@ public class WebtoonService {
 			FileName.forWebtoon(),
 			thumbnailImage
 		);
-		Webtoon webtoon = request.toEntity(author, thumbnailUrl);
+		Webtoon webtoon = request.toWebtoonEntity(author, thumbnailUrl);
+		List<DayOfWeekWebtoon> dayOfWeekWebtoons = request.toDayOfWeekWebtoonEntity(webtoon);
+		List<GenreWebtoon> genreWebtoons = request.toGenreWebtoonEntity(webtoon);
 		webtoonRepository.save(webtoon);
-	}
-
-	public WebtoonInfoRes getWebtoon(Long webtoonId) {
-		Webtoon webtoon = getWebtoonById(webtoonId);
-
-		return WebtoonInfoRes.from(webtoon);
+		dayOfWeekWebtoonRepository.saveAll(dayOfWeekWebtoons);
+		genreWebtoonRepository.saveAll(genreWebtoons);
 	}
 
 	@Transactional
@@ -82,6 +87,14 @@ public class WebtoonService {
 		return PageRes.from(totalCount, webtoons);
 	}
 
+	public WebtoonInfoRes getWebtoon(Long webtoonId) {
+		Webtoon webtoon = getWebtoonById(webtoonId);
+		List<String> dayOfWeeks = getDayOfWeeks(webtoonId);
+		List<GenreRes> genres = getGenres(webtoonId);
+
+		return WebtoonInfoRes.of(webtoon, dayOfWeeks, genres);
+	}
+
 	private Webtoon getWebtoonById(Long webtoonId) {
 		return webtoonRepository.findById(webtoonId)
 			.orElseThrow(() -> new RuntimeException("존재하는 웹툰이 아닙니다."));
@@ -90,6 +103,20 @@ public class WebtoonService {
 	private Member getMemberById(Long memberId) {
 		return memberRepository.findById(memberId)
 			.orElseThrow(() -> new RuntimeException("존재하는 회원이 아닙니다."));
+	}
+
+	private List<String> getDayOfWeeks(Long webtoonId) {
+		return dayOfWeekWebtoonRepository.findById(webtoonId)
+			.stream()
+			.map(webtoon -> webtoon.getDayOfWeek().name())
+			.toList();
+	}
+
+	private List<GenreRes> getGenres(Long webtoonId) {
+		return genreWebtoonRepository.findById(webtoonId)
+			.stream()
+			.map(GenreRes::from)
+			.toList();
 	}
 
 	private void validateDuplicateTitle(String title) {
