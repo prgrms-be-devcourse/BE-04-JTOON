@@ -42,7 +42,7 @@ public class AuthService {
 		RefreshToken token = checkAndGetToken(findToken, refreshToken, logInReq.email());
 		refreshTokenRepository.save(token);
 
-		return new LoginRes(accessToken, refreshToken);
+		return LoginRes.of(accessToken, refreshToken);
 	}
 
 	public boolean isPasswordSame(String rawPassword, String memberPassword) {

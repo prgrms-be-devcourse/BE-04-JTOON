@@ -56,6 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		refreshToken = refreshToken.split(SPACE)[1];
 		jwtProvider.isTokenValid(refreshToken);
 		jwtProvider.verifyRefreshTokenDb(refreshToken);
+		
 		return refreshToken;
 	}
 
