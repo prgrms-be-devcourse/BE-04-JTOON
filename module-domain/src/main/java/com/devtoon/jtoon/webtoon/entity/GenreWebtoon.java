@@ -2,6 +2,7 @@ package com.devtoon.jtoon.webtoon.entity;
 
 import static java.util.Objects.*;
 
+import com.devtoon.jtoon.global.common.BaseTimeEntity;
 import com.devtoon.jtoon.webtoon.entity.enums.Genre;
 
 import jakarta.persistence.Column;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "genre_webtoons")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GenreWebtoon {
+public class GenreWebtoon extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
