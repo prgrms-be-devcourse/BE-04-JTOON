@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import com.devtoon.jtoon.security.filter.JwtAuthenticationFilter;
-import com.devtoon.jtoon.security.jwt.JwtProvider;
+import com.devtoon.jtoon.security.jwt.application.JwtProvider;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -30,7 +30,7 @@ public class WebSecurityConfiguration {
 	}
 
 	@Bean
-	public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests(request -> request
 				.requestMatchers("/members").permitAll()
@@ -40,7 +40,8 @@ public class WebSecurityConfiguration {
 			.csrf(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(new JwtAuthenticationFilter(handlerExceptionResolver, jwtProvider), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new JwtAuthenticationFilter(handlerExceptionResolver, jwtProvider),
+				UsernamePasswordAuthenticationFilter.class)
 		;
 		return http.build();
 	}
