@@ -48,7 +48,8 @@ public class WebtoonController {
 		@RequestPart MultipartFile mainImage,
 		@RequestPart(required = false) MultipartFile thumbnailImage
 	) {
-		webtoonService.createEpisode(webtoonId, request, mainImage, thumbnailImage);
+		Member member = MemberThreadLocal.getMember();
+		webtoonService.createEpisode(member, webtoonId, request, mainImage, thumbnailImage);
 	}
 
 	@GetMapping

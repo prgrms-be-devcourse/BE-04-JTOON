@@ -47,7 +47,7 @@ public class WebtoonService {
 	private final S3Service s3Service;
 
 	@Transactional
-	public void createWebtoon(Member author, MultipartFile thumbnailImage, CreateWebtoonReq request) {
+	public void createWebtoon(Member member, MultipartFile thumbnailImage, CreateWebtoonReq request) {
 		validateDuplicateTitle(request.title());
 		String thumbnailUrl = s3Service.upload(
 			WEBTOON_THUMBNAIL,
@@ -55,7 +55,7 @@ public class WebtoonService {
 			FileName.forWebtoon(),
 			thumbnailImage
 		);
-		Webtoon webtoon = request.toWebtoonEntity(author, thumbnailUrl);
+		Webtoon webtoon = request.toWebtoonEntity(member, thumbnailUrl);
 		List<DayOfWeekWebtoon> dayOfWeekWebtoons = request.toDayOfWeekWebtoonEntity(webtoon);
 		List<GenreWebtoon> genreWebtoons = request.toGenreWebtoonEntity(webtoon);
 		webtoonRepository.save(webtoon);
@@ -65,12 +65,14 @@ public class WebtoonService {
 
 	@Transactional
 	public void createEpisode(
+		Member member,
 		Long webtoonId,
 		CreateEpisodeReq request,
 		MultipartFile mainImage,
 		MultipartFile thumbnailImage
 	) {
 		Webtoon webtoon = getWebtoonById(webtoonId);
+		validateAuthorOfWebtoon(member, webtoon);
 		String mainUrl = s3Service.upload(
 			EPISODE_MAIN,
 			webtoon.getTitle(),
@@ -126,6 +128,12 @@ public class WebtoonService {
 	private void validateDuplicateTitle(String title) {
 		if (webtoonRepository.existsByTitle(title)) {
 			throw new RuntimeException("이미 존재하는 웹툰 제목입니다.");
+		}
+	}
+
+	private void validateAuthorOfWebtoon(Member member, Webtoon webtoon) {
+		if (!webtoon.isAuthor(member.getId())) {
+			throw new RuntimeException("해당 웹툰의 작가가 아닙니다.");
 		}
 	}
 }
