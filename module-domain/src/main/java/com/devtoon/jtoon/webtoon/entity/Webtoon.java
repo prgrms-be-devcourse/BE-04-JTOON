@@ -2,18 +2,13 @@ package com.devtoon.jtoon.webtoon.entity;
 
 import static java.util.Objects.*;
 
-import java.util.Set;
-
 import org.hibernate.annotations.ColumnDefault;
 
 import com.devtoon.jtoon.global.common.BaseTimeEntity;
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.webtoon.entity.converter.AgeLimitConverter;
-import com.devtoon.jtoon.webtoon.entity.converter.DayOfWeekConverter;
-import com.devtoon.jtoon.webtoon.entity.converter.GenreConverter;
+import com.devtoon.jtoon.webtoon.entity.enums.AgeLimit;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -44,27 +39,18 @@ public class Webtoon extends BaseTimeEntity {
 	@Column(name = "description", nullable = false, length = 400)
 	private String description;
 
-	@Convert(converter = DayOfWeekConverter.class)
-	@Column(name = "day_of_week", nullable = false, length = 30)
-	private Set<DayOfWeek> dayOfWeeks;
-
-	@Convert(converter = GenreConverter.class)
-	@Column(name = "genre", nullable = false, length = 30)
-	private Set<Genre> genres;
-
-	@Convert(converter = AgeLimitConverter.class)
 	@Column(name = "age_limit", nullable = false)
 	private AgeLimit ageLimit;
 
 	@ColumnDefault("'default thumbnail url'")
-	@Column(name = "thumbnail_url", nullable = false, length = 65535)
+	@Column(name = "thumbnail_url", nullable = false, length = 500)
 	private String thumbnailUrl = "default thumbnail url";
 
 	@Column(name = "cookie_count", nullable = false)
 	private int cookieCount;
 
-	@Column(name = "interest_count", nullable = false)
-	private int interestCount;
+	@Column(name = "favorite_count", nullable = false)
+	private int favoriteCount;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "author_id", nullable = false)
@@ -74,8 +60,6 @@ public class Webtoon extends BaseTimeEntity {
 	private Webtoon(
 		String title,
 		String description,
-		Set<DayOfWeek> dayOfWeeks,
-		Set<Genre> genres,
 		AgeLimit ageLimit,
 		String thumbnailUrl,
 		int cookieCount,
@@ -87,8 +71,6 @@ public class Webtoon extends BaseTimeEntity {
 
 		this.title = requireNonNull(title, "title is null");
 		this.description = requireNonNull(description, "description is null");
-		this.dayOfWeeks = requireNonNull(dayOfWeeks, "dayOfWeeks is null");
-		this.genres = requireNonNull(genres, "genres is null");
 		this.ageLimit = requireNonNull(ageLimit, "ageLimit is null");
 		this.thumbnailUrl = thumbnailUrl;
 		this.cookieCount = cookieCount;
