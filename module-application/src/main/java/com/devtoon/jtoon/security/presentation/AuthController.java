@@ -1,11 +1,14 @@
 package com.devtoon.jtoon.security.presentation;
 
+import static com.devtoon.jtoon.security.util.SecurityConstant.*;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devtoon.jtoon.security.application.AuthService;
 import com.devtoon.jtoon.security.request.LogInReq;
+import com.devtoon.jtoon.security.response.LoginRes;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +21,9 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public void login(@RequestBody @Valid LogInReq logInReq, HttpServletResponse response) {
-		String token = authService.login(logInReq);
+		LoginRes loginRes = authService.login(logInReq);
 
-		response.setHeader("Set-Cookie", "Bearer " + token);
+		response.setHeader(ACCESS_TOKEN_HEADER, BEARER_VALUE + loginRes.accessToken());
+		response.setHeader(REFRESH_TOKEN_HEADER, BEARER_VALUE + loginRes.refreshToken());
 	}
 }
