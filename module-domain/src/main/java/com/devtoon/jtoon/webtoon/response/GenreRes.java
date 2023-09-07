@@ -7,15 +7,12 @@ import lombok.Builder;
 
 @Builder
 public record GenreRes(
-
-	Long id,
 	Genre type,
 	String name
 ) {
 
 	public static GenreRes from(GenreWebtoon genreWebtoon) {
 		return GenreRes.builder()
-			.id(genreWebtoon.getId())
 			.type(genreWebtoon.getGenre())
 			.name(genreWebtoon.getGenre().getText())
 			.build();
