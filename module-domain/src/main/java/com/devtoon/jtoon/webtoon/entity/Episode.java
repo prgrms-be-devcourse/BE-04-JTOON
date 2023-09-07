@@ -40,11 +40,11 @@ public class Episode extends BaseTimeEntity {
 	@Column(name = "title", nullable = false, length = 30)
 	private String title;
 
-	@Column(name = "main_url", nullable = false, length = 65535)
+	@Column(name = "main_url", nullable = false, length = 500)
 	private String mainUrl;
 
 	@ColumnDefault("'default thumbnail url'")
-	@Column(name = "thumbnail_url", nullable = false, length = 65535)
+	@Column(name = "thumbnail_url", nullable = false, length = 500)
 	private String thumbnailUrl = "default thumbnail url";
 
 	@ColumnDefault("1")
