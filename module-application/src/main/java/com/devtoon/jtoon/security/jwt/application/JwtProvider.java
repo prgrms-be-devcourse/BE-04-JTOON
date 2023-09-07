@@ -1,6 +1,6 @@
 package com.devtoon.jtoon.security.jwt.application;
 
-import static com.devtoon.jtoon.security.application.SecurityConstant.*;
+import static com.devtoon.jtoon.security.util.SecurityConstant.*;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;

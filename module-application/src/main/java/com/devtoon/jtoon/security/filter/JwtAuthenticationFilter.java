@@ -1,6 +1,6 @@
 package com.devtoon.jtoon.security.filter;
 
-import static com.devtoon.jtoon.security.application.SecurityConstant.*;
+import static com.devtoon.jtoon.security.util.SecurityConstant.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;

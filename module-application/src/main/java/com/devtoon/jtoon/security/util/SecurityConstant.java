@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.security.application;
+package com.devtoon.jtoon.security.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

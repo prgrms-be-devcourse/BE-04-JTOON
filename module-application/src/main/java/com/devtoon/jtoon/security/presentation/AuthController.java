@@ -1,6 +1,6 @@
 package com.devtoon.jtoon.security.presentation;
 
-import static com.devtoon.jtoon.security.application.SecurityConstant.*;
+import static com.devtoon.jtoon.security.util.SecurityConstant.*;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
