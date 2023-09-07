@@ -19,7 +19,6 @@ public class S3Service {
 	@Value("${spring.cloud.aws.cloud-front.url}")
 	private String IMAGE_URL;
 
-	//TODO 확장자 포함
 	public String upload(ImageType imageType, String webtoonTitle, FileName fileName, MultipartFile image) {
 		String key = imageType.getPath(webtoonTitle, fileName.getValue());
 		s3Uploader.upload(key, image);

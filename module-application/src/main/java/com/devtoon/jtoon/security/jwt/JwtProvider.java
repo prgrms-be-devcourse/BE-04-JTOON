@@ -3,10 +3,10 @@ package com.devtoon.jtoon.security.jwt;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import com.devtoon.jtoon.security.jwt.application.CustomUserDetailsService;
+import com.devtoon.jtoon.security.jwt.domain.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -36,7 +36,7 @@ public class JwtProvider {
 
 	private Key secretKey;
 
-	private final UserDetailsService userDetailsService;
+	private final CustomUserDetailsService userDetailsService;
 
 	@PostConstruct
 	private void init() {
@@ -71,7 +71,7 @@ public class JwtProvider {
 
 	public Authentication getAuthentication(String token) {
 		String ClaimsEmail = parseClaimsBody(token).getSubject();
-		UserDetails userDetails = userDetailsService.loadUserByUsername(ClaimsEmail);
+		CustomUserDetails userDetails = userDetailsService.loadUserByUsername(ClaimsEmail);
 
 		return new UsernamePasswordAuthenticationToken(userDetails, " ", userDetails.getAuthorities());
 	}

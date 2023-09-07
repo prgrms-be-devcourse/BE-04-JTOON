@@ -19,16 +19,16 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/members")
 public class MemberController {
 
-    private final MemberService memberService;
+	private final MemberService memberService;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody @Valid SignUpReq signUpReq) {
-        memberService.createMember(signUpReq);
-    }
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public void signUp(@RequestBody @Valid SignUpReq signUpReq) {
+		memberService.createMember(signUpReq);
+	}
 
-    @GetMapping("/email-authorization")
-    public String authenticateEmail(@RequestParam(value = "email") String email) {
-        return memberService.sendEmailAuthentication(email);
-    }
+	@GetMapping("/email-authorization")
+	public String authenticateEmail(@RequestParam(value = "email") String email) {
+		return memberService.sendEmailAuthentication(email);
+	}
 }

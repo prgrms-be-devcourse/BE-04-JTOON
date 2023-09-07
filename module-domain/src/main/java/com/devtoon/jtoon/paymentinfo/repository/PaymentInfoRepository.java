@@ -1,9 +1,9 @@
-package com.devtoon.jtoon.payment.repository;
+package com.devtoon.jtoon.paymentinfo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.devtoon.jtoon.payment.entity.PaymentInfo;
+import com.devtoon.jtoon.paymentinfo.entity.PaymentInfo;
 
 @Repository
 public interface PaymentInfoRepository extends JpaRepository<PaymentInfo, Long> {

@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.devtoon.jtoon.application.S3Service;
 import com.devtoon.jtoon.common.FileName;
@@ -21,6 +22,7 @@ import com.devtoon.jtoon.webtoon.repository.WebtoonSearchRepository;
 import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.CreateWebtoonReq;
 import com.devtoon.jtoon.webtoon.request.GetWebtoonsReq;
+import com.devtoon.jtoon.webtoon.response.WebtoonInfoRes;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,17 +38,22 @@ public class WebtoonService {
 	private final S3Service s3Service;
 
 	@Transactional
-	public void createWebtoon(Long memberId, CreateWebtoonReq request) {
+	public void createWebtoon(Member author, MultipartFile thumbnailImage, CreateWebtoonReq request) {
 		validateDuplicateTitle(request.title());
-		Member author = getMemberById(memberId);
 		String thumbnailUrl = s3Service.upload(
 			WEBTOON_THUMBNAIL,
 			request.title(),
 			FileName.forWebtoon(),
-			request.thumbnailImage()
+			thumbnailImage
 		);
 		Webtoon webtoon = request.toEntity(author, thumbnailUrl);
 		webtoonRepository.save(webtoon);
+	}
+
+	public WebtoonInfoRes getWebtoon(Long webtoonId) {
+		Webtoon webtoon = getWebtoonById(webtoonId);
+
+		return WebtoonInfoRes.from(webtoon);
 	}
 
 	@Transactional
