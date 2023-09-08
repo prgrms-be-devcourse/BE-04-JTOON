@@ -16,8 +16,7 @@ public record WebtoonInfoRes(
 	AgeLimit ageLimit,
 	String thumbnailUrl,
 	int favoriteCount,
-	Long authorId,
-	String authorName
+	AuthorRes author
 ) {
 
 	public static WebtoonInfoRes of(Webtoon webtoon, List<String> dayOfWeeks, List<GenreRes> genres) {
@@ -29,8 +28,7 @@ public record WebtoonInfoRes(
 			.ageLimit(webtoon.getAgeLimit())
 			.thumbnailUrl(webtoon.getThumbnailUrl())
 			.favoriteCount(webtoon.getFavoriteCount())
-			.authorId(webtoon.getAuthor().getId())
-			.authorName(webtoon.getAuthor().getNickname())
+			.author(AuthorRes.from(webtoon.getAuthor()))
 			.build();
 	}
 }
