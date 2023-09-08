@@ -1,7 +1,7 @@
 package com.devtoon.jtoon.smtp.application;
 
 import com.devtoon.jtoon.error.exception.MemberException;
-import com.devtoon.jtoon.error.model.ExceptionCode;
+import com.devtoon.jtoon.error.model.ExceptionStatus;
 import com.devtoon.jtoon.smtp.entity.Mail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -27,7 +27,7 @@ public class SmtpService {
             mimeMessageHelper.setText(mail.getText());
             javaMailSender.send(mimeMessage);
         } catch (MessagingException | MailException e) {
-            throw new MemberException(ExceptionCode.MEMBER_MESSAGE_SEND_FAILED);
+            throw new MemberException(ExceptionStatus.MEMBER_MESSAGE_SEND_FAILED);
         }
     }
 }

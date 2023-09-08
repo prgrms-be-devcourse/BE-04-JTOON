@@ -1,6 +1,6 @@
 package com.devtoon.jtoon.member.entity;
 
-import com.devtoon.jtoon.error.model.ExceptionCode;
+import com.devtoon.jtoon.error.model.ExceptionStatus;
 import com.devtoon.jtoon.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -60,12 +60,12 @@ public class Member extends BaseTimeEntity {
     @Builder
     private Member(String email, String password, String name, String nickname, Gender gender, String phone, Role role,
                    LoginType loginType) {
-        this.email = requireNonNull(email, ExceptionCode.MEMBER_EMAIL_INVALID_FORMAT.getMessage());
-        this.password = requireNonNull(password, ExceptionCode.MEMBER_PASSWORD_INVALID_FORMAT.getMessage());
-        this.name = requireNonNull(name, ExceptionCode.MEMBER_NAME_INVALID_FORMAT.getMessage());
-        this.nickname = requireNonNull(nickname, ExceptionCode.MEMBER_NICKNAME_INVALID_FORMAT.getMessage());
-        this.gender = requireNonNull(gender, ExceptionCode.MEMBER_GENDER_INVALID_FORMAT.getMessage());
-        this.phone = requireNonNull(phone, ExceptionCode.MEMBER_PHONE_INVALID_FORMAT.getMessage());
+        this.email = requireNonNull(email, ExceptionStatus.MEMBER_EMAIL_INVALID_FORMAT.getMessage());
+        this.password = requireNonNull(password, ExceptionStatus.MEMBER_PASSWORD_INVALID_FORMAT.getMessage());
+        this.name = requireNonNull(name, ExceptionStatus.MEMBER_NAME_INVALID_FORMAT.getMessage());
+        this.nickname = requireNonNull(nickname, ExceptionStatus.MEMBER_NICKNAME_INVALID_FORMAT.getMessage());
+        this.gender = requireNonNull(gender, ExceptionStatus.MEMBER_GENDER_INVALID_FORMAT.getMessage());
+        this.phone = requireNonNull(phone, ExceptionStatus.MEMBER_PHONE_INVALID_FORMAT.getMessage());
         this.role = role;
         this.loginType = loginType;
     }

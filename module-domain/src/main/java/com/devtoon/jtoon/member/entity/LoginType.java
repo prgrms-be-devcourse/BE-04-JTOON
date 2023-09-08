@@ -1,7 +1,7 @@
 package com.devtoon.jtoon.member.entity;
 
 import com.devtoon.jtoon.error.exception.MemberException;
-import com.devtoon.jtoon.error.model.ExceptionCode;
+import com.devtoon.jtoon.error.model.ExceptionStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -29,6 +29,6 @@ public enum LoginType {
 
     public static LoginType from(String loginType) {
         return Optional.ofNullable(LOGIN_TYPE_MAP.get(loginType))
-                .orElseThrow(() -> new MemberException(ExceptionCode.MEMBER_LOGIN_TYPE_INVALID_FORMAT));
+                .orElseThrow(() -> new MemberException(ExceptionStatus.MEMBER_LOGIN_TYPE_INVALID_FORMAT));
     }
 }
