@@ -19,9 +19,16 @@ public enum ExceptionStatus {
     MEMBER_MESSAGE_SEND_FAILED("이메일 인증 메세지 전송 실패"),
     MEMBER_EMAIL_CONFLICT("Email 중복"),
 
+    PAYMENT_IMP_UID_IS_NULL("결제 고유번호 값이 NULL 입니다."),
+    PAYMENT_MERCHANT_UID_IS_NULL("주문번호 값이 NULL 입니다."),
+    PAYMENT_PAY_METHOD_IS_NULL("결제 방법 값이 NULL 입니다."),
+    PAYMENT_COOKIE_ITEM_IS_NULL("쿠키 아이템 값이 NULL 입니다."),
+    PAYMENT_AMOUNT_IS_NULL("결제 금액 값이 NULL 입니다."),
+    PAYMENT_MEMBER_IS_NULL("결제 사용자 값이 NULL 입니다."),
     PAYMENT_IMP_UID_DUPLICATED("결제 고유번호가 중복되었습니다."),
     PAYMENT_MERCHANT_UID_DUPLICATED("주문 번호가 중복되었습니다."),
     PAYMENT_AMOUNT_INVALID("잘못된 결제 금액입니다."),
+    PAYMENT_COOKIE_NOT_FOUND("등록되지 않은 쿠키 상품입니다."),
     ;
 
     private final String message;
