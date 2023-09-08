@@ -1,5 +1,8 @@
 package com.devtoon.jtoon.paymentinfo.service;
 
+import com.devtoon.jtoon.error.exception.DuplicatedException;
+import com.devtoon.jtoon.error.exception.InvalidRequestException;
+import com.devtoon.jtoon.error.model.ExceptionStatus;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.paymentinfo.entity.CookieItem;
 import com.devtoon.jtoon.paymentinfo.entity.PaymentInfo;
@@ -65,19 +68,19 @@ public class PaymentInfoService {
         BigDecimal realAmount = iamportResponse.getResponse().getAmount();
 
         if (!realAmount.equals(amount)) {
-            throw new RuntimeException("verify iamport exception");
+            throw new InvalidRequestException(ExceptionStatus.PAYMENT_AMOUNT_INVALID);
         }
     }
 
     private void validateMerchantUid(PaymentReq paymentReq) {
         if (paymentInfoRepository.existsByMerchantUid(paymentReq.merchantUid())) {
-            throw new RuntimeException("merchantUid duplicate");
+            throw new DuplicatedException(ExceptionStatus.PAYMENT_MERCHANT_UID_DUPLICATED);
         }
     }
 
     private void validateImpUid(PaymentReq paymentReq) {
         if (paymentInfoRepository.existsByImpUid(paymentReq.impUid())) {
-            throw new RuntimeException("impUid duplicate");
+            throw new DuplicatedException(ExceptionStatus.PAYMENT_IMP_UID_DUPLICATED);
         }
     }
 }
