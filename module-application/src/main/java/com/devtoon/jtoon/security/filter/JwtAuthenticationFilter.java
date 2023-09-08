@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		if (accessToken != null && accessToken.startsWith(BEARER_VALUE)) {
 			try {
-				accessToken = accessToken.split(SPACE)[1];
+				accessToken = accessToken.split(SPLIT_DATA)[1];
 				if (!jwtProvider.isTokenValid(accessToken)) {
 					String refreshToken = validateAndGetRefreshToken(request);
 					accessToken = regenerateTokens(refreshToken, response);
@@ -53,10 +53,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private String validateAndGetRefreshToken(HttpServletRequest request) {
 		String refreshToken = request.getHeader(REFRESH_TOKEN_HEADER);
-		refreshToken = refreshToken.split(SPACE)[1];
+		refreshToken = refreshToken.split(SPLIT_DATA)[1];
 		jwtProvider.isTokenValid(refreshToken);
 		jwtProvider.verifyRefreshTokenDb(refreshToken);
-		
+
 		return refreshToken;
 	}
 
