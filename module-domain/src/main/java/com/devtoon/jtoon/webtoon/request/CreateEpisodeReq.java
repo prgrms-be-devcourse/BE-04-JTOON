@@ -2,8 +2,6 @@ package com.devtoon.jtoon.webtoon.request;
 
 import java.time.LocalDateTime;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.devtoon.jtoon.webtoon.entity.Episode;
 import com.devtoon.jtoon.webtoon.entity.Webtoon;
 
@@ -16,9 +14,7 @@ public record CreateEpisodeReq(
 	@Min(1) int no,
 	@NotBlank @Size(max = 30) String title,
 	boolean hasComment,
-	@NotNull LocalDateTime openedAt,
-	@NotNull MultipartFile mainImage,
-	MultipartFile thumbnailImage
+	@NotNull LocalDateTime openedAt
 ) {
 
 	public Episode toEntity(Webtoon webtoon, String mainUrl, String thumbnailUrl) {
