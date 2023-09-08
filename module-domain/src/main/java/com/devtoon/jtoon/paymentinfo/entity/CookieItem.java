@@ -1,7 +1,7 @@
 package com.devtoon.jtoon.paymentinfo.entity;
 
 import com.devtoon.jtoon.error.exception.NotFoundException;
-import com.devtoon.jtoon.error.model.ExceptionStatus;
+import com.devtoon.jtoon.error.model.ErrorStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +35,6 @@ public enum CookieItem {
 
     public static CookieItem from(String itemName) {
         return Optional.ofNullable(COOKIE_MAP.get(itemName))
-                .orElseThrow(() -> new NotFoundException(ExceptionStatus.PAYMENT_COOKIE_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(ErrorStatus.PAYMENT_COOKIE_NOT_FOUND));
     }
 }

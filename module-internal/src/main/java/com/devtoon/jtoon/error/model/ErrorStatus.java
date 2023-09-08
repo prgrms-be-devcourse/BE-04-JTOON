@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public enum ExceptionStatus {
+public enum ErrorStatus {
 
     MEMBER_EMAIL_INVALID_FORMAT("올바른 이메일 형식이 아닙니다."),
     MEMBER_PASSWORD_INVALID_FORMAT("올바른 비밀번호형식이 아닙니다."),

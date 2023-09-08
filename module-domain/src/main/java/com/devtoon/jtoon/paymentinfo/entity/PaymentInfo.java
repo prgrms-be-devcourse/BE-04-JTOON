@@ -1,6 +1,6 @@
 package com.devtoon.jtoon.paymentinfo.entity;
 
-import com.devtoon.jtoon.error.model.ExceptionStatus;
+import com.devtoon.jtoon.error.model.ErrorStatus;
 import com.devtoon.jtoon.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -53,11 +53,11 @@ public class PaymentInfo {
             BigDecimal amount,
             Member member
     ) {
-        this.impUid = requireNonNull(impUid, ExceptionStatus.PAYMENT_IMP_UID_IS_NULL.getMessage());
-        this.merchantUid = requireNonNull(merchantUid, ExceptionStatus.PAYMENT_MERCHANT_UID_IS_NULL.getMessage());
-        this.payMethod = requireNonNull(payMethod, ExceptionStatus.PAYMENT_PAY_METHOD_IS_NULL.getMessage());
-        this.cookieItem = requireNonNull(cookieItem, ExceptionStatus.PAYMENT_COOKIE_ITEM_IS_NULL.getMessage());
-        this.amount = requireNonNull(amount, ExceptionStatus.PAYMENT_AMOUNT_IS_NULL.getMessage());
+        this.impUid = requireNonNull(impUid, ErrorStatus.PAYMENT_IMP_UID_IS_NULL.getMessage());
+        this.merchantUid = requireNonNull(merchantUid, ErrorStatus.PAYMENT_MERCHANT_UID_IS_NULL.getMessage());
+        this.payMethod = requireNonNull(payMethod, ErrorStatus.PAYMENT_PAY_METHOD_IS_NULL.getMessage());
+        this.cookieItem = requireNonNull(cookieItem, ErrorStatus.PAYMENT_COOKIE_ITEM_IS_NULL.getMessage());
+        this.amount = requireNonNull(amount, ErrorStatus.PAYMENT_AMOUNT_IS_NULL.getMessage());
         this.member = member;
         // this.member = requireNonNull(member, ExceptionStatus.PAYMENT_MEMBER_IS_NULL.getMessage());
     }

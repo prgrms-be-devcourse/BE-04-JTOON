@@ -1,7 +1,7 @@
 package com.devtoon.jtoon.member.application;
 
 import com.devtoon.jtoon.error.exception.MemberException;
-import com.devtoon.jtoon.error.model.ExceptionStatus;
+import com.devtoon.jtoon.error.model.ErrorStatus;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.repository.MemberRepository;
 import com.devtoon.jtoon.member.request.SignUpReq;
@@ -48,7 +48,7 @@ public class MemberService {
 
     private void validateDuplicateEmail(String email) {
         if (memberRepository.existsByEmail(email)) {
-            throw new MemberException(ExceptionStatus.MEMBER_EMAIL_CONFLICT);
+            throw new MemberException(ErrorStatus.MEMBER_EMAIL_CONFLICT);
         }
     }
 }
