@@ -1,16 +1,15 @@
 package com.devtoon.jtoon.smtp.application;
 
-import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
-
-import com.devtoon.jtoon.exception.ExceptionCode;
-import com.devtoon.jtoon.exception.MemberException;
+import com.devtoon.jtoon.error.exception.MemberException;
+import com.devtoon.jtoon.error.model.ExceptionCode;
 import com.devtoon.jtoon.smtp.entity.Mail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
