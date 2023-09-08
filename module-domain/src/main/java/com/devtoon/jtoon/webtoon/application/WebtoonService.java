@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.devtoon.jtoon.application.S3Service;
 import com.devtoon.jtoon.common.FileName;
+import com.devtoon.jtoon.global.util.CustomPageRequest;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.repository.MemberRepository;
 import com.devtoon.jtoon.webtoon.entity.DayOfWeekWebtoon;
@@ -21,12 +22,16 @@ import com.devtoon.jtoon.webtoon.entity.Webtoon;
 import com.devtoon.jtoon.webtoon.entity.enums.DayOfWeek;
 import com.devtoon.jtoon.webtoon.repository.DayOfWeekWebtoonRepository;
 import com.devtoon.jtoon.webtoon.repository.EpisodeRepository;
+import com.devtoon.jtoon.webtoon.repository.EpisodeSearchRepository;
 import com.devtoon.jtoon.webtoon.repository.GenreWebtoonRepository;
 import com.devtoon.jtoon.webtoon.repository.WebtoonRepository;
 import com.devtoon.jtoon.webtoon.repository.WebtoonSearchRepository;
 import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.CreateWebtoonReq;
+import com.devtoon.jtoon.webtoon.request.GetEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.GetWebtoonsReq;
+import com.devtoon.jtoon.webtoon.response.EpisodeRes;
+import com.devtoon.jtoon.webtoon.response.EpisodesRes;
 import com.devtoon.jtoon.webtoon.response.GenreRes;
 import com.devtoon.jtoon.webtoon.response.WebtoonInfoRes;
 import com.devtoon.jtoon.webtoon.response.WebtoonItemRes;
@@ -40,12 +45,13 @@ public class WebtoonService {
 
 	private final WebtoonRepository webtoonRepository;
 	private final WebtoonSearchRepository webtoonSearchRepository;
-	private final MemberRepository memberRepository;
-	private final EpisodeRepository episodeRepository;
 	private final DayOfWeekWebtoonRepository dayOfWeekWebtoonRepository;
 	private final GenreWebtoonRepository genreWebtoonRepository;
+	private final EpisodeRepository episodeRepository;
+	private final EpisodeSearchRepository episodeSearchRepository;
+	private final MemberRepository memberRepository;
 	private final S3Service s3Service;
-
+	
 	@Transactional
 	public void createWebtoon(Member member, MultipartFile thumbnailImage, CreateWebtoonReq request) {
 		validateDuplicateTitle(request.title());
@@ -104,6 +110,18 @@ public class WebtoonService {
 		List<GenreRes> genres = getGenres(webtoonId);
 
 		return WebtoonInfoRes.of(webtoon, dayOfWeeks, genres);
+	}
+
+	public List<EpisodesRes> getEpisodes(Long webtoonId, CustomPageRequest request) {
+		return episodeSearchRepository.getEpisodes(webtoonId, request)
+			.stream()
+			.map(EpisodesRes::from)
+			.toList();
+	}
+
+	public EpisodeRes getDetailEpisode(Long episodeId, GetEpisodeReq request) {
+		Episode episode = episodeRepository.findByIdAndNo(episodeId, request.no());
+		return EpisodeRes.from(episode);
 	}
 
 	private Webtoon getWebtoonById(Long webtoonId) {
