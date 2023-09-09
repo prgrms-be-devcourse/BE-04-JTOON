@@ -21,10 +21,12 @@ jobs:
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Github release 자동생성
-        uses: ncipollo/release-action@v1
+        uses: action-pack/github-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag: ${{ env.VERSION }}
-          name: JTOON - ${{ env.VERSION }}
+          title: JTOON - ${{ env.VERSION }}
 
       - name: JDK 17 설정
         uses: actions/setup-java@v3
