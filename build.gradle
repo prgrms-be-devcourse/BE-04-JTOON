@@ -29,6 +29,8 @@ subprojects {
     }
 
     dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
     }
 
     test {
@@ -38,6 +40,9 @@ subprojects {
 
 project(':module-application') {
     dependencies {
+        implementation project(':module-domain')
+        implementation project(':module-domain-s3')
+        implementation project(':module-domain-smtp')
         implementation project(':module-core')
     }
 }
@@ -46,6 +51,9 @@ project(':module-domain') {
     bootJar.enabled = false
 
     dependencies {
+        implementation project(':module-domain-s3')
+        implementation project(':module-domain-smtp')
+        implementation project(':module-internal')
         implementation project(':module-core')
     }
 }
@@ -54,6 +62,15 @@ project(':module-domain-s3') {
     bootJar.enabled = false
 
     dependencies {
+        implementation project(':module-core')
+    }
+}
+
+project(':module-domain-smtp') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-internal')
         implementation project(':module-core')
     }
 }

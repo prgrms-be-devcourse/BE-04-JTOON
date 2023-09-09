@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta id="_csrf" name="_csrf" content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}"/>
+    <title>Sample Payment</title>
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- iamport.payment.js -->
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+
+    <script>
+        var IMP = window.IMP;
+        IMP.init("imp27504174");
+
+        function requestPay() {
+            IMP.request_pay({
+                pg: $("#pg").val(),
+                pay_method: $("#pay-method").val(),
+                merchant_uid: "IMP" + new Date().getTime(),
+                name: $('#amount option:selected').text(),
+                amount: Number($("#amount").val()),
+                buyer_email: $("#buyer-email").val(),
+                buyer_name: $("#buyer-name").val(),
+                buyer_tel: $("#buyer-tel").val()
+            }, function (rsp) {
+                // 결제 성공 시
+                console.log("결제는 성공");
+                if (rsp.success) {
+                    console.log("결제 검증 위해 payments/validation 호출");
+                    $.ajax({
+                        url: 'http://localhost:8080/api/v1/payments/validation',
+                        type: "POST",
+                        contentType: "application/json; charset=UTF-8",
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            impUid: rsp.imp_uid,
+                            merchantUid: rsp.merchant_uid,
+                            payMethod: rsp.pay_method,
+                            cookieItem: rsp.name,
+                            amount: rsp.paid_amount,
+                            buyerEmail: rsp.buyer_email,
+                            buyerName: rsp.buyer_name,
+                            buyerPhone: rsp.buyer_tel
+                        })
+                    }).done(function (data, textStatus, xhr) {
+                        console.log("결제 검증 및 저장 성공");
+                    }).fail(function (xhr, textStatus, errorThrown) {
+                        console.log("결제 검증 및 저장 실패 : ");
+                        alert('결제 검증 실패 : ' + rsp.error_msg);
+                        cancelPayments(rsp);
+                    });
+                } else {
+                    console.log("결제 실패");
+                    alert('- 결제 실패 : ' + rsp.error_msg);
+                }
+            });
+        }
+
+        function cancelPayments(rsp) {
+            console.log("결제 취소 호출");
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8080/api/v1/payments/cancel',
+                contentType: "application/json; charset=UTF-8",
+                withCredentials: true,
+                data: JSON.stringify({
+                    impUid: rsp.imp_uid,
+                    merchantUid: rsp.merchant_uid,
+                    reason: '결제 금액 위/변조 - 결제 금액 불일치',
+                    checksum: rsp.paid_amount,
+                    refundHolder: rsp.buyer_name
+                }),
+            }).done(function (data, textStatus, xhr) {
+                console.log("결제 취소 성공");
+                alert('결제 취소 성공');
+            }).fail(function (xhr, textStatus, errorThrown) {
+                console.log("결제 취소 실패");
+                alert('결제 취소 실패 : ' + rsp.error_msg);
+            });
+        }
+    </script>
+</head>
+<body>
+이름: <input type="text" id="buyer-name" value="hhj"><br>
+이메일: <input type="text" id="buyer-email" value="example@naver.com"><br>
+전화번호: <input type="text" id="buyer-tel" value="01017171237"><br>
+
+구매할 쿠키 갯수 :
+<select id='amount'>
+    <option value='1000'>쿠키 10개</option>
+    <option value='2000'>쿠키 20개</option>
+    <option value='3000'>쿠키 30개</option>
+    <option value='5000'>쿠키 50개</option>
+    <option value='10000'>쿠키 100개</option>
+    <option value='500'>쿠키 10개</option>
+</select> (개당 100원) <br>
+
+결제 방법:
+<select id='pay-method'>
+    <option value='card'>카드</option>
+</select><br>
+
+결제사:
+<select id='pg'>
+    <option value='kcp'>KG이니시스</option>
+</select><br><br>
+
+<button onclick="requestPay()">결제하기</button>
+</body>
+</html>
