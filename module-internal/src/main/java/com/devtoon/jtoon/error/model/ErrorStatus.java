@@ -43,6 +43,7 @@ public enum ErrorStatus {
 	WEBTOON_DAY_OF_WEEK_IS_NULL("웹툰 요일 값이 NULL 입니다."),
 	WEBTOON_GENRE_IS_NULL("웹툰 장르 값이 NULL 입니다."),
 	WEBTOON_COOKIE_COUNT_NOT_NEGATIVE("쿠키 개수는 음수일 수 없습니다."),
+	EPISODE_NOT_FOUND("존재하지 않는 회차입니다."),
 	EPISODE_NUMBER_POSITIVE("회차 번호는 양수여야 합니다."),
 	EPISODE_TITLE_IS_NULL("회차 제목 값이 NULL 입니다."),
 	EPISODE_MAIN_URL_IS_NULL("회차 메인 이미지 URL 값이 NULL 입니다."),

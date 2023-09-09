@@ -21,7 +21,6 @@ import com.devtoon.jtoon.webtoon.application.WebtoonService;
 import com.devtoon.jtoon.webtoon.entity.enums.DayOfWeek;
 import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.CreateWebtoonReq;
-import com.devtoon.jtoon.webtoon.request.GetEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.GetWebtoonsReq;
 import com.devtoon.jtoon.webtoon.response.EpisodeRes;
 import com.devtoon.jtoon.webtoon.response.EpisodesRes;
@@ -74,9 +73,8 @@ public class WebtoonController {
 		return webtoonService.getEpisodes(webtoonId, request);
 	}
 
-	@GetMapping("/detail")
-	@ResponseStatus(HttpStatus.OK)
-	public EpisodeRes detailEpisode(@RequestParam Long episodeId, @RequestParam GetEpisodeReq request) {
-		return webtoonService.getDetailEpisode(episodeId, request);
+	@GetMapping("/episodes/{episodeId}")
+	public EpisodeRes getEpisode(@PathVariable Long episodeId) {
+		return webtoonService.getEpisode(episodeId);
 	}
 }

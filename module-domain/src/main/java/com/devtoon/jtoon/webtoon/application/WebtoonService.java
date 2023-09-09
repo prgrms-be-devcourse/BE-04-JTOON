@@ -32,7 +32,6 @@ import com.devtoon.jtoon.webtoon.repository.WebtoonRepository;
 import com.devtoon.jtoon.webtoon.repository.WebtoonSearchRepository;
 import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.CreateWebtoonReq;
-import com.devtoon.jtoon.webtoon.request.GetEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.GetWebtoonsReq;
 import com.devtoon.jtoon.webtoon.response.EpisodeRes;
 import com.devtoon.jtoon.webtoon.response.EpisodesRes;
@@ -123,14 +122,19 @@ public class WebtoonService {
 			.toList();
 	}
 
-	public EpisodeRes getDetailEpisode(Long episodeId, GetEpisodeReq request) {
-		Episode episode = episodeRepository.findByIdAndNo(episodeId, request.no());
+	public EpisodeRes getEpisode(Long episodeId) {
+		Episode episode = getEpisodeById(episodeId);
 		return EpisodeRes.from(episode);
 	}
 
 	private Webtoon getWebtoonById(Long webtoonId) {
 		return webtoonRepository.findById(webtoonId)
 			.orElseThrow(() -> new NotFoundException(WEBTOON_NOT_FOUND));
+	}
+
+	private Episode getEpisodeById(Long episodeId) {
+		return episodeRepository.findById(episodeId)
+			.orElseThrow(() -> new NotFoundException(EPISODE_NOT_FOUND));
 	}
 
 	private List<String> getDayOfWeeks(Long webtoonId) {
