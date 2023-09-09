@@ -47,6 +47,8 @@ public enum ErrorStatus {
 	EPISODE_TITLE_IS_NULL("회차 제목 값이 NULL 입니다."),
 	EPISODE_MAIN_URL_IS_NULL("회차 메인 이미지 URL 값이 NULL 입니다."),
 	EPISODE_OPENED_AT_IS_NULL("회차 공개일자 값이 NULL 입니다."),
+
+	S3_UPLOAD_FAIL("S3 이미지 업로드에 실패했습니다."),
 	;
 
 	private final String message;
