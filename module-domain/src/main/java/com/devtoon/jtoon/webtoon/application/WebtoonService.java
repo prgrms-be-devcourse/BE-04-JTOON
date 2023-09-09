@@ -1,6 +1,7 @@
 package com.devtoon.jtoon.webtoon.application;
 
 import static com.devtoon.jtoon.common.ImageType.*;
+import static com.devtoon.jtoon.error.model.ErrorStatus.*;
 import static java.util.stream.Collectors.*;
 
 import java.util.List;
@@ -12,6 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.devtoon.jtoon.application.S3Service;
 import com.devtoon.jtoon.common.FileName;
+import com.devtoon.jtoon.error.exception.DuplicatedException;
+import com.devtoon.jtoon.error.exception.InvalidRequestException;
+import com.devtoon.jtoon.error.exception.NotFoundException;
 import com.devtoon.jtoon.global.util.CustomPageRequest;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.repository.MemberRepository;
@@ -51,7 +55,7 @@ public class WebtoonService {
 	private final EpisodeSearchRepository episodeSearchRepository;
 	private final MemberRepository memberRepository;
 	private final S3Service s3Service;
-	
+
 	@Transactional
 	public void createWebtoon(Member member, MultipartFile thumbnailImage, CreateWebtoonReq request) {
 		validateDuplicateTitle(request.title());
@@ -126,7 +130,7 @@ public class WebtoonService {
 
 	private Webtoon getWebtoonById(Long webtoonId) {
 		return webtoonRepository.findById(webtoonId)
-			.orElseThrow(() -> new RuntimeException("존재하는 웹툰이 아닙니다."));
+			.orElseThrow(() -> new NotFoundException(WEBTOON_NOT_FOUND));
 	}
 
 	private List<String> getDayOfWeeks(Long webtoonId) {
@@ -145,13 +149,13 @@ public class WebtoonService {
 
 	private void validateDuplicateTitle(String title) {
 		if (webtoonRepository.existsByTitle(title)) {
-			throw new RuntimeException("이미 존재하는 웹툰 제목입니다.");
+			throw new DuplicatedException(WEBTOON_TITLE_DUPLICATED);
 		}
 	}
 
 	private void validateAuthorOfWebtoon(Member member, Webtoon webtoon) {
 		if (!webtoon.isAuthor(member.getId())) {
-			throw new RuntimeException("해당 웹툰의 작가가 아닙니다.");
+			throw new InvalidRequestException(WEBTOON_NOT_AUTHOR);
 		}
 	}
 }

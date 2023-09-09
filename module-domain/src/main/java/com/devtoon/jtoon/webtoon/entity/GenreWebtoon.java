@@ -1,5 +1,6 @@
 package com.devtoon.jtoon.webtoon.entity;
 
+import static com.devtoon.jtoon.error.model.ErrorStatus.*;
 import static java.util.Objects.*;
 
 import com.devtoon.jtoon.global.common.BaseTimeEntity;
@@ -42,7 +43,7 @@ public class GenreWebtoon extends BaseTimeEntity {
 
 	@Builder
 	private GenreWebtoon(Genre genre, Webtoon webtoon) {
-		this.genre = requireNonNull(genre, "genre is null");
-		this.webtoon = requireNonNull(webtoon, "webtoon is null");
+		this.genre = requireNonNull(genre, WEBTOON_GENRE_IS_NULL.getMessage());
+		this.webtoon = requireNonNull(webtoon, WEBTOON_IS_NULL.getMessage());
 	}
 }
