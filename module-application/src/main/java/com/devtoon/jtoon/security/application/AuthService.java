@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.repository.MemberRepository;
 import com.devtoon.jtoon.security.entity.RefreshToken;
-import com.devtoon.jtoon.security.jwt.application.JwtProvider;
 import com.devtoon.jtoon.security.repository.RefreshTokenRepository;
 import com.devtoon.jtoon.security.request.LogInReq;
 import com.devtoon.jtoon.security.response.LoginRes;
@@ -22,7 +21,7 @@ public class AuthService {
 
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final JwtProvider jwtProvider;
+	private final JwtService jwtService;
 
 	private final RefreshTokenRepository refreshTokenRepository;
 
@@ -36,8 +35,8 @@ public class AuthService {
 		}
 
 		member.updateLastLogin();
-		String accessToken = jwtProvider.generateAccessToken(logInReq.email());
-		String refreshToken = jwtProvider.generateRefreshToken();
+		String accessToken = jwtService.generateAccessToken(logInReq.email());
+		String refreshToken = jwtService.generateRefreshToken();
 		Optional<RefreshToken> findToken = refreshTokenRepository.findById(logInReq.email());
 		RefreshToken token = checkAndGetToken(findToken, refreshToken, logInReq.email());
 		refreshTokenRepository.save(token);

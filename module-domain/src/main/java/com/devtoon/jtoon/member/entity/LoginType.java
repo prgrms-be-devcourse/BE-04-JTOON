@@ -13,9 +13,10 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum LoginType {
+	
 	LOCAL,
 	NAVER,
-	GOOGLE;
+	KAKAO;
 
 	private static final Map<String, LoginType> LOGIN_TYPE_MAP;
 
@@ -27,7 +28,8 @@ public enum LoginType {
 	}
 
 	public static LoginType from(String loginType) {
-		return Optional.ofNullable(LOGIN_TYPE_MAP.get(loginType))
+		return Optional.ofNullable(LOGIN_TYPE_MAP.get(loginType.toUpperCase()))
 			.orElseThrow(() -> new MemberException(ExceptionCode.MEMBER_LOGIN_TYPE_INVALID_FORMAT));
 	}
+
 }

@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.security.jwt.domain.MemberThreadLocal;
+import com.devtoon.jtoon.security.domain.jwt.MemberThreadLocal;
 import com.devtoon.jtoon.webtoon.application.WebtoonService;
 import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.CreateWebtoonReq;
 import com.devtoon.jtoon.webtoon.response.WebtoonInfoRes;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

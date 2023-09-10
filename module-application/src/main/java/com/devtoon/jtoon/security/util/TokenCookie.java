@@ -17,7 +17,7 @@ public class TokenCookie {
 	public static Cookie of(String name, String value) {
 		Cookie cookie = new Cookie(name, URLEncoder.encode(BEARER_VALUE + value, charSet));
 		cookie.setSecure(true);
-		// cookie.setHttpOnly(true);
+		cookie.setHttpOnly(true);
 		return cookie;
 	}
 }
