@@ -68,7 +68,7 @@ public class Webtoon extends BaseTimeEntity {
 		Member author
 	) {
 		if (cookieCount < 0) {
-			throw new InvalidRequestException(WEBTOON_COOKIE_COUNT_NOT_NEGATIVE);
+			throw new InvalidRequestException(COOKIE_COUNT_NOT_NEGATIVE);
 		}
 
 		this.title = requireNonNull(title, WEBTOON_TITLE_IS_NULL.getMessage());

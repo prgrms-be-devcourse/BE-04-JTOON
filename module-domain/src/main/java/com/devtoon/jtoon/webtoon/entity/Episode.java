@@ -82,4 +82,8 @@ public class Episode extends BaseTimeEntity {
 		this.openedAt = requireNonNull(openedAt, EPISODE_OPENED_AT_IS_NULL.getMessage());
 		this.webtoon = requireNonNull(webtoon, WEBTOON_IS_NULL.getMessage());
 	}
+
+	public int getCookieCount() {
+		return webtoon.getCookieCount();
+	}
 }

@@ -77,4 +77,10 @@ public class WebtoonController {
 	public EpisodeRes getEpisode(@PathVariable Long episodeId) {
 		return webtoonService.getEpisode(episodeId);
 	}
+
+	@PostMapping("/episodes/{episodeId}/purchase")
+	public void purchaseEpisode(@PathVariable Long episodeId) {
+		Member member = MemberThreadLocal.getMember();
+		webtoonService.purchaseEpisode(member, episodeId);
+	}
 }

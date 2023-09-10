@@ -56,7 +56,7 @@ public class WebtoonApplicationService {
 		CreateEpisodeReq request
 	) {
 		Webtoon webtoon = webtoonDomainService.getWebtoonById(webtoonId);
-		webtoonDomainService.validateAuthorOfWebtoon(member, webtoon);
+		webtoonDomainService.validateAuthorOfWebtoon(member.getId(), webtoon);
 		String mainUrl = s3Service.upload(UploadImageReq.builder()
 			.imageType(EPISODE_MAIN)
 			.webtoonTitle(webtoon.getTitle())
@@ -88,5 +88,10 @@ public class WebtoonApplicationService {
 
 	public EpisodeRes getEpisode(Long episodeId) {
 		return webtoonDomainService.getEpisode(episodeId);
+	}
+
+	@Transactional
+	public void purchaseEpisode(Member member, Long episodeId) {
+		webtoonDomainService.purchaseEpisode(member, episodeId);
 	}
 }
