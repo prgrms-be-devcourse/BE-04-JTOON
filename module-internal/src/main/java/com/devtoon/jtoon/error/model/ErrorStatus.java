@@ -10,6 +10,7 @@ public enum ErrorStatus {
 
 	COMMON_DTO_FIELD_INVALID_FORMAT("올바른 요청 정보가 아닙니다."),
 
+	MEMBER_IS_NULL("회원 값이 NULL 입니다."),
 	MEMBER_EMAIL_INVALID_FORMAT("올바른 이메일 형식이 아닙니다."),
 	MEMBER_PASSWORD_INVALID_FORMAT("올바른 비밀번호형식이 아닙니다."),
 	MEMBER_NAME_INVALID_FORMAT("올바른 이름이 아닙니다."),
@@ -20,6 +21,7 @@ public enum ErrorStatus {
 	MEMBER_LOGIN_TYPE_INVALID_FORMAT("올바른 로그인 타입이 아닙니다."),
 	MEMBER_MESSAGE_SEND_FAILED("이메일 인증 메세지 전송 실패"),
 	MEMBER_EMAIL_CONFLICT("Email 중복"),
+	MEMBER_COOKIE_NOT_FOUND("회원의 쿠키 정보가 존재하지 않습니다."),
 
 	PAYMENT_IMP_UID_IS_NULL("결제 고유번호 값이 NULL 입니다."),
 	PAYMENT_MERCHANT_UID_IS_NULL("주문번호 값이 NULL 입니다."),
@@ -42,9 +44,11 @@ public enum ErrorStatus {
 	WEBTOON_AUTHOR_IS_NULL("웹툰 작가 값이 NULL 입니다."),
 	WEBTOON_DAY_OF_WEEK_IS_NULL("웹툰 요일 값이 NULL 입니다."),
 	WEBTOON_GENRE_IS_NULL("웹툰 장르 값이 NULL 입니다."),
-	WEBTOON_COOKIE_COUNT_NOT_NEGATIVE("쿠키 개수는 음수일 수 없습니다."),
+	COOKIE_COUNT_NOT_NEGATIVE("쿠키 개수는 음수일 수 없습니다."),
+	EPISODE_IS_NULL("회차 값이 NULL 입니다."),
 	EPISODE_NOT_FOUND("존재하지 않는 회차입니다."),
 	EPISODE_NUMBER_POSITIVE("회차 번호는 양수여야 합니다."),
+	EPISODE_NOT_ENOUGH_COOKIES("쿠키 개수가 부족합니다."),
 	EPISODE_TITLE_IS_NULL("회차 제목 값이 NULL 입니다."),
 	EPISODE_MAIN_URL_IS_NULL("회차 메인 이미지 URL 값이 NULL 입니다."),
 	EPISODE_OPENED_AT_IS_NULL("회차 공개일자 값이 NULL 입니다."),
