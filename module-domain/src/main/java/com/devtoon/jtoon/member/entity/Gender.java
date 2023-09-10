@@ -2,9 +2,6 @@ package com.devtoon.jtoon.member.entity;
 
 import com.devtoon.jtoon.error.exception.MemberException;
 import com.devtoon.jtoon.error.model.ErrorStatus;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -34,6 +31,6 @@ public enum Gender {
 
 	public static Gender from(String gender) {
 		return Optional.ofNullable(GENDER_MAP.get(gender.toUpperCase()))
-			.orElseThrow(() -> new MemberException(ExceptionCode.MEMBER_GENDER_INVALID_FORMAT));
+			.orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_GENDER_INVALID_FORMAT));
 	}
 }
