@@ -76,4 +76,8 @@ public class Webtoon extends BaseTimeEntity {
 		this.cookieCount = cookieCount;
 		this.author = requireNonNull(author, "author is null");
 	}
+
+	public boolean isAuthor(Long memberId) {
+		return memberId.equals(author.getId());
+	}
 }

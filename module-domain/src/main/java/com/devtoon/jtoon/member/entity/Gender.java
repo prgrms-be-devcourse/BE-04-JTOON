@@ -1,7 +1,10 @@
 package com.devtoon.jtoon.member.entity;
 
-import com.devtoon.jtoon.exception.ExceptionCode;
-import com.devtoon.jtoon.exception.MemberException;
+import com.devtoon.jtoon.error.exception.MemberException;
+import com.devtoon.jtoon.error.model.ErrorStatus;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;

@@ -1,22 +1,16 @@
 package com.devtoon.jtoon.member.entity;
 
-import static java.util.Objects.*;
-
-import com.devtoon.jtoon.exception.ExceptionCode;
+import com.devtoon.jtoon.error.model.ErrorStatus;
 import com.devtoon.jtoon.global.common.BaseTimeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+import static java.util.Objects.requireNonNull;
 
 @Entity
 @Getter
