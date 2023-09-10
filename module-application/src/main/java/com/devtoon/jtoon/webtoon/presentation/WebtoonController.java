@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.devtoon.jtoon.global.util.CustomPageRequest;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.security.jwt.domain.MemberThreadLocal;
-import com.devtoon.jtoon.webtoon.application.WebtoonService;
+import com.devtoon.jtoon.webtoon.application.WebtoonApplicationService;
 import com.devtoon.jtoon.webtoon.entity.enums.DayOfWeek;
 import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.CreateWebtoonReq;
@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/webtoons")
 public class WebtoonController {
 
-	private final WebtoonService webtoonService;
+	private final WebtoonApplicationService webtoonService;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -48,12 +48,12 @@ public class WebtoonController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createEpisode(
 		@PathVariable Long webtoonId,
-		@RequestPart @Valid CreateEpisodeReq request,
 		@RequestPart MultipartFile mainImage,
-		@RequestPart(required = false) MultipartFile thumbnailImage
+		@RequestPart(required = false) MultipartFile thumbnailImage,
+		@RequestPart @Valid CreateEpisodeReq request
 	) {
 		Member member = MemberThreadLocal.getMember();
-		webtoonService.createEpisode(member, webtoonId, request, mainImage, thumbnailImage);
+		webtoonService.createEpisode(member, webtoonId, mainImage, thumbnailImage, request);
 	}
 
 	@GetMapping
