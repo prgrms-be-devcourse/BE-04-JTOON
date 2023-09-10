@@ -33,5 +33,5 @@ public class AuthController {
 
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public void healthCheck() { /* HealthCheck 용 Root Path */ }
+	public void healthCheck() { /* HealthCheck Root Path */ }
 }
