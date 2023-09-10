@@ -2,11 +2,11 @@
 
 IS_BLUE=$(docker ps | grep jtoon-blue)
 
-NGINX_CONF="./nginx/nginx.conf"
+NGINX_CONF="${PWD}/nginx/nginx.conf"
 
 docker-compose up -d nginx
 
-if [ $IS_BLUE  ];then
+if [ -n "$IS_BLUE" ]; then
         echo "### BLUE => GREEN ###"
         echo "1. jtoon-green 이미지 가져오고 실행"
         docker-compose pull jtoon-green
@@ -14,7 +14,7 @@ if [ $IS_BLUE  ];then
         while [ 1 = 1 ]; do
                 echo "2. jtoon-green health check"
                 sleep 5
-                REQUEST=$(docker exec nginx curl http://jtoon-green:8080)
+                REQUEST=$(docker exec nginx curl http://jtoon-green:${SERVER_PORT})
                 if [ -n "$REQUEST" ]; then
                         echo "health check 성공"
                         break;
@@ -33,13 +33,14 @@ else
         while [ 1 = 1 ]; do
                 echo "2. jtoon-blue health check"
                 sleep 5
-                REQUEST=$(docker exec nginx curl http://jtoon-blue:8080)
+                REQUEST=$(docker exec nginx curl http://jtoon-blue:${SERVER_PORT})
                 if [ -n "$REQUEST" ]; then
                         echo "health check 성공"
                         break;
                 fi
         done;
         sed -i 's/jtoon-green/jtoon-blue/g' $NGINX_CONF
+	echo $NGINX_CONF
         echo "3. nginx 설정파일 reload"
         docker exec nginx service nginx reload
         echo "4. jtoon-green 컨테이너 종료"

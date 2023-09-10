@@ -1,4 +1,4 @@
-name: JToon CI/CD
+name: JToon deployment
 
 on:
   push:

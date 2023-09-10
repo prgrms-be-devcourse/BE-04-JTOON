@@ -2,13 +2,17 @@ package com.devtoon.jtoon.security.presentation;
 
 import static com.devtoon.jtoon.security.util.SecurityConstant.*;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devtoon.jtoon.security.application.AuthService;
 import com.devtoon.jtoon.security.request.LogInReq;
 import com.devtoon.jtoon.security.response.LoginRes;
+
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,4 +30,8 @@ public class AuthController {
 		response.setHeader(ACCESS_TOKEN_HEADER, BEARER_VALUE + loginRes.accessToken());
 		response.setHeader(REFRESH_TOKEN_HEADER, BEARER_VALUE + loginRes.refreshToken());
 	}
+
+	@GetMapping
+	@ResponseStatus(HttpStatus.OK)
+	public void healthCheck() { /* HealthCheck 용 Root Path */ }
 }
