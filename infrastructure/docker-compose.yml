@@ -14,10 +14,10 @@ services:
     container_name: jtoon-blue
     restart: always
     expose:
-      - 8080
+      - ${SERVER_PORT}
   jtoon-green:
     image: ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPOSITORY}:latest
     container_name: jtoon-green
     restart: always
     expose:
-      - 8080
+      - ${SERVER_PORT}
