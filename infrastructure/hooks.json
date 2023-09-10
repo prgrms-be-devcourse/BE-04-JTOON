@@ -1,0 +1,18 @@
+[
+  {
+    "id": "${id}",
+    "execute-command": "${execute-command}",
+    "command-working-directory": "${command-working-directory}",
+    "response-message": "${response-message}",
+    "trigger-rule": {
+      "match": {
+        "type": "value",
+        "value": "${value}",
+        "parameter": {
+          "source": "url",
+          "name": "${parameter}"
+        }
+      }
+    }
+  }
+]
