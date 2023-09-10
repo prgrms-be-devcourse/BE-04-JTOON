@@ -33,5 +33,7 @@ public class AuthController {
 
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public void healthCheck() { /* HealthCheck Root Path */ }
+	public String healthCheck() {
+		return "Health Check Success";
+	}
 }
