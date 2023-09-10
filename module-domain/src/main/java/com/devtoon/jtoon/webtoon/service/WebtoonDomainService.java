@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devtoon.jtoon.error.exception.DuplicatedException;
-import com.devtoon.jtoon.error.exception.InvalidRequestException;
 import com.devtoon.jtoon.error.exception.NotFoundException;
 import com.devtoon.jtoon.global.util.CustomPageRequest;
 import com.devtoon.jtoon.member.entity.Member;
@@ -114,12 +113,6 @@ public class WebtoonDomainService {
 	public void validateDuplicateTitle(String title) {
 		if (webtoonRepository.existsByTitle(title)) {
 			throw new DuplicatedException(WEBTOON_TITLE_DUPLICATED);
-		}
-	}
-
-	public void validateAuthorOfWebtoon(Long memberId, Webtoon webtoon) {
-		if (!webtoon.isAuthor(memberId)) {
-			throw new InvalidRequestException(WEBTOON_NOT_AUTHOR);
 		}
 	}
 

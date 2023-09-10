@@ -3,6 +3,8 @@ package com.devtoon.jtoon.webtoon.entity;
 import static com.devtoon.jtoon.error.model.ErrorStatus.*;
 import static java.util.Objects.*;
 
+import java.util.Objects;
+
 import org.hibernate.annotations.ColumnDefault;
 
 import com.devtoon.jtoon.error.exception.InvalidRequestException;
@@ -79,7 +81,13 @@ public class Webtoon extends BaseTimeEntity {
 		this.author = requireNonNull(author, WEBTOON_AUTHOR_IS_NULL.getMessage());
 	}
 
-	public boolean isAuthor(Long memberId) {
-		return memberId.equals(author.getId());
+	public void validateAuthor(Long memberId) {
+		if (!isAuthor(memberId)) {
+			throw new InvalidRequestException(WEBTOON_NOT_AUTHOR);
+		}
+	}
+
+	private boolean isAuthor(Long memberId) {
+		return Objects.equals(author.getId(), memberId);
 	}
 }

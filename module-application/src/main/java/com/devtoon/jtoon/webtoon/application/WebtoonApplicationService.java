@@ -56,7 +56,7 @@ public class WebtoonApplicationService {
 		CreateEpisodeReq request
 	) {
 		Webtoon webtoon = webtoonDomainService.getWebtoonById(webtoonId);
-		webtoonDomainService.validateAuthorOfWebtoon(member.getId(), webtoon);
+		webtoon.validateAuthor(member.getId());
 		String mainUrl = s3Service.upload(UploadImageReq.builder()
 			.imageType(EPISODE_MAIN)
 			.webtoonTitle(webtoon.getTitle())
