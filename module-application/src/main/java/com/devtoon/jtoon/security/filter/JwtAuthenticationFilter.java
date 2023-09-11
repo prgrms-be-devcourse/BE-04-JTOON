@@ -11,8 +11,10 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import com.devtoon.jtoon.security.application.JwtService;
 import com.devtoon.jtoon.security.domain.jwt.CustomUserDetails;
 import com.devtoon.jtoon.security.domain.jwt.MemberThreadLocal;
+import com.devtoon.jtoon.security.util.TokenCookie;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -64,8 +66,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		String newAccessToken = jwtService.reGenerateAccessToken(refreshToken);
 		String newRefreshToken = jwtService.generateRefreshToken();
 		jwtService.updateRefreshTokenDb(newAccessToken, newRefreshToken);
-		response.setHeader(ACCESS_TOKEN_HEADER, BEARER_VALUE + newAccessToken);
-		response.setHeader(REFRESH_TOKEN_HEADER, BEARER_VALUE + newRefreshToken);
+		Cookie accessCookie = TokenCookie.of(ACCESS_TOKEN_HEADER, newAccessToken);
+		Cookie refreshCookie = TokenCookie.of(REFRESH_TOKEN_HEADER, newRefreshToken);
+		response.addCookie(accessCookie);
+		response.addCookie(refreshCookie);
 
 		return newAccessToken;
 	}
