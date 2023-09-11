@@ -1,10 +1,11 @@
-package com.devtoon.jtoon.member.entity;
+package com.devtoon.jtoon.paymentinfo.entity;
 
 import static com.devtoon.jtoon.error.model.ErrorStatus.*;
 import static java.util.Objects.*;
 
 import com.devtoon.jtoon.error.exception.InvalidRequestException;
 import com.devtoon.jtoon.global.common.BaseTimeEntity;
+import com.devtoon.jtoon.member.entity.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
