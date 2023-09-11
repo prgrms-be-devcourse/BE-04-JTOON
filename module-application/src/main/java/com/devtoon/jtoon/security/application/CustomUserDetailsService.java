@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.security.jwt.application;
+package com.devtoon.jtoon.security.application;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.repository.MemberRepository;
-import com.devtoon.jtoon.security.jwt.domain.CustomUserDetails;
+import com.devtoon.jtoon.security.domain.jwt.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 
 @Service

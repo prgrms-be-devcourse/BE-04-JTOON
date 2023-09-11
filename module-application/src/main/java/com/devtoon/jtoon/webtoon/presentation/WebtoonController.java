@@ -1,8 +1,5 @@
 package com.devtoon.jtoon.webtoon.presentation;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.devtoon.jtoon.global.util.CustomPageRequest;
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.security.jwt.domain.MemberThreadLocal;
+import com.devtoon.jtoon.security.domain.jwt.MemberThreadLocal;
 import com.devtoon.jtoon.webtoon.application.WebtoonService;
 import com.devtoon.jtoon.webtoon.entity.enums.DayOfWeek;
 import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
@@ -27,8 +24,9 @@ import com.devtoon.jtoon.webtoon.response.EpisodeRes;
 import com.devtoon.jtoon.webtoon.response.EpisodesRes;
 import com.devtoon.jtoon.webtoon.response.WebtoonInfoRes;
 import com.devtoon.jtoon.webtoon.response.WebtoonItemRes;
-
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 
 @RestController

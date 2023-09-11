@@ -8,11 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.repository.MemberRepository;
 import com.devtoon.jtoon.security.entity.RefreshToken;
-import com.devtoon.jtoon.security.jwt.application.JwtProvider;
 import com.devtoon.jtoon.security.repository.RefreshTokenRepository;
 import com.devtoon.jtoon.security.request.LogInReq;
 import com.devtoon.jtoon.security.response.LoginRes;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,7 +20,7 @@ public class AuthService {
 
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final JwtProvider jwtProvider;
+	private final JwtService jwtService;
 
 	private final RefreshTokenRepository refreshTokenRepository;
 
@@ -36,29 +34,18 @@ public class AuthService {
 		}
 
 		member.updateLastLogin();
-		String accessToken = jwtProvider.generateAccessToken(logInReq.email());
-		String refreshToken = jwtProvider.generateRefreshToken();
-		Optional<RefreshToken> findToken = refreshTokenRepository.findById(logInReq.email());
-		RefreshToken token = checkAndGetToken(findToken, refreshToken, logInReq.email());
+		String accessToken = jwtService.generateAccessToken(logInReq.email());
+		String refreshToken = jwtService.generateRefreshToken();
+		RefreshToken token = RefreshToken.builder()
+			.refreshToken(refreshToken)
+			.email(logInReq.email())
+			.build();
 		refreshTokenRepository.save(token);
 
-		return LoginRes.of(accessToken, refreshToken);
+		return LoginRes.toDto(accessToken, refreshToken);
 	}
 
 	public boolean isPasswordSame(String rawPassword, String memberPassword) {
 		return passwordEncoder.matches(rawPassword, memberPassword);
-	}
-
-	private RefreshToken checkAndGetToken(Optional<RefreshToken> findToken, String refreshToken, String email) {
-		if (findToken.isPresent()) {
-			RefreshToken token = findToken.get();
-			token.updateToken(refreshToken);
-			return token;
-		}
-
-		return RefreshToken.builder()
-			.email(email)
-			.refreshToken(refreshToken)
-			.build();
 	}
 }
