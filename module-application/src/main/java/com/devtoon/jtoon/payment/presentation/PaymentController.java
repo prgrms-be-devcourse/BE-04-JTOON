@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.devtoon.jtoon.payment.application.PaymentService;
 import com.devtoon.jtoon.paymentinfo.request.CancelReq;
 import com.devtoon.jtoon.paymentinfo.request.PaymentReq;
+import com.devtoon.jtoon.paymentinfo.service.IamportService;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class PaymentController {
 
 	private final PaymentService paymentService;
+	private final IamportService iamportService;
 
 	@PostMapping("/validation")
 	public BigDecimal validatePayment(@RequestBody @Valid PaymentReq paymentReq)
@@ -34,6 +36,6 @@ public class PaymentController {
 	@PostMapping("/cancel")
 	public IamportResponse<Payment> cancelPayment(@RequestBody @Valid CancelReq cancelReq)
 		throws IamportResponseException, IOException {
-		return paymentService.cancelPayment(cancelReq);
+		return iamportService.cancelPayment(cancelReq);
 	}
 }

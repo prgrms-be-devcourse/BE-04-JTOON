@@ -6,13 +6,11 @@ import java.math.BigDecimal;
 import org.springframework.stereotype.Service;
 
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.paymentinfo.request.CancelReq;
 import com.devtoon.jtoon.paymentinfo.request.PaymentReq;
+import com.devtoon.jtoon.paymentinfo.service.IamportService;
 import com.devtoon.jtoon.paymentinfo.service.PaymentInfoService;
 import com.devtoon.jtoon.security.domain.jwt.MemberThreadLocal;
 import com.siot.IamportRestClient.exception.IamportResponseException;
-import com.siot.IamportRestClient.response.IamportResponse;
-import com.siot.IamportRestClient.response.Payment;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,17 +19,13 @@ import lombok.RequiredArgsConstructor;
 public class PaymentService {
 
 	private final PaymentInfoService paymentInfoService;
+	private final IamportService iamportService;
 
 	public BigDecimal validatePayment(PaymentReq paymentReq)
 		throws IamportResponseException, IOException {
 		Member member = MemberThreadLocal.getMember();
-		paymentInfoService.validateIamport(paymentReq);
+		iamportService.validateIamport(paymentReq);
 
 		return paymentInfoService.createPayment(paymentReq, member);
-	}
-
-	public IamportResponse<Payment> cancelPayment(CancelReq cancelReq)
-		throws IamportResponseException, IOException {
-		return paymentInfoService.cancelPayment(cancelReq);
 	}
 }
