@@ -1,6 +1,6 @@
-package com.devtoon.jtoon.webtoon.application;
+package com.devtoon.jtoon.webtoon.service;
 
-import static com.devtoon.jtoon.common.ImageType.*;
+import static com.devtoon.jtoon.error.model.ErrorStatus.*;
 import static java.util.stream.Collectors.*;
 
 import java.util.List;
@@ -8,27 +8,28 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.devtoon.jtoon.application.S3Service;
-import com.devtoon.jtoon.common.FileName;
+import com.devtoon.jtoon.error.exception.DuplicatedException;
+import com.devtoon.jtoon.error.exception.NotFoundException;
 import com.devtoon.jtoon.global.util.CustomPageRequest;
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.member.repository.MemberRepository;
+import com.devtoon.jtoon.member.entity.MemberCookie;
+import com.devtoon.jtoon.member.repository.MemberCookieRepository;
 import com.devtoon.jtoon.webtoon.entity.DayOfWeekWebtoon;
 import com.devtoon.jtoon.webtoon.entity.Episode;
 import com.devtoon.jtoon.webtoon.entity.GenreWebtoon;
+import com.devtoon.jtoon.webtoon.entity.PurchasedEpisode;
 import com.devtoon.jtoon.webtoon.entity.Webtoon;
 import com.devtoon.jtoon.webtoon.entity.enums.DayOfWeek;
 import com.devtoon.jtoon.webtoon.repository.DayOfWeekWebtoonRepository;
 import com.devtoon.jtoon.webtoon.repository.EpisodeRepository;
 import com.devtoon.jtoon.webtoon.repository.EpisodeSearchRepository;
 import com.devtoon.jtoon.webtoon.repository.GenreWebtoonRepository;
+import com.devtoon.jtoon.webtoon.repository.PurchasedEpisodeRepository;
 import com.devtoon.jtoon.webtoon.repository.WebtoonRepository;
 import com.devtoon.jtoon.webtoon.repository.WebtoonSearchRepository;
 import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.CreateWebtoonReq;
-import com.devtoon.jtoon.webtoon.request.GetEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.GetWebtoonsReq;
 import com.devtoon.jtoon.webtoon.response.EpisodeRes;
 import com.devtoon.jtoon.webtoon.response.EpisodesRes;
@@ -41,7 +42,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class WebtoonService {
+public class WebtoonDomainService {
 
 	private final WebtoonRepository webtoonRepository;
 	private final WebtoonSearchRepository webtoonSearchRepository;
@@ -49,18 +50,11 @@ public class WebtoonService {
 	private final GenreWebtoonRepository genreWebtoonRepository;
 	private final EpisodeRepository episodeRepository;
 	private final EpisodeSearchRepository episodeSearchRepository;
-	private final MemberRepository memberRepository;
-	private final S3Service s3Service;
-	
+	private final PurchasedEpisodeRepository purchasedEpisodeRepository;
+	private final MemberCookieRepository memberCookieRepository;
+
 	@Transactional
-	public void createWebtoon(Member member, MultipartFile thumbnailImage, CreateWebtoonReq request) {
-		validateDuplicateTitle(request.title());
-		String thumbnailUrl = s3Service.upload(
-			WEBTOON_THUMBNAIL,
-			request.title(),
-			FileName.forWebtoon(),
-			thumbnailImage
-		);
+	public void createWebtoon(Member member, String thumbnailUrl, CreateWebtoonReq request) {
 		Webtoon webtoon = request.toWebtoonEntity(member, thumbnailUrl);
 		List<DayOfWeekWebtoon> dayOfWeekWebtoons = request.toDayOfWeekWebtoonEntity(webtoon);
 		List<GenreWebtoon> genreWebtoons = request.toGenreWebtoonEntity(webtoon);
@@ -70,27 +64,7 @@ public class WebtoonService {
 	}
 
 	@Transactional
-	public void createEpisode(
-		Member member,
-		Long webtoonId,
-		CreateEpisodeReq request,
-		MultipartFile mainImage,
-		MultipartFile thumbnailImage
-	) {
-		Webtoon webtoon = getWebtoonById(webtoonId);
-		validateAuthorOfWebtoon(member, webtoon);
-		String mainUrl = s3Service.upload(
-			EPISODE_MAIN,
-			webtoon.getTitle(),
-			FileName.forEpisode(request.no()),
-			mainImage
-		);
-		String thumbnailUrl = s3Service.upload(
-			EPISODE_THUMBNAIL,
-			webtoon.getTitle(),
-			FileName.forEpisode(request.no()),
-			thumbnailImage
-		);
+	public void createEpisode(Webtoon webtoon, String mainUrl, String thumbnailUrl, CreateEpisodeReq request) {
 		Episode episode = request.toEntity(webtoon, mainUrl, thumbnailUrl);
 		episodeRepository.save(episode);
 	}
@@ -119,14 +93,42 @@ public class WebtoonService {
 			.toList();
 	}
 
-	public EpisodeRes getDetailEpisode(Long episodeId, GetEpisodeReq request) {
-		Episode episode = episodeRepository.findByIdAndNo(episodeId, request.no());
+	public EpisodeRes getEpisode(Long episodeId) {
+		Episode episode = getEpisodeById(episodeId);
 		return EpisodeRes.from(episode);
 	}
 
-	private Webtoon getWebtoonById(Long webtoonId) {
+	@Transactional
+	public void purchaseEpisode(Member member, Long episodeId) {
+		Episode episode = getEpisodeById(episodeId);
+		MemberCookie memberCookie = getMemberCookieById(member.getId());
+		memberCookie.decreaseCookieCount(episode.getCookieCount());
+		purchasedEpisodeRepository.save(PurchasedEpisode.builder()
+			.member(member)
+			.episode(episode)
+			.build()
+		);
+	}
+
+	public void validateDuplicateTitle(String title) {
+		if (webtoonRepository.existsByTitle(title)) {
+			throw new DuplicatedException(WEBTOON_TITLE_DUPLICATED);
+		}
+	}
+
+	public Webtoon getWebtoonById(Long webtoonId) {
 		return webtoonRepository.findById(webtoonId)
-			.orElseThrow(() -> new RuntimeException("존재하는 웹툰이 아닙니다."));
+			.orElseThrow(() -> new NotFoundException(WEBTOON_NOT_FOUND));
+	}
+
+	private Episode getEpisodeById(Long episodeId) {
+		return episodeRepository.findById(episodeId)
+			.orElseThrow(() -> new NotFoundException(EPISODE_NOT_FOUND));
+	}
+
+	private MemberCookie getMemberCookieById(Long memberId) {
+		return memberCookieRepository.findById(memberId)
+			.orElseThrow(() -> new NotFoundException(MEMBER_COOKIE_NOT_FOUND));
 	}
 
 	private List<String> getDayOfWeeks(Long webtoonId) {
@@ -141,17 +143,5 @@ public class WebtoonService {
 			.stream()
 			.map(GenreRes::from)
 			.toList();
-	}
-
-	private void validateDuplicateTitle(String title) {
-		if (webtoonRepository.existsByTitle(title)) {
-			throw new RuntimeException("이미 존재하는 웹툰 제목입니다.");
-		}
-	}
-
-	private void validateAuthorOfWebtoon(Member member, Webtoon webtoon) {
-		if (!webtoon.isAuthor(member.getId())) {
-			throw new RuntimeException("해당 웹툰의 작가가 아닙니다.");
-		}
 	}
 }

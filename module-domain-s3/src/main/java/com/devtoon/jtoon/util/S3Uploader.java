@@ -1,10 +1,14 @@
 package com.devtoon.jtoon.util;
 
+import static com.devtoon.jtoon.error.model.ErrorStatus.*;
+
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.devtoon.jtoon.error.exception.InvalidRequestException;
 
 import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Template;
@@ -28,7 +32,7 @@ public class S3Uploader {
 				ObjectMetadata.builder().contentType("image/png").build()
 			);
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new InvalidRequestException(S3_UPLOAD_FAIL);
 		}
 	}
 

@@ -2,10 +2,8 @@ package com.devtoon.jtoon.application;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.devtoon.jtoon.common.FileName;
-import com.devtoon.jtoon.common.ImageType;
+import com.devtoon.jtoon.request.UploadImageReq;
 import com.devtoon.jtoon.util.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
@@ -19,9 +17,9 @@ public class S3Service {
 	@Value("${spring.cloud.aws.cloud-front.url}")
 	private String IMAGE_URL;
 
-	public String upload(ImageType imageType, String webtoonTitle, FileName fileName, MultipartFile image) {
-		String key = imageType.getPath(webtoonTitle, fileName.getValue());
-		s3Uploader.upload(key, image);
+	public String upload(UploadImageReq request) {
+		String key = request.toKey();
+		s3Uploader.upload(key, request.image());
 
 		return IMAGE_URL + key;
 	}

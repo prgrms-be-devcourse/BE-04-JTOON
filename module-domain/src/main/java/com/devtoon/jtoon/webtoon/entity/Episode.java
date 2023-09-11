@@ -1,11 +1,13 @@
 package com.devtoon.jtoon.webtoon.entity;
 
+import static com.devtoon.jtoon.error.model.ErrorStatus.*;
 import static java.util.Objects.*;
 
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.devtoon.jtoon.error.exception.InvalidRequestException;
 import com.devtoon.jtoon.global.common.BaseTimeEntity;
 
 import jakarta.persistence.Column;
@@ -69,15 +71,19 @@ public class Episode extends BaseTimeEntity {
 		Webtoon webtoon
 	) {
 		if (no <= 0) {
-			throw new RuntimeException("number is zero or negative number");
+			throw new InvalidRequestException(EPISODE_NUMBER_POSITIVE);
 		}
 
 		this.no = no;
-		this.title = requireNonNull(title, "title is null");
-		this.mainUrl = requireNonNull(mainUrl, "mainUrl is null");
+		this.title = requireNonNull(title, EPISODE_TITLE_IS_NULL.getMessage());
+		this.mainUrl = requireNonNull(mainUrl, EPISODE_MAIN_URL_IS_NULL.getMessage());
 		this.thumbnailUrl = thumbnailUrl;
 		this.hasComment = hasComment;
-		this.openedAt = requireNonNull(openedAt, "openedAt is null");
-		this.webtoon = requireNonNull(webtoon, "webtoon is null");
+		this.openedAt = requireNonNull(openedAt, EPISODE_OPENED_AT_IS_NULL.getMessage());
+		this.webtoon = requireNonNull(webtoon, WEBTOON_IS_NULL.getMessage());
+	}
+
+	public int getCookieCount() {
+		return webtoon.getCookieCount();
 	}
 }
