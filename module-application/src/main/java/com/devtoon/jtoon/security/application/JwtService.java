@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.security.jwt.application;
+package com.devtoon.jtoon.security.application;
 
 import static com.devtoon.jtoon.security.util.SecurityConstant.*;
 
@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.devtoon.jtoon.security.domain.jwt.CustomUserDetails;
 import com.devtoon.jtoon.security.entity.RefreshToken;
-import com.devtoon.jtoon.security.jwt.domain.CustomUserDetails;
 import com.devtoon.jtoon.security.repository.RefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -28,10 +28,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+@Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class JwtProvider {
+public class JwtService {
 
 	@Value("${jwt.iss}")
 	private String ISS;

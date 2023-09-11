@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.security.jwt.domain;
+package com.devtoon.jtoon.security.domain.jwt;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

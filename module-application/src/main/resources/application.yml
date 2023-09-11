@@ -1,3 +1,0 @@
-spring:
-  profiles:
-    include: s3, smtp, iamport, jwt

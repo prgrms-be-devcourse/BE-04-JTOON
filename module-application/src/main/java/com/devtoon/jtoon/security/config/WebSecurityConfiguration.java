@@ -12,8 +12,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+import com.devtoon.jtoon.security.application.CustomOAuth2UserService;
+import com.devtoon.jtoon.security.application.JwtService;
 import com.devtoon.jtoon.security.filter.JwtAuthenticationFilter;
-import com.devtoon.jtoon.security.jwt.application.JwtProvider;
+import com.devtoon.jtoon.security.handler.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -22,7 +24,9 @@ import lombok.RequiredArgsConstructor;
 public class WebSecurityConfiguration {
 
 	private final HandlerExceptionResolver handlerExceptionResolver;
-	private final JwtProvider jwtProvider;
+	private final JwtService jwtService;
+	private final CustomOAuth2UserService customOAuth2UserService;
+	private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
 	@Bean
 	public PasswordEncoder encoder() {
@@ -39,9 +43,13 @@ public class WebSecurityConfiguration {
 				.anyRequest().permitAll())
 			.csrf(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)
+			.formLogin(AbstractHttpConfigurer::disable)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(new JwtAuthenticationFilter(handlerExceptionResolver, jwtProvider),
+			.addFilterBefore(new JwtAuthenticationFilter(handlerExceptionResolver, jwtService),
 				UsernamePasswordAuthenticationFilter.class)
+			.oauth2Login(login -> login
+				.userInfoEndpoint(endpoint -> endpoint.userService(customOAuth2UserService))
+				.successHandler(oAuth2SuccessHandler))
 		;
 		return http.build();
 	}
