@@ -4,12 +4,10 @@ import static com.devtoon.jtoon.error.model.ErrorStatus.*;
 import static java.util.Objects.*;
 
 import com.devtoon.jtoon.global.common.BaseTimeEntity;
-import com.devtoon.jtoon.webtoon.entity.enums.DayOfWeek;
+import com.devtoon.jtoon.member.entity.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,26 +22,26 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "day_of_week_webtoons")
+@Table(name = "purchased_episodes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DayOfWeekWebtoon extends BaseTimeEntity {
+public class PurchasedEpisode extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "day_of_week_webtoon_id")
+	@Column(name = "purchased_episode_id")
 	private Long id;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "day_of_week", nullable = false, length = 3)
-	private DayOfWeek dayOfWeek;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id", nullable = false)
+	private Member member;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "webtoon_id", nullable = false)
-	private Webtoon webtoon;
+	@JoinColumn(name = "episode_id", nullable = false)
+	private Episode episode;
 
 	@Builder
-	private DayOfWeekWebtoon(DayOfWeek dayOfWeek, Webtoon webtoon) {
-		this.dayOfWeek = requireNonNull(dayOfWeek, WEBTOON_DAY_OF_WEEK_IS_NULL.getMessage());
-		this.webtoon = requireNonNull(webtoon, WEBTOON_IS_NULL.getMessage());
+	private PurchasedEpisode(Member member, Episode episode) {
+		this.member = requireNonNull(member, MEMBER_IS_NULL.getMessage());
+		this.episode = requireNonNull(episode, EPISODE_IS_NULL.getMessage());
 	}
 }

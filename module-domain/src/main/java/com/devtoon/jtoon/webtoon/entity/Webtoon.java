@@ -1,9 +1,13 @@
 package com.devtoon.jtoon.webtoon.entity;
 
+import static com.devtoon.jtoon.error.model.ErrorStatus.*;
 import static java.util.Objects.*;
+
+import java.util.Objects;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.devtoon.jtoon.error.exception.InvalidRequestException;
 import com.devtoon.jtoon.global.common.BaseTimeEntity;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.webtoon.entity.enums.AgeLimit;
@@ -66,18 +70,24 @@ public class Webtoon extends BaseTimeEntity {
 		Member author
 	) {
 		if (cookieCount < 0) {
-			throw new RuntimeException("cookieCount is negative number");
+			throw new InvalidRequestException(COOKIE_COUNT_NOT_NEGATIVE);
 		}
 
-		this.title = requireNonNull(title, "title is null");
-		this.description = requireNonNull(description, "description is null");
-		this.ageLimit = requireNonNull(ageLimit, "ageLimit is null");
+		this.title = requireNonNull(title, WEBTOON_TITLE_IS_NULL.getMessage());
+		this.description = requireNonNull(description, WEBTOON_DESCRIPTION_IS_NULL.getMessage());
+		this.ageLimit = requireNonNull(ageLimit, WEBTOON_AGE_LIMIT_IS_NULL.getMessage());
 		this.thumbnailUrl = thumbnailUrl;
 		this.cookieCount = cookieCount;
-		this.author = requireNonNull(author, "author is null");
+		this.author = requireNonNull(author, WEBTOON_AUTHOR_IS_NULL.getMessage());
 	}
 
-	public boolean isAuthor(Long memberId) {
-		return memberId.equals(author.getId());
+	public void validateAuthor(Long memberId) {
+		if (!isAuthor(memberId)) {
+			throw new InvalidRequestException(WEBTOON_NOT_AUTHOR);
+		}
+	}
+
+	private boolean isAuthor(Long memberId) {
+		return Objects.equals(author.getId(), memberId);
 	}
 }

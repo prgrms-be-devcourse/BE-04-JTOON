@@ -17,7 +17,8 @@ public enum Genre {
 	HISTORICAL("무협/사극"),
 	DRAMA("드라마"),
 	SENSIBILITY("감성"),
-	SPORTS("스포츠");
+	SPORTS("스포츠"),
+	;
 
 	private final String text;
 }

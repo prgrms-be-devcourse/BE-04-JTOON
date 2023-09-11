@@ -16,12 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.devtoon.jtoon.global.util.CustomPageRequest;
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.security.jwt.domain.MemberThreadLocal;
-import com.devtoon.jtoon.webtoon.application.WebtoonService;
+import com.devtoon.jtoon.security.domain.jwt.MemberThreadLocal;
+import com.devtoon.jtoon.webtoon.application.WebtoonApplicationService;
 import com.devtoon.jtoon.webtoon.entity.enums.DayOfWeek;
 import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.CreateWebtoonReq;
-import com.devtoon.jtoon.webtoon.request.GetEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.GetWebtoonsReq;
 import com.devtoon.jtoon.webtoon.response.EpisodeRes;
 import com.devtoon.jtoon.webtoon.response.EpisodesRes;
@@ -36,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/webtoons")
 public class WebtoonController {
 
-	private final WebtoonService webtoonService;
+	private final WebtoonApplicationService webtoonService;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -49,12 +48,12 @@ public class WebtoonController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createEpisode(
 		@PathVariable Long webtoonId,
-		@RequestPart @Valid CreateEpisodeReq request,
 		@RequestPart MultipartFile mainImage,
-		@RequestPart(required = false) MultipartFile thumbnailImage
+		@RequestPart(required = false) MultipartFile thumbnailImage,
+		@RequestPart @Valid CreateEpisodeReq request
 	) {
 		Member member = MemberThreadLocal.getMember();
-		webtoonService.createEpisode(member, webtoonId, request, mainImage, thumbnailImage);
+		webtoonService.createEpisode(member, webtoonId, mainImage, thumbnailImage, request);
 	}
 
 	@GetMapping
@@ -74,9 +73,14 @@ public class WebtoonController {
 		return webtoonService.getEpisodes(webtoonId, request);
 	}
 
-	@GetMapping("/detail")
-	@ResponseStatus(HttpStatus.OK)
-	public EpisodeRes detailEpisode(@RequestParam Long episodeId, @RequestParam GetEpisodeReq request) {
-		return webtoonService.getDetailEpisode(episodeId, request);
+	@GetMapping("/episodes/{episodeId}")
+	public EpisodeRes getEpisode(@PathVariable Long episodeId) {
+		return webtoonService.getEpisode(episodeId);
+	}
+
+	@PostMapping("/episodes/{episodeId}/purchase")
+	public void purchaseEpisode(@PathVariable Long episodeId) {
+		Member member = MemberThreadLocal.getMember();
+		webtoonService.purchaseEpisode(member, episodeId);
 	}
 }

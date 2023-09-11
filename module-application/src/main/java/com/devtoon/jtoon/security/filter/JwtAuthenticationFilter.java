@@ -8,11 +8,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import com.devtoon.jtoon.security.jwt.application.JwtProvider;
-import com.devtoon.jtoon.security.jwt.domain.CustomUserDetails;
-import com.devtoon.jtoon.security.jwt.domain.MemberThreadLocal;
+import com.devtoon.jtoon.security.application.JwtService;
+import com.devtoon.jtoon.security.domain.jwt.CustomUserDetails;
+import com.devtoon.jtoon.security.domain.jwt.MemberThreadLocal;
+import com.devtoon.jtoon.security.util.TokenCookie;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final HandlerExceptionResolver handlerExceptionResolver;
-	private final JwtProvider jwtProvider;
+	private final JwtService jwtService;
 
 	@Override
 	protected void doFilterInternal(
@@ -36,8 +38,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		if (accessToken != null && accessToken.startsWith(BEARER_VALUE)) {
 			try {
-				accessToken = accessToken.split(SPACE)[1];
-				if (!jwtProvider.isTokenValid(accessToken)) {
+				accessToken = accessToken.split(SPLIT_DATA)[1];
+				if (!jwtService.isTokenValid(accessToken)) {
 					String refreshToken = validateAndGetRefreshToken(request);
 					accessToken = regenerateTokens(refreshToken, response);
 				}
@@ -53,25 +55,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private String validateAndGetRefreshToken(HttpServletRequest request) {
 		String refreshToken = request.getHeader(REFRESH_TOKEN_HEADER);
-		refreshToken = refreshToken.split(SPACE)[1];
-		jwtProvider.isTokenValid(refreshToken);
-		jwtProvider.verifyRefreshTokenDb(refreshToken);
-		
+		refreshToken = refreshToken.split(SPLIT_DATA)[1];
+		jwtService.isTokenValid(refreshToken);
+		jwtService.verifyRefreshTokenDb(refreshToken);
+
 		return refreshToken;
 	}
 
 	private String regenerateTokens(String refreshToken, HttpServletResponse response) {
-		String newAccessToken = jwtProvider.reGenerateAccessToken(refreshToken);
-		String newRefreshToken = jwtProvider.generateRefreshToken();
-		jwtProvider.updateRefreshTokenDb(newAccessToken, newRefreshToken);
-		response.setHeader(ACCESS_TOKEN_HEADER, BEARER_VALUE + newAccessToken);
-		response.setHeader(REFRESH_TOKEN_HEADER, BEARER_VALUE + newRefreshToken);
+		String newAccessToken = jwtService.reGenerateAccessToken(refreshToken);
+		String newRefreshToken = jwtService.generateRefreshToken();
+		jwtService.updateRefreshTokenDb(newAccessToken, newRefreshToken);
+		Cookie accessCookie = TokenCookie.of(ACCESS_TOKEN_HEADER, newAccessToken);
+		Cookie refreshCookie = TokenCookie.of(REFRESH_TOKEN_HEADER, newRefreshToken);
+		response.addCookie(accessCookie);
+		response.addCookie(refreshCookie);
 
 		return newAccessToken;
 	}
 
 	private void authenticate(String accessToken) {
-		Authentication auth = jwtProvider.getAuthentication(accessToken);
+		Authentication auth = jwtService.getAuthentication(accessToken);
 		CustomUserDetails customUserDetails = (CustomUserDetails)auth.getPrincipal();
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		MemberThreadLocal.setMember(customUserDetails.getMember());
