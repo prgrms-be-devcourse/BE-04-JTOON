@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.paymentinfo.entity;
+package com.devtoon.jtoon.payment.entity;
 
 import java.math.BigDecimal;
 import java.util.Arrays;

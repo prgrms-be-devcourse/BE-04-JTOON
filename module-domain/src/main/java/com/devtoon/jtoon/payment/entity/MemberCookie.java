@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.paymentinfo.entity;
+package com.devtoon.jtoon.payment.entity;
 
 import static com.devtoon.jtoon.error.model.ErrorStatus.*;
 import static java.util.Objects.*;

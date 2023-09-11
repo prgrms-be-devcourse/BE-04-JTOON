@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devtoon.jtoon.payment.application.PaymentService;
-import com.devtoon.jtoon.paymentinfo.request.CancelReq;
-import com.devtoon.jtoon.paymentinfo.request.PaymentReq;
-import com.devtoon.jtoon.paymentinfo.service.IamportService;
+import com.devtoon.jtoon.payment.request.CancelReq;
+import com.devtoon.jtoon.payment.request.PaymentReq;
+import com.devtoon.jtoon.payment.service.IamportService;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;

@@ -6,9 +6,9 @@ import java.math.BigDecimal;
 import org.springframework.stereotype.Service;
 
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.paymentinfo.request.PaymentReq;
-import com.devtoon.jtoon.paymentinfo.service.IamportService;
-import com.devtoon.jtoon.paymentinfo.service.PaymentInfoService;
+import com.devtoon.jtoon.payment.request.PaymentReq;
+import com.devtoon.jtoon.payment.service.IamportService;
+import com.devtoon.jtoon.payment.service.PaymentInfoService;
 import com.devtoon.jtoon.security.domain.jwt.MemberThreadLocal;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 

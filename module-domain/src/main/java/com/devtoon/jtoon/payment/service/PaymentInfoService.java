@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.paymentinfo.service;
+package com.devtoon.jtoon.payment.service;
 
 import java.math.BigDecimal;
 
@@ -9,12 +9,12 @@ import com.devtoon.jtoon.error.exception.DuplicatedException;
 import com.devtoon.jtoon.error.exception.InvalidRequestException;
 import com.devtoon.jtoon.error.model.ErrorStatus;
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.paymentinfo.entity.CookieItem;
-import com.devtoon.jtoon.paymentinfo.entity.MemberCookie;
-import com.devtoon.jtoon.paymentinfo.entity.PaymentInfo;
-import com.devtoon.jtoon.paymentinfo.repository.MemberCookieRepository;
-import com.devtoon.jtoon.paymentinfo.repository.PaymentInfoRepository;
-import com.devtoon.jtoon.paymentinfo.request.PaymentReq;
+import com.devtoon.jtoon.payment.entity.CookieItem;
+import com.devtoon.jtoon.payment.entity.MemberCookie;
+import com.devtoon.jtoon.payment.entity.PaymentInfo;
+import com.devtoon.jtoon.payment.repository.MemberCookieRepository;
+import com.devtoon.jtoon.payment.repository.PaymentInfoRepository;
+import com.devtoon.jtoon.payment.request.PaymentReq;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 

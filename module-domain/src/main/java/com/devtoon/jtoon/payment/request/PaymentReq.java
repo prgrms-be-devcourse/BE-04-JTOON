@@ -1,12 +1,12 @@
-package com.devtoon.jtoon.paymentinfo.request;
+package com.devtoon.jtoon.payment.request;
 
 import static com.devtoon.jtoon.global.util.RegExp.*;
 
 import java.math.BigDecimal;
 
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.paymentinfo.entity.CookieItem;
-import com.devtoon.jtoon.paymentinfo.entity.PaymentInfo;
+import com.devtoon.jtoon.payment.entity.CookieItem;
+import com.devtoon.jtoon.payment.entity.PaymentInfo;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;

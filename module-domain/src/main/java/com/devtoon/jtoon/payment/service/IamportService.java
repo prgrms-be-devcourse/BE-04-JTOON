@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.paymentinfo.service;
+package com.devtoon.jtoon.payment.service;
 
 import java.io.IOException;
 
@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.devtoon.jtoon.paymentinfo.entity.CookieItem;
-import com.devtoon.jtoon.paymentinfo.request.CancelReq;
-import com.devtoon.jtoon.paymentinfo.request.PaymentReq;
+import com.devtoon.jtoon.payment.entity.CookieItem;
+import com.devtoon.jtoon.payment.request.CancelReq;
+import com.devtoon.jtoon.payment.request.PaymentReq;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.CancelData;
