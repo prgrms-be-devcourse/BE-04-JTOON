@@ -21,8 +21,7 @@ public class PaymentService {
 	private final PaymentInfoService paymentInfoService;
 	private final IamportService iamportService;
 
-	public BigDecimal validatePayment(PaymentReq paymentReq)
-		throws IamportResponseException, IOException {
+	public BigDecimal validatePayment(PaymentReq paymentReq) throws IamportResponseException, IOException {
 		Member member = MemberThreadLocal.getMember();
 		iamportService.validateIamport(paymentReq);
 
