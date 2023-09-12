@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.devtoon.jtoon.security.application.AuthService;
 import com.devtoon.jtoon.security.request.LogInReq;
 import com.devtoon.jtoon.security.response.LoginRes;
-
+import com.devtoon.jtoon.security.util.TokenCookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +26,9 @@ public class AuthController {
 	@PostMapping("/login")
 	public void login(@RequestBody @Valid LogInReq logInReq, HttpServletResponse response) {
 		LoginRes loginRes = authService.login(logInReq);
-
-		response.setHeader(ACCESS_TOKEN_HEADER, BEARER_VALUE + loginRes.accessToken());
-		response.setHeader(REFRESH_TOKEN_HEADER, BEARER_VALUE + loginRes.refreshToken());
+		
+		response.addCookie(TokenCookie.of(ACCESS_TOKEN_HEADER, loginRes.accessToken()));
+		response.addCookie(TokenCookie.of(REFRESH_TOKEN_HEADER, loginRes.refreshToken()));
 	}
 
 	@GetMapping
