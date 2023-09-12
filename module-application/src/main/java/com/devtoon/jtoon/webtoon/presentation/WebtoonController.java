@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.devtoon.jtoon.global.util.CustomPageRequest;
-import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.security.domain.jwt.MemberThreadLocal;
 import com.devtoon.jtoon.webtoon.application.WebtoonApplicationService;
 import com.devtoon.jtoon.webtoon.entity.enums.DayOfWeek;
 import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
@@ -40,8 +38,7 @@ public class WebtoonController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createWebtoon(@RequestPart MultipartFile thumbnailImage, @RequestPart @Valid CreateWebtoonReq request) {
-		Member member = MemberThreadLocal.getMember();
-		webtoonService.createWebtoon(member, thumbnailImage, request);
+		webtoonService.createWebtoon(thumbnailImage, request);
 	}
 
 	@PostMapping("/{webtoonId}")
@@ -52,8 +49,7 @@ public class WebtoonController {
 		@RequestPart(required = false) MultipartFile thumbnailImage,
 		@RequestPart @Valid CreateEpisodeReq request
 	) {
-		Member member = MemberThreadLocal.getMember();
-		webtoonService.createEpisode(member, webtoonId, mainImage, thumbnailImage, request);
+		webtoonService.createEpisode(webtoonId, mainImage, thumbnailImage, request);
 	}
 
 	@GetMapping
@@ -80,7 +76,6 @@ public class WebtoonController {
 
 	@PostMapping("/episodes/{episodeId}/purchase")
 	public void purchaseEpisode(@PathVariable Long episodeId) {
-		Member member = MemberThreadLocal.getMember();
-		webtoonService.purchaseEpisode(member, episodeId);
+		webtoonService.purchaseEpisode(episodeId);
 	}
 }

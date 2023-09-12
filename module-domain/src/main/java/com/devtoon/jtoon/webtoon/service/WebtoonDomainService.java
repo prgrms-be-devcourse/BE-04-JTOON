@@ -14,7 +14,7 @@ import com.devtoon.jtoon.error.exception.NotFoundException;
 import com.devtoon.jtoon.global.util.CustomPageRequest;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.entity.MemberCookie;
-import com.devtoon.jtoon.member.repository.MemberCookieRepository;
+import com.devtoon.jtoon.payment.repository.MemberCookieRepository;
 import com.devtoon.jtoon.webtoon.entity.DayOfWeekWebtoon;
 import com.devtoon.jtoon.webtoon.entity.Episode;
 import com.devtoon.jtoon.webtoon.entity.GenreWebtoon;

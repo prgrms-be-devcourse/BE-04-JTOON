@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devtoon.jtoon.member.application.MemberService;
 import com.devtoon.jtoon.member.request.SignUpReq;
+import com.devtoon.jtoon.member.service.MemberService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -30,5 +31,10 @@ public class MemberController {
 	@GetMapping("/email-authorization")
 	public String authenticateEmail(@RequestParam(value = "email") String email) {
 		return memberService.sendEmailAuthentication(email);
+	}
+
+	@GetMapping
+	public int getCookieCount() {
+		return memberService.getCookieCount();
 	}
 }
