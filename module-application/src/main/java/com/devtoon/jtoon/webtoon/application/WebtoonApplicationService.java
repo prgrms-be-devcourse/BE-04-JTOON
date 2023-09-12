@@ -23,6 +23,7 @@ import com.devtoon.jtoon.webtoon.response.EpisodeRes;
 import com.devtoon.jtoon.webtoon.response.EpisodesRes;
 import com.devtoon.jtoon.webtoon.response.WebtoonInfoRes;
 import com.devtoon.jtoon.webtoon.response.WebtoonItemRes;
+import com.devtoon.jtoon.webtoon.service.EpisodeDomainService;
 import com.devtoon.jtoon.webtoon.service.WebtoonDomainService;
 
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class WebtoonApplicationService {
 
 	private final WebtoonDomainService webtoonDomainService;
+	private final EpisodeDomainService episodeDomainService;
 	private final S3Service s3Service;
 
 	@Transactional
@@ -59,7 +61,7 @@ public class WebtoonApplicationService {
 		String thumbnailUrl = s3Service.upload(
 			UploadImageReq.of(EPISODE_THUMBNAIL, webtoon.getTitle(), FileName.forEpisode(request.no()), thumbnailImage)
 		);
-		webtoonDomainService.createEpisode(webtoon, mainUrl, thumbnailUrl, request);
+		episodeDomainService.createEpisode(webtoon, mainUrl, thumbnailUrl, request);
 	}
 
 	public Map<DayOfWeek, List<WebtoonItemRes>> getWebtoons(GetWebtoonsReq request) {
@@ -71,15 +73,15 @@ public class WebtoonApplicationService {
 	}
 
 	public List<EpisodesRes> getEpisodes(Long webtoonId, CustomPageRequest request) {
-		return webtoonDomainService.getEpisodes(webtoonId, request);
+		return episodeDomainService.getEpisodes(webtoonId, request);
 	}
 
 	public EpisodeRes getEpisode(Long episodeId) {
-		return webtoonDomainService.getEpisode(episodeId);
+		return episodeDomainService.getEpisode(episodeId);
 	}
 
 	@Transactional
 	public void purchaseEpisode(Member member, Long episodeId) {
-		webtoonDomainService.purchaseEpisode(member, episodeId);
+		episodeDomainService.purchaseEpisode(member, episodeId);
 	}
 }
