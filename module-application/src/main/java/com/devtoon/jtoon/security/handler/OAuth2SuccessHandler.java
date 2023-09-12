@@ -11,7 +11,6 @@ import com.devtoon.jtoon.security.application.JwtService;
 import com.devtoon.jtoon.security.entity.RefreshToken;
 import com.devtoon.jtoon.security.repository.RefreshTokenRepository;
 import com.devtoon.jtoon.security.util.TokenCookie;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -32,10 +31,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		String email = (String)res.get("email");
 		String accessToken = jwtService.generateAccessToken(email);
 		String refreshToken = jwtService.generateRefreshToken();
-		Cookie accessCookie = TokenCookie.of(ACCESS_TOKEN_HEADER, accessToken);
-		Cookie refreshCookie = TokenCookie.of(REFRESH_TOKEN_HEADER, refreshToken);
-		response.addCookie(accessCookie);
-		response.addCookie(refreshCookie);
+		response.addCookie(TokenCookie.of(ACCESS_TOKEN_HEADER, accessToken));
+		response.addCookie(TokenCookie.of(REFRESH_TOKEN_HEADER, refreshToken));
 		refreshTokenRepository.save(RefreshToken.builder()
 			.email(email)
 			.refreshToken(refreshToken)
