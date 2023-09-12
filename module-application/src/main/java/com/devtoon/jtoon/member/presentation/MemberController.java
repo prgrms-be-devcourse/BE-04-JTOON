@@ -22,7 +22,7 @@ public class MemberController {
 
 	private final MemberService memberService;
 
-	@PostMapping
+	@PostMapping("/sign-up")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void signUp(@RequestBody @Valid SignUpReq signUpReq) {
 		memberService.createMember(signUpReq);
