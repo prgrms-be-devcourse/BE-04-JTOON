@@ -15,6 +15,15 @@ public record UploadImageReq(
 	MultipartFile image
 ) {
 
+	public static UploadImageReq of(ImageType imageType, String webtoonTitle, FileName fileName, MultipartFile image) {
+		return UploadImageReq.builder()
+			.imageType(imageType)
+			.webtoonTitle(webtoonTitle)
+			.fileName(fileName)
+			.image(image)
+			.build();
+	}
+
 	public String toKey() {
 		return imageType.getPath(webtoonTitle, fileName.getValue());
 	}
