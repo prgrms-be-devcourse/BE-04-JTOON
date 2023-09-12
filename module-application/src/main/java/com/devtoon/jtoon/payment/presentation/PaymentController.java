@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devtoon.jtoon.payment.application.PaymentService;
+import com.devtoon.jtoon.payment.application.PaymentApplicationService;
 import com.devtoon.jtoon.payment.request.CancelReq;
 import com.devtoon.jtoon.payment.request.PaymentReq;
 import com.devtoon.jtoon.payment.service.IamportService;
@@ -24,13 +24,13 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/payments")
 public class PaymentController {
 
-	private final PaymentService paymentService;
+	private final PaymentApplicationService paymentApplicationService;
 	private final IamportService iamportService;
 
 	@PostMapping("/validation")
 	public BigDecimal validatePayment(@RequestBody @Valid PaymentReq paymentReq)
 		throws IamportResponseException, IOException {
-		return paymentService.validatePayment(paymentReq);
+		return paymentApplicationService.validatePayment(paymentReq);
 	}
 
 	@PostMapping("/cancel")

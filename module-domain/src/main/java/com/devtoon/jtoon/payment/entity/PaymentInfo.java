@@ -25,13 +25,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "payments")
+@Table(name = "payments_info")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PaymentInfo {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "payment_id")
+	@Column(name = "payment_info_id")
 	private Long id;
 
 	@Column(name = "imp_uid", length = 100, nullable = false, unique = true, updatable = false)

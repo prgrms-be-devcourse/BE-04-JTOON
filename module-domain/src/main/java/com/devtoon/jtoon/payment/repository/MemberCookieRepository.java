@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.payment.entity.MemberCookie;
+import com.devtoon.jtoon.member.entity.MemberCookie;
 
 public interface MemberCookieRepository extends JpaRepository<MemberCookie, Long> {
 

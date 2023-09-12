@@ -13,7 +13,7 @@ import com.devtoon.jtoon.error.exception.DuplicatedException;
 import com.devtoon.jtoon.error.exception.NotFoundException;
 import com.devtoon.jtoon.global.util.CustomPageRequest;
 import com.devtoon.jtoon.member.entity.Member;
-import com.devtoon.jtoon.payment.entity.MemberCookie;
+import com.devtoon.jtoon.member.entity.MemberCookie;
 import com.devtoon.jtoon.payment.repository.MemberCookieRepository;
 import com.devtoon.jtoon.webtoon.entity.DayOfWeekWebtoon;
 import com.devtoon.jtoon.webtoon.entity.Episode;

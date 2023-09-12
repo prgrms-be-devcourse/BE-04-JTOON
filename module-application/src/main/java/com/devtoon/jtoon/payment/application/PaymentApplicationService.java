@@ -5,18 +5,18 @@ import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
 
+import com.devtoon.jtoon.global.common.MemberThreadLocal;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.payment.request.PaymentReq;
 import com.devtoon.jtoon.payment.service.IamportService;
 import com.devtoon.jtoon.payment.service.PaymentInfoService;
-import com.devtoon.jtoon.security.domain.jwt.MemberThreadLocal;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentService {
+public class PaymentApplicationService {
 
 	private final PaymentInfoService paymentInfoService;
 	private final IamportService iamportService;
