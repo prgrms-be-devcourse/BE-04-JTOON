@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,7 +17,6 @@ import com.devtoon.jtoon.security.application.JwtService;
 import com.devtoon.jtoon.security.filter.JwtAuthenticationFilter;
 import com.devtoon.jtoon.security.handler.OAuth2FailureHandler;
 import com.devtoon.jtoon.security.handler.OAuth2SuccessHandler;
-
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -35,13 +33,6 @@ public class SecurityConfig {
 	@Bean
 	public PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return web -> web.ignoring()
-			.requestMatchers("/members/sign-up")
-			.requestMatchers("/login");
 	}
 
 	@Bean
