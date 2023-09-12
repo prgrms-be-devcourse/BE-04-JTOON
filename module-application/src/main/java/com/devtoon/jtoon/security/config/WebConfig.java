@@ -5,7 +5,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.devtoon.jtoon.global.util.RegExp;
 import com.devtoon.jtoon.security.interceptor.MemberInterceptor;
 
 @Configuration
@@ -22,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(final CorsRegistry registry) {
 		registry.addMapping("/**")
-			.allowedOriginPatterns(RegExp.ALLOW_ORIGIN_PATTERN)
+			.allowedOriginPatterns("*")
 			.allowedMethods(ALLOWED_METHOD_NAMES.split(","))
 			.allowedHeaders("*")
 			.allowCredentials(true)
