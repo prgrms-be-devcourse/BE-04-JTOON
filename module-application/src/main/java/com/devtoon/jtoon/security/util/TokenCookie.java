@@ -2,11 +2,10 @@ package com.devtoon.jtoon.security.util;
 
 import static com.devtoon.jtoon.security.util.SecurityConstant.*;
 
+import jakarta.servlet.http.Cookie;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-
-import jakarta.servlet.http.Cookie;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +18,7 @@ public class TokenCookie {
 		Cookie cookie = new Cookie(name, URLEncoder.encode(BEARER_VALUE + BLANK + value, charSet));
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
+
 		return cookie;
 	}
 }
