@@ -1,5 +1,8 @@
 package com.devtoon.jtoon.security.application;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -9,14 +12,13 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.devtoon.jtoon.global.common.MemberThreadLocal;
 import com.devtoon.jtoon.member.entity.LoginType;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.repository.MemberRepository;
-import com.devtoon.jtoon.security.domain.jwt.MemberThreadLocal;
 import com.devtoon.jtoon.security.domain.oauth.CustomOAuth2User;
 import com.devtoon.jtoon.security.domain.oauth.OAuthAttributes;
-import java.util.Collections;
-import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 
 @Service

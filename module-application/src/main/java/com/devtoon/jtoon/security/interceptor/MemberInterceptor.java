@@ -3,7 +3,8 @@ package com.devtoon.jtoon.security.interceptor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.devtoon.jtoon.security.domain.jwt.MemberThreadLocal;
+import com.devtoon.jtoon.global.common.MemberThreadLocal;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 

@@ -48,6 +48,13 @@ public class MemberCookie extends BaseTimeEntity {
 		this.member = requireNonNull(member, MEMBER_IS_NULL.getMessage());
 	}
 
+	public static MemberCookie create(int cookieCount, Member member) {
+		return MemberCookie.builder()
+			.cookieCount(cookieCount)
+			.member(member)
+			.build();
+	}
+
 	public void decreaseCookieCount(int cookieCount) {
 		if (this.cookieCount < cookieCount) {
 			throw new InvalidRequestException(EPISODE_NOT_ENOUGH_COOKIES);

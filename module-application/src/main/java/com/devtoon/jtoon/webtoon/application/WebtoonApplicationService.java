@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.devtoon.jtoon.application.S3Service;
 import com.devtoon.jtoon.common.FileName;
+import com.devtoon.jtoon.global.common.MemberThreadLocal;
 import com.devtoon.jtoon.global.util.CustomPageRequest;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.request.UploadImageReq;
@@ -37,7 +38,8 @@ public class WebtoonApplicationService {
 	private final S3Service s3Service;
 
 	@Transactional
-	public void createWebtoon(Member member, MultipartFile thumbnailImage, CreateWebtoonReq request) {
+	public void createWebtoon(MultipartFile thumbnailImage, CreateWebtoonReq request) {
+		Member member = MemberThreadLocal.getMember();
 		webtoonDomainService.validateDuplicateTitle(request.title());
 		String thumbnailUrl = s3Service.upload(
 			UploadImageReq.of(WEBTOON_THUMBNAIL, request.title(), FileName.forWebtoon(), thumbnailImage)
@@ -47,12 +49,12 @@ public class WebtoonApplicationService {
 
 	@Transactional
 	public void createEpisode(
-		Member member,
 		Long webtoonId,
 		MultipartFile mainImage,
 		MultipartFile thumbnailImage,
 		CreateEpisodeReq request
 	) {
+		Member member = MemberThreadLocal.getMember();
 		Webtoon webtoon = webtoonDomainService.getWebtoonById(webtoonId);
 		webtoon.validateAuthor(member.getId());
 		String mainUrl = s3Service.upload(
@@ -81,7 +83,8 @@ public class WebtoonApplicationService {
 	}
 
 	@Transactional
-	public void purchaseEpisode(Member member, Long episodeId) {
+	public void purchaseEpisode(Long episodeId) {
+		Member member = MemberThreadLocal.getMember();
 		episodeDomainService.purchaseEpisode(member, episodeId);
 	}
 }

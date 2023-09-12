@@ -34,6 +34,9 @@ public enum ErrorStatus {
 	PAYMENT_AMOUNT_INVALID("잘못된 결제 금액입니다."),
 	PAYMENT_COOKIE_NOT_FOUND("등록되지 않은 쿠키 상품입니다."),
 
+	COOKIE_COUNT_NOT_NEGATIVE("쿠키 개수는 음수일 수 없습니다."),
+	COOKIE_MEMBER_NOT_FOUND("해당 회원은 쿠키 정보가 없습니다."),
+
 	WEBTOON_TITLE_DUPLICATED("이미 존재하는 웹툰 제목입니다."),
 	WEBTOON_NOT_FOUND("존재하지 않는 웹툰입니다."),
 	WEBTOON_NOT_AUTHOR("해당 웹툰의 작가가 아닙니다."),
@@ -44,7 +47,7 @@ public enum ErrorStatus {
 	WEBTOON_AUTHOR_IS_NULL("웹툰 작가 값이 NULL 입니다."),
 	WEBTOON_DAY_OF_WEEK_IS_NULL("웹툰 요일 값이 NULL 입니다."),
 	WEBTOON_GENRE_IS_NULL("웹툰 장르 값이 NULL 입니다."),
-	COOKIE_COUNT_NOT_NEGATIVE("쿠키 개수는 음수일 수 없습니다."),
+
 	EPISODE_IS_NULL("회차 값이 NULL 입니다."),
 	EPISODE_NOT_FOUND("존재하지 않는 회차입니다."),
 	EPISODE_NUMBER_POSITIVE("회차 번호는 양수여야 합니다."),

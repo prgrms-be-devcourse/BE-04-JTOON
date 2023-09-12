@@ -1,4 +1,4 @@
-package com.devtoon.jtoon.security.domain.jwt;
+package com.devtoon.jtoon.global.common;
 
 import com.devtoon.jtoon.member.entity.Member;
 
