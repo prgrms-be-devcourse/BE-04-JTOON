@@ -54,11 +54,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 				authenticate(accessToken);
 			}
-		} catch (NullPointerException | MalformedJwtException | BadCredentialsException e) {
+		} catch (MalformedJwtException | BadCredentialsException e) {
 			log.error("Token validation failed", e);
 			handlerExceptionResolver.resolveException(request, response, null, e);
 
 			return;
+		} catch (NullPointerException e) {
+			log.error("Cookie is null", e);
 		}
 
 		filterChain.doFilter(request, response);
