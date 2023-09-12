@@ -11,28 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.devtoon.jtoon.error.exception.DuplicatedException;
 import com.devtoon.jtoon.error.exception.NotFoundException;
-import com.devtoon.jtoon.global.util.CustomPageRequest;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.entity.MemberCookie;
 import com.devtoon.jtoon.payment.repository.MemberCookieRepository;
 import com.devtoon.jtoon.webtoon.entity.DayOfWeekWebtoon;
-import com.devtoon.jtoon.webtoon.entity.Episode;
 import com.devtoon.jtoon.webtoon.entity.GenreWebtoon;
-import com.devtoon.jtoon.webtoon.entity.PurchasedEpisode;
 import com.devtoon.jtoon.webtoon.entity.Webtoon;
 import com.devtoon.jtoon.webtoon.entity.enums.DayOfWeek;
 import com.devtoon.jtoon.webtoon.repository.DayOfWeekWebtoonRepository;
-import com.devtoon.jtoon.webtoon.repository.EpisodeRepository;
-import com.devtoon.jtoon.webtoon.repository.EpisodeSearchRepository;
 import com.devtoon.jtoon.webtoon.repository.GenreWebtoonRepository;
-import com.devtoon.jtoon.webtoon.repository.PurchasedEpisodeRepository;
 import com.devtoon.jtoon.webtoon.repository.WebtoonRepository;
 import com.devtoon.jtoon.webtoon.repository.WebtoonSearchRepository;
-import com.devtoon.jtoon.webtoon.request.CreateEpisodeReq;
 import com.devtoon.jtoon.webtoon.request.CreateWebtoonReq;
 import com.devtoon.jtoon.webtoon.request.GetWebtoonsReq;
-import com.devtoon.jtoon.webtoon.response.EpisodeRes;
-import com.devtoon.jtoon.webtoon.response.EpisodesRes;
 import com.devtoon.jtoon.webtoon.response.GenreRes;
 import com.devtoon.jtoon.webtoon.response.WebtoonInfoRes;
 import com.devtoon.jtoon.webtoon.response.WebtoonItemRes;
@@ -48,10 +39,6 @@ public class WebtoonDomainService {
 	private final WebtoonSearchRepository webtoonSearchRepository;
 	private final DayOfWeekWebtoonRepository dayOfWeekWebtoonRepository;
 	private final GenreWebtoonRepository genreWebtoonRepository;
-	private final EpisodeRepository episodeRepository;
-	private final EpisodeSearchRepository episodeSearchRepository;
-	private final PurchasedEpisodeRepository purchasedEpisodeRepository;
-	private final MemberCookieRepository memberCookieRepository;
 
 	@Transactional
 	public void createWebtoon(Member member, String thumbnailUrl, CreateWebtoonReq request) {
@@ -61,12 +48,6 @@ public class WebtoonDomainService {
 		webtoonRepository.save(webtoon);
 		dayOfWeekWebtoonRepository.saveAll(dayOfWeekWebtoons);
 		genreWebtoonRepository.saveAll(genreWebtoons);
-	}
-
-	@Transactional
-	public void createEpisode(Webtoon webtoon, String mainUrl, String thumbnailUrl, CreateEpisodeReq request) {
-		Episode episode = request.toEntity(webtoon, mainUrl, thumbnailUrl);
-		episodeRepository.save(episode);
 	}
 
 	public Map<DayOfWeek, List<WebtoonItemRes>> getWebtoons(GetWebtoonsReq request) {
@@ -86,30 +67,6 @@ public class WebtoonDomainService {
 		return WebtoonInfoRes.of(webtoon, dayOfWeeks, genres);
 	}
 
-	public List<EpisodesRes> getEpisodes(Long webtoonId, CustomPageRequest request) {
-		return episodeSearchRepository.getEpisodes(webtoonId, request)
-			.stream()
-			.map(EpisodesRes::from)
-			.toList();
-	}
-
-	public EpisodeRes getEpisode(Long episodeId) {
-		Episode episode = getEpisodeById(episodeId);
-		return EpisodeRes.from(episode);
-	}
-
-	@Transactional
-	public void purchaseEpisode(Member member, Long episodeId) {
-		Episode episode = getEpisodeById(episodeId);
-		MemberCookie memberCookie = getMemberCookieById(member.getId());
-		memberCookie.decreaseCookieCount(episode.getCookieCount());
-		purchasedEpisodeRepository.save(PurchasedEpisode.builder()
-			.member(member)
-			.episode(episode)
-			.build()
-		);
-	}
-
 	public void validateDuplicateTitle(String title) {
 		if (webtoonRepository.existsByTitle(title)) {
 			throw new DuplicatedException(WEBTOON_TITLE_DUPLICATED);
@@ -119,16 +76,6 @@ public class WebtoonDomainService {
 	public Webtoon getWebtoonById(Long webtoonId) {
 		return webtoonRepository.findById(webtoonId)
 			.orElseThrow(() -> new NotFoundException(WEBTOON_NOT_FOUND));
-	}
-
-	private Episode getEpisodeById(Long episodeId) {
-		return episodeRepository.findById(episodeId)
-			.orElseThrow(() -> new NotFoundException(EPISODE_NOT_FOUND));
-	}
-
-	private MemberCookie getMemberCookieById(Long memberId) {
-		return memberCookieRepository.findById(memberId)
-			.orElseThrow(() -> new NotFoundException(MEMBER_COOKIE_NOT_FOUND));
 	}
 
 	private List<String> getDayOfWeeks(Long webtoonId) {
