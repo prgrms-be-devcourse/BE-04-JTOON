@@ -54,6 +54,11 @@ project(':module-application') {
     }
 }
 
+project(':module-domain') {
+    bootJar.enabled = false
+    jar.enabled = false
+}
+
 project(':module-domain:domain-member') {
     bootJar.enabled = false
 
@@ -87,6 +92,11 @@ project(':module-domain:domain-s3') {
     dependencies {
         implementation project(':module-core')
     }
+}
+
+project(':module-internal') {
+    bootJar.enabled = false
+    jar.enabled = false
 }
 
 project(':module-internal:core-web') {
@@ -124,7 +134,4 @@ project(':module-internal:oauth2-client') {
 project(':module-core') {
     bootJar.enabled = false
     jar.enabled = true
-
-    dependencies {
-    }
 }
