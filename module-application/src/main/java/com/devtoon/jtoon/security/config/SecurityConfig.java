@@ -41,7 +41,7 @@ public class SecurityConfig {
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return web -> web.ignoring()
 			.requestMatchers("/members/sign-up")
-			.requestMatchers("/login");
+			.requestMatchers("/local-login");
 	}
 
 	@Bean
