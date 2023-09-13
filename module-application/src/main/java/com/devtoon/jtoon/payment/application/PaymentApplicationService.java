@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
 
-import com.devtoon.jtoon.global.common.MemberThreadLocal;
-import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.payment.request.PaymentReq;
 import com.devtoon.jtoon.payment.service.IamportService;
 import com.devtoon.jtoon.payment.service.PaymentInfoDomainService;
@@ -22,9 +20,8 @@ public class PaymentApplicationService {
 	private final PaymentInfoDomainService paymentInfoDomainService;
 
 	public BigDecimal validatePayment(PaymentReq paymentReq) throws IamportResponseException, IOException {
-		Member member = MemberThreadLocal.getMember();
 		iamportService.validateIamport(paymentReq);
 
-		return paymentInfoDomainService.createPayment(paymentReq, member);
+		return paymentInfoDomainService.createPayment(paymentReq);
 	}
 }

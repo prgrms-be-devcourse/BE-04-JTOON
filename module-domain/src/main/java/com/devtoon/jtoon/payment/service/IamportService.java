@@ -1,6 +1,7 @@
 package com.devtoon.jtoon.payment.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,8 @@ public class IamportService {
 	public IamportResponse<Payment> cancelPayment(CancelReq cancelReq)
 		throws IamportResponseException, IOException {
 		IamportResponse<Payment> irsp = iamportClient.paymentByImpUid(cancelReq.impUid());
-		paymentInfoDomainService.validateAmount(irsp, cancelReq.checksum());
+		BigDecimal realAmount = irsp.getResponse().getAmount();
+		paymentInfoDomainService.validateAmount(realAmount, cancelReq.checksum());
 		CancelData cancelData = cancelReq.toCancelData(irsp);
 
 		return iamportClient.cancelPaymentByImpUid(cancelData);
@@ -42,9 +44,10 @@ public class IamportService {
 
 	public void validateIamport(PaymentReq paymentReq) throws IamportResponseException, IOException {
 		IamportResponse<Payment> irsp = iamportClient.paymentByImpUid(paymentReq.impUid());
+		BigDecimal realAmount = irsp.getResponse().getAmount();
 		CookieItem cookieItem = CookieItem.from(paymentReq.cookieItem());
-		paymentInfoDomainService.validateAmount(irsp, cookieItem.getAmount());
-		paymentInfoDomainService.validateAmount(irsp, paymentReq.amount());
+		paymentInfoDomainService.validateAmount(realAmount, cookieItem.getAmount());
+		paymentInfoDomainService.validateAmount(realAmount, paymentReq.amount());
 		paymentInfoDomainService.validateImpUid(paymentReq);
 		paymentInfoDomainService.validateMerchantUid(paymentReq);
 	}
