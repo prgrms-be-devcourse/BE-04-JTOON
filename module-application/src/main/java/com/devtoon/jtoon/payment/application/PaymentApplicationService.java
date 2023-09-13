@@ -9,7 +9,7 @@ import com.devtoon.jtoon.global.common.MemberThreadLocal;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.payment.request.PaymentReq;
 import com.devtoon.jtoon.payment.service.IamportService;
-import com.devtoon.jtoon.payment.service.PaymentInfoService;
+import com.devtoon.jtoon.payment.service.PaymentInfoDomainService;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PaymentApplicationService {
 
-	private final PaymentInfoService paymentInfoService;
 	private final IamportService iamportService;
+	private final PaymentInfoDomainService paymentInfoDomainService;
 
 	public BigDecimal validatePayment(PaymentReq paymentReq) throws IamportResponseException, IOException {
 		Member member = MemberThreadLocal.getMember();
 		iamportService.validateIamport(paymentReq);
 
-		return paymentInfoService.createPayment(paymentReq, member);
+		return paymentInfoDomainService.createPayment(paymentReq, member);
 	}
 }

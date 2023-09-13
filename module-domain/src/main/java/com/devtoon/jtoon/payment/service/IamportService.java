@@ -20,21 +20,21 @@ import com.siot.IamportRestClient.response.Payment;
 public class IamportService {
 
 	private final IamportClient iamportClient;
-	private final PaymentInfoService paymentInfoService;
+	private final PaymentInfoDomainService paymentInfoDomainService;
 
 	public IamportService(
 		@Value("${pg.kg-inicis.rest-api-key}") String restApiKey,
 		@Value("${pg.kg-inicis.rest-api-secret}") String restSecretKey,
-		PaymentInfoService paymentInfoService
+		PaymentInfoDomainService paymentInfoDomainService
 	) {
 		this.iamportClient = new IamportClient(restApiKey, restSecretKey);
-		this.paymentInfoService = paymentInfoService;
+		this.paymentInfoDomainService = paymentInfoDomainService;
 	}
 
 	public IamportResponse<Payment> cancelPayment(CancelReq cancelReq)
 		throws IamportResponseException, IOException {
 		IamportResponse<Payment> irsp = iamportClient.paymentByImpUid(cancelReq.impUid());
-		paymentInfoService.validateAmount(irsp, cancelReq.checksum());
+		paymentInfoDomainService.validateAmount(irsp, cancelReq.checksum());
 		CancelData cancelData = cancelReq.toCancelData(irsp);
 
 		return iamportClient.cancelPaymentByImpUid(cancelData);
@@ -43,9 +43,9 @@ public class IamportService {
 	public void validateIamport(PaymentReq paymentReq) throws IamportResponseException, IOException {
 		IamportResponse<Payment> irsp = iamportClient.paymentByImpUid(paymentReq.impUid());
 		CookieItem cookieItem = CookieItem.from(paymentReq.cookieItem());
-		paymentInfoService.validateAmount(irsp, cookieItem.getAmount());
-		paymentInfoService.validateAmount(irsp, paymentReq.amount());
-		paymentInfoService.validateImpUid(paymentReq);
-		paymentInfoService.validateMerchantUid(paymentReq);
+		paymentInfoDomainService.validateAmount(irsp, cookieItem.getAmount());
+		paymentInfoDomainService.validateAmount(irsp, paymentReq.amount());
+		paymentInfoDomainService.validateImpUid(paymentReq);
+		paymentInfoDomainService.validateMerchantUid(paymentReq);
 	}
 }

@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PaymentInfoService {
+public class PaymentInfoDomainService {
 
 	private final PaymentInfoRepository paymentInfoRepository;
 	private final MemberCookieRepository memberCookieRepository;
