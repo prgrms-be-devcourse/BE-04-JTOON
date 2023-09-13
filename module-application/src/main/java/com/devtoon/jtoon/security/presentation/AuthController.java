@@ -13,6 +13,7 @@ import com.devtoon.jtoon.security.application.AuthService;
 import com.devtoon.jtoon.security.request.LogInReq;
 import com.devtoon.jtoon.security.response.LoginRes;
 import com.devtoon.jtoon.security.util.TokenCookie;
+
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,10 @@ public class AuthController {
 
 	private final AuthService authService;
 
-	@PostMapping("/login")
+	@PostMapping("/local-login")
 	public void login(@RequestBody @Valid LogInReq logInReq, HttpServletResponse response) {
 		LoginRes loginRes = authService.login(logInReq);
-		
+
 		response.addCookie(TokenCookie.of(ACCESS_TOKEN_HEADER, loginRes.accessToken()));
 		response.addCookie(TokenCookie.of(REFRESH_TOKEN_HEADER, loginRes.refreshToken()));
 	}
