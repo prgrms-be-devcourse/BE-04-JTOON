@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devtoon.jtoon.error.exception.DuplicatedException;
 import com.devtoon.jtoon.error.exception.InvalidRequestException;
 import com.devtoon.jtoon.error.model.ErrorStatus;
+import com.devtoon.jtoon.global.common.MemberThreadLocal;
 import com.devtoon.jtoon.member.entity.Member;
 import com.devtoon.jtoon.member.entity.MemberCookie;
 import com.devtoon.jtoon.payment.entity.CookieItem;
@@ -15,21 +16,20 @@ import com.devtoon.jtoon.payment.entity.PaymentInfo;
 import com.devtoon.jtoon.payment.repository.MemberCookieRepository;
 import com.devtoon.jtoon.payment.repository.PaymentInfoRepository;
 import com.devtoon.jtoon.payment.request.PaymentReq;
-import com.siot.IamportRestClient.response.IamportResponse;
-import com.siot.IamportRestClient.response.Payment;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PaymentInfoService {
+public class PaymentInfoDomainService {
 
 	private final PaymentInfoRepository paymentInfoRepository;
 	private final MemberCookieRepository memberCookieRepository;
 
 	@Transactional
-	public BigDecimal createPayment(PaymentReq paymentReq, Member member) {
+	public BigDecimal createPayment(PaymentReq paymentReq) {
+		Member member = MemberThreadLocal.getMember();
 		PaymentInfo paymentInfo = paymentReq.toEntity(member);
 		CookieItem cookieItem = CookieItem.from(paymentReq.cookieItem());
 		MemberCookie memberCookie = MemberCookie.create(cookieItem.getCount(), member);
@@ -39,9 +39,7 @@ public class PaymentInfoService {
 		return paymentInfo.getAmount();
 	}
 
-	public void validateAmount(IamportResponse<Payment> iamportResponse, BigDecimal amount) {
-		BigDecimal realAmount = iamportResponse.getResponse().getAmount();
-
+	public void validateAmount(BigDecimal realAmount, BigDecimal amount) {
 		if (!realAmount.equals(amount)) {
 			throw new InvalidRequestException(ErrorStatus.PAYMENT_AMOUNT_INVALID);
 		}
