@@ -9,7 +9,7 @@
 <br/>
 
 ## 📚 Team 소개
-|김영명|김희빈|박세연(PO)|신재윤|홍혁준|조셉|김훈기|
+|김영명|김희빈|박세연(PO)|신재윤|홍혁준(SM)|조셉|김훈기|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 |DEVELOPER|DEVELOPER|DEVELOPER|DEVELOPER|DEVELOPER|멘토|서브멘토|
 |<img src="https://avatars.githubusercontent.com/u/83266154?v=4" width="250" />|<img src="https://avatars.githubusercontent.com/u/72112845?v=4" width="250" />|<img src="https://avatars.githubusercontent.com/u/54196094?v=4" width="250" />|<img src="https://avatars.githubusercontent.com/u/87688023?v=4" width="250" />|<img src="https://avatars.githubusercontent.com/u/31675711?v=4" width="250" />|<img src="https://avatars.githubusercontent.com/u/42864786?v=4" width="250" />|<img src="https://avatars.githubusercontent.com/u/66348135?v=4" width="250" />|
