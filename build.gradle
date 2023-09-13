@@ -14,7 +14,7 @@ buildscript {
 }
 
 subprojects {
-    group 'com.devtoon.jtoon'
+    group 'shop.jtoon'
     version '0.0.1-SNAPSHOT'
 
     apply plugin: 'java'
@@ -29,6 +29,8 @@ subprojects {
     }
 
     dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
     }
 
     test {
@@ -38,11 +40,21 @@ subprojects {
 
 project(':module-application') {
     dependencies {
+        implementation project(':module-domain:domain-member')
+        implementation project(':module-domain:domain-payment')
+        implementation project(':module-domain:domain-webtoon')
+        implementation project(':module-domain:domain-s3')
+
+        implementation project(':module-internal:core-web')
+        implementation project(':module-internal:iamport-client')
+        implementation project(':module-internal:oauth2-client')
+        implementation project(':module-internal:smtp-client')
+
         implementation project(':module-core')
     }
 }
 
-project(':module-domain') {
+project(':module-domain:domain-member') {
     bootJar.enabled = false
 
     dependencies {
@@ -50,7 +62,26 @@ project(':module-domain') {
     }
 }
 
-project(':module-domain-s3') {
+project(':module-domain:domain-payment') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-domain:domain-member')
+        implementation project(':module-core')
+    }
+}
+
+project(':module-domain:domain-webtoon') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-domain:domain-member')
+        implementation project(':module-domain:domain-s3')
+        implementation project(':module-core')
+    }
+}
+
+project(':module-domain:domain-s3') {
     bootJar.enabled = false
 
     dependencies {
@@ -58,7 +89,31 @@ project(':module-domain-s3') {
     }
 }
 
-project(':module-internal') {
+project(':module-internal:core-web') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-core')
+    }
+}
+
+project(':module-internal:iamport-client') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-core')
+    }
+}
+
+project(':module-internal:smtp-client') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-core')
+    }
+}
+
+project(':module-internal:oauth2-client') {
     bootJar.enabled = false
 
     dependencies {
