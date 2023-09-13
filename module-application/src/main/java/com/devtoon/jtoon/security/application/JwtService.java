@@ -46,9 +46,7 @@ public class JwtService {
 	private long REFRESH_EXPIRE;
 
 	private Key secretKey;
-
 	private final CustomUserDetailsService userDetailsService;
-
 	private final RefreshTokenRepository refreshTokenRepository;
 
 	@PostConstruct
@@ -91,6 +89,7 @@ public class JwtService {
 				.setSigningKey(secretKey)
 				.build()
 				.parseClaimsJws(token);
+
 			return true;
 		} catch (ExpiredJwtException e) {
 			log.error("Expired access Token", e);
