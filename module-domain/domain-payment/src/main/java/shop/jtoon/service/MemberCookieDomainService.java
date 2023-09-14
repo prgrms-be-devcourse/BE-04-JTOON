@@ -26,14 +26,23 @@ public class MemberCookieDomainService {
 		memberCookieRepository.save(memberCookie);
 	}
 
-	public int getMemberCookie() {
+	@Transactional
+	public int useCookie(int cookieCount) {
 		Member member = null; // TODO: member 조회 기능 추가
-		MemberCookie memberCookie = getMemberCookie(member);
+		MemberCookie memberCookie = findMemberCookie(member);
+		memberCookie.decreaseCookieCount(cookieCount);
 
 		return memberCookie.getCookieCount();
 	}
 
-	private MemberCookie getMemberCookie(Member member) {
+	public int getMemberCookie() {
+		Member member = null; // TODO: member 조회 기능 추가
+		MemberCookie memberCookie = findMemberCookie(member);
+
+		return memberCookie.getCookieCount();
+	}
+
+	private MemberCookie findMemberCookie(Member member) {
 		return memberCookieRepository.findByMember(member)
 			.orElseThrow(() -> new NotFoundException(MEMBER_COOKIE_NOT_FOUND));
 	}
