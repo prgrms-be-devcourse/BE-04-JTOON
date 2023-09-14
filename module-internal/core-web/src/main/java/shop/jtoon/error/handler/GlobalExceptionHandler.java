@@ -1,4 +1,4 @@
-package shop.jtoon.global.error.handler;
+package shop.jtoon.error.handler;
 
 import java.util.List;
 
@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import shop.jtoon.global.error.exception.DuplicatedException;
-import shop.jtoon.global.error.exception.ForbiddenException;
-import shop.jtoon.global.error.exception.InvalidRequestException;
-import shop.jtoon.global.error.exception.NotFoundException;
-import shop.jtoon.global.error.exception.UnauthorizedException;
-import shop.jtoon.global.error.model.ErrorResponse;
-import shop.jtoon.global.error.model.ErrorStatus;
+import shop.jtoon.error.model.ErrorResponse;
+import shop.jtoon.exception.DuplicatedException;
+import shop.jtoon.exception.ForbiddenException;
+import shop.jtoon.exception.InvalidRequestException;
+import shop.jtoon.exception.NotFoundException;
+import shop.jtoon.exception.UnauthorizedException;
+import shop.jtoon.type.ErrorStatus;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

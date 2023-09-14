@@ -1,4 +1,4 @@
-package shop.jtoon.global.error.model;
+package shop.jtoon.error.model;
 
 import java.util.List;
 
