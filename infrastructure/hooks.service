@@ -1,0 +1,10 @@
+# /etc/systemd/system/hooks.service
+
+[Unit]
+Description=jtoon-auto-deploy-endpoint
+
+[Service]
+ExecStart=webhook -hooks ${HOOKS_JSON_PATH} -port ${HOOKS_PORT} --verbose
+
+[Install]
+WantedBy=multi-user.target
