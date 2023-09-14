@@ -1,4 +1,4 @@
-package shop.jtoon.global.error.model;
+package shop.jtoon.type;
 
 import lombok.AccessLevel;
 import lombok.Getter;

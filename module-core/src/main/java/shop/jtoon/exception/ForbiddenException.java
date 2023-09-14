@@ -1,7 +1,7 @@
-package shop.jtoon.global.error.exception;
+package shop.jtoon.exception;
 
 import lombok.Getter;
-import shop.jtoon.global.error.model.ErrorStatus;
+import shop.jtoon.type.ErrorStatus;
 
 /**
  * 인증된 사용자가 권한이 없는 리소스에 액세스하려고 할 때 발생하는 예외

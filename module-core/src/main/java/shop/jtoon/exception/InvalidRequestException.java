@@ -1,7 +1,7 @@
-package shop.jtoon.global.error.exception;
+package shop.jtoon.exception;
 
 import lombok.Getter;
-import shop.jtoon.global.error.model.ErrorStatus;
+import shop.jtoon.type.ErrorStatus;
 
 /**
  * 클라이언트의 요청이 잘못되었을 때 발생하는 예외
