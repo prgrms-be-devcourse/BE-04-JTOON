@@ -1,3 +1,7 @@
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
 dependencies {
     // Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -8,6 +12,12 @@ dependencies {
     // AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
+    // JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // I-AM-PORT
+    implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
 }
