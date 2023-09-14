@@ -1,0 +1,13 @@
+dependencies {
+    // Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Bean Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // AOP
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

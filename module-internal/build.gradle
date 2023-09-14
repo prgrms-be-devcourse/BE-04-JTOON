@@ -1,0 +1,39 @@
+project(':module-internal:core-web') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-core')
+    }
+}
+
+project(':module-internal:s3-client') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-core')
+    }
+}
+
+project(':module-internal:iamport-client') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-core')
+    }
+}
+
+project(':module-internal:smtp-client') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-core')
+    }
+}
+
+project(':module-internal:oauth2-client') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-core')
+    }
+}

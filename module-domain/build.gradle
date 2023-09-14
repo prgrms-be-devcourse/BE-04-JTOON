@@ -1,0 +1,23 @@
+project(':module-domain:domain-member') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-core')
+    }
+}
+
+project(':module-domain:domain-payment') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-core')
+    }
+}
+
+project(':module-domain:domain-webtoon') {
+    bootJar.enabled = false
+
+    dependencies {
+        implementation project(':module-core')
+    }
+}

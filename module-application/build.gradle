@@ -1,10 +1,18 @@
-dependencies {
-    // Web
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+project(':module-application:app-api') {
+    dependencies {
+        // Domain Layer
+        implementation project(':module-domain:domain-member')
+        implementation project(':module-domain:domain-payment')
+        implementation project(':module-domain:domain-webtoon')
 
-    // Bean Validation
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+        // Internal Layer
+        implementation project(':module-internal:core-web')
+        implementation project(':module-internal:iamport-client')
+        implementation project(':module-internal:oauth2-client')
+        implementation project(':module-internal:s3-client')
+        implementation project(':module-internal:smtp-client')
 
-    // Test
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        // Core Layer
+        implementation project(':module-core')
+    }
 }
