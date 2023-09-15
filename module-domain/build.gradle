@@ -20,6 +20,7 @@ project(':module-domain:domain-payment') {
 
     dependencies {
         api project(':module-domain:domain-jpa')
+        implementation project(':module-domain:domain-member')
         implementation project(':module-core')
     }
 }
