@@ -16,8 +16,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
 // Test
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 // I-AM-PORT
-    implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
+implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
 }
