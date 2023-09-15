@@ -21,7 +21,7 @@ public class S3Uploader {
 	@Value("${spring.cloud.aws.s3.bucket}")
 	private String BUCKET;
 
-	public void upload(String key, MultipartFile file) {
+	public void uploadImage(String key, MultipartFile file) {
 		try {
 			s3Template.upload(
 				BUCKET,

@@ -10,19 +10,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-import shop.jtoon.application.S3Service;
-import shop.jtoon.common.FileName;
 import shop.jtoon.dto.CreateEpisodeDto;
 import shop.jtoon.dto.CreateWebtoonDto;
+import shop.jtoon.dto.UploadImageDto;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.enums.DayOfWeek;
-import shop.jtoon.request.UploadImageReq;
 import shop.jtoon.response.EpisodeRes;
 import shop.jtoon.response.EpisodesRes;
 import shop.jtoon.response.WebtoonInfoRes;
 import shop.jtoon.response.WebtoonItemRes;
 import shop.jtoon.response.WebtoonRes;
 import shop.jtoon.service.EpisodeDomainService;
+import shop.jtoon.service.S3Service;
 import shop.jtoon.service.WebtoonDomainService;
 import shop.jtoon.type.CustomPageRequest;
 import shop.jtoon.webtoon.request.CreateEpisodeReq;
@@ -40,13 +39,8 @@ public class WebtoonApplicationService {
 	@Transactional
 	public void createWebtoon(Member member, MultipartFile thumbnailImage, CreateWebtoonReq request) {
 		webtoonDomainService.validateDuplicateTitle(request.title());
-		UploadImageReq uploadImageReq = UploadImageReq.of(
-			WEBTOON_THUMBNAIL,
-			request.title(),
-			FileName.forWebtoon(),
-			thumbnailImage
-		);
-		String thumbnailUrl = s3Service.upload(uploadImageReq);
+		UploadImageDto uploadImageDto = request.toUploadImageDto(WEBTOON_THUMBNAIL, thumbnailImage);
+		String thumbnailUrl = s3Service.uploadImage(uploadImageDto);
 		CreateWebtoonDto dto = request.toDto(member, thumbnailUrl);
 		webtoonDomainService.createWebtoon(dto);
 	}
@@ -61,20 +55,14 @@ public class WebtoonApplicationService {
 	) {
 		WebtoonRes webtoonRes = webtoonDomainService.getWebtoonById(webtoonId);
 		webtoonDomainService.validateAuthor(member, webtoonRes.author());
-		UploadImageReq uploadMainImageReq = UploadImageReq.of(
-			EPISODE_MAIN,
-			webtoonRes.title(),
-			FileName.forEpisode(request.no()),
-			mainImage
-		);
-		UploadImageReq uploadThumbnailImageReq = UploadImageReq.of(
+		UploadImageDto uploadMainImageReq = request.toUploadImageDto(EPISODE_MAIN, webtoonRes.title(), mainImage);
+		UploadImageDto uploadThumbnailImageReq = request.toUploadImageDto(
 			EPISODE_THUMBNAIL,
 			webtoonRes.title(),
-			FileName.forEpisode(request.no()),
 			thumbnailImage
 		);
-		String mainUrl = s3Service.upload(uploadMainImageReq);
-		String thumbnailUrl = s3Service.upload(uploadThumbnailImageReq);
+		String mainUrl = s3Service.uploadImage(uploadMainImageReq);
+		String thumbnailUrl = s3Service.uploadImage(uploadThumbnailImageReq);
 		CreateEpisodeDto dto = request.toDto(webtoonRes, mainUrl, thumbnailUrl);
 		episodeDomainService.createEpisode(dto);
 	}
