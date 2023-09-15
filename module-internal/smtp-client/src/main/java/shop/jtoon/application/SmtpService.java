@@ -7,10 +7,12 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import shop.jtoon.config.MailSession;
 import shop.jtoon.entity.Mail;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class SmtpService {
 
@@ -25,7 +27,7 @@ public class SmtpService {
 			message.setText(mail.getText());
 			Transport.send(message);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("===== sendMail error =====", e);
 		}
 	}
 }

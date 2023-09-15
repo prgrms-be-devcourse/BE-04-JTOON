@@ -1,4 +1,4 @@
-package shop.jtoon.request;
+package shop.jtoon.dto;
 
 import lombok.Builder;
 import shop.jtoon.entity.Gender;

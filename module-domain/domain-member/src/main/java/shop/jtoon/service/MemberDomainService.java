@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import shop.jtoon.dto.SignUpDto;
 import shop.jtoon.entity.Member;
 import shop.jtoon.exception.DuplicatedException;
 import shop.jtoon.repository.MemberRepository;
-import shop.jtoon.request.SignUpDto;
 import shop.jtoon.type.ErrorStatus;
 
 @Service

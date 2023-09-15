@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import shop.jtoon.member.application.MemberService;
+import shop.jtoon.member.application.MemberApplicationService;
 import shop.jtoon.member.request.SignUpReq;
 
 @RestController
@@ -19,17 +19,17 @@ import shop.jtoon.member.request.SignUpReq;
 @RequestMapping("/members")
 public class MemberController {
 
-	private final MemberService memberService;
+	private final MemberApplicationService memberApplicationService;
 
 	@PostMapping("/sign-up")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void signUp(@RequestBody @Valid SignUpReq signUpReq) {
-		memberService.signUp(signUpReq);
+		memberApplicationService.signUp(signUpReq);
 	}
 
 	@GetMapping("/email-authorization")
 	public String authenticateEmail(@RequestParam(value = "email") String email) {
-		return memberService.sendEmailAuthentication(email);
+		return memberApplicationService.sendEmailAuthentication(email);
 
 	}
 }
