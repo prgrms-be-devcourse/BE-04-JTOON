@@ -3,6 +3,7 @@ package shop.jtoon.entity;
 import static java.util.Objects.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -78,5 +79,9 @@ public class Member extends BaseTimeEntity {
 
 	public void updateLastLogin() {
 		lastLoginDate = LocalDateTime.now();
+	}
+
+	public boolean isAuthor(Member author) {
+		return Objects.equals(this.id, author.getId());
 	}
 }
