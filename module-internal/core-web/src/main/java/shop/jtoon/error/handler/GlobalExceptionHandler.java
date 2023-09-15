@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import shop.jtoon.error.model.ErrorResponse;
 import shop.jtoon.exception.DuplicatedException;
 import shop.jtoon.exception.ForbiddenException;
+import shop.jtoon.exception.IamportException;
 import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.exception.NotFoundException;
 import shop.jtoon.exception.UnauthorizedException;
@@ -32,6 +33,12 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(NullPointerException.class)
 	public ErrorResponse handleNullPointerException(NullPointerException e) {
+		return makeResponseErrorFormat(e.getMessage());
+	}
+
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(IamportException.class)
+	protected ErrorResponse handleIamportException(IamportException e) {
 		return makeResponseErrorFormat(e.getMessage());
 	}
 
