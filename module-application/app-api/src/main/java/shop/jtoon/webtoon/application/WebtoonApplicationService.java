@@ -40,9 +40,13 @@ public class WebtoonApplicationService {
 	@Transactional
 	public void createWebtoon(Member member, MultipartFile thumbnailImage, CreateWebtoonReq request) {
 		webtoonDomainService.validateDuplicateTitle(request.title());
-		String thumbnailUrl = s3Service.upload(
-			UploadImageReq.of(WEBTOON_THUMBNAIL, request.title(), FileName.forWebtoon(), thumbnailImage)
+		UploadImageReq uploadImageReq = UploadImageReq.of(
+			WEBTOON_THUMBNAIL,
+			request.title(),
+			FileName.forWebtoon(),
+			thumbnailImage
 		);
+		String thumbnailUrl = s3Service.upload(uploadImageReq);
 		CreateWebtoonDto dto = request.toDto(member, thumbnailUrl);
 		webtoonDomainService.createWebtoon(dto);
 	}
@@ -57,12 +61,20 @@ public class WebtoonApplicationService {
 	) {
 		WebtoonRes webtoonRes = webtoonDomainService.getWebtoonById(webtoonId);
 		webtoonDomainService.validateAuthor(member, webtoonRes.author());
-		String mainUrl = s3Service.upload(
-			UploadImageReq.of(EPISODE_MAIN, webtoonRes.title(), FileName.forEpisode(request.no()), mainImage)
+		UploadImageReq uploadMainImageReq = UploadImageReq.of(
+			EPISODE_MAIN,
+			webtoonRes.title(),
+			FileName.forEpisode(request.no()),
+			mainImage
 		);
-		String thumbnailUrl = s3Service.upload(
-			UploadImageReq.of(EPISODE_THUMBNAIL, webtoonRes.title(), FileName.forEpisode(request.no()), thumbnailImage)
+		UploadImageReq uploadThumbnailImageReq = UploadImageReq.of(
+			EPISODE_THUMBNAIL,
+			webtoonRes.title(),
+			FileName.forEpisode(request.no()),
+			thumbnailImage
 		);
+		String mainUrl = s3Service.upload(uploadMainImageReq);
+		String thumbnailUrl = s3Service.upload(uploadThumbnailImageReq);
 		CreateEpisodeDto dto = request.toDto(webtoonRes, mainUrl, thumbnailUrl);
 		episodeDomainService.createEpisode(dto);
 	}

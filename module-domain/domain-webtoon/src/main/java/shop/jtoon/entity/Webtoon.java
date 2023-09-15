@@ -66,19 +66,24 @@ public class Webtoon extends BaseTimeEntity {
 		int cookieCount,
 		Member author
 	) {
-		if (cookieCount < 0) {
-			throw new InvalidRequestException(COOKIE_COUNT_NOT_NEGATIVE);
-		}
 
 		this.title = requireNonNull(title, WEBTOON_TITLE_IS_NULL.getMessage());
 		this.description = requireNonNull(description, WEBTOON_DESCRIPTION_IS_NULL.getMessage());
 		this.ageLimit = requireNonNull(ageLimit, WEBTOON_AGE_LIMIT_IS_NULL.getMessage());
 		this.thumbnailUrl = thumbnailUrl;
-		this.cookieCount = cookieCount;
+		this.cookieCount = validateCookieCount(cookieCount);
 		this.author = requireNonNull(author, WEBTOON_AUTHOR_IS_NULL.getMessage());
 	}
 
 	public boolean isAuthor(Member member) {
 		return Objects.equals(author.getId(), member.getId());
+	}
+
+	private int validateCookieCount(int cookieCount) {
+		if (cookieCount < 0) {
+			throw new InvalidRequestException(COOKIE_COUNT_NOT_NEGATIVE);
+		}
+
+		return cookieCount;
 	}
 }

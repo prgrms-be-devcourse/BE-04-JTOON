@@ -37,21 +37,13 @@ public record CreateWebtoonDto(
 
 	public List<DayOfWeekWebtoon> toDayOfWeekWebtoonEntity(Webtoon webtoon) {
 		return dayOfWeeks.stream()
-			.map(dayOfWeek -> DayOfWeekWebtoon.builder()
-				.dayOfWeek(dayOfWeek)
-				.webtoon(webtoon)
-				.build()
-			)
+			.map(dayOfWeek -> DayOfWeekWebtoon.create(dayOfWeek, webtoon))
 			.toList();
 	}
 
 	public List<GenreWebtoon> toGenreWebtoonEntity(Webtoon webtoon) {
 		return genres.stream()
-			.map(genre -> GenreWebtoon.builder()
-				.genre(genre)
-				.webtoon(webtoon)
-				.build()
-			)
+			.map(genre -> GenreWebtoon.create(genre, webtoon))
 			.toList();
 	}
 }

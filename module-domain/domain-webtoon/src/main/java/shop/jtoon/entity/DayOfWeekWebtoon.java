@@ -44,4 +44,11 @@ public class DayOfWeekWebtoon extends BaseTimeEntity {
 		this.dayOfWeek = requireNonNull(dayOfWeek, WEBTOON_DAY_OF_WEEK_IS_NULL.getMessage());
 		this.webtoon = requireNonNull(webtoon, WEBTOON_IS_NULL.getMessage());
 	}
+
+	public static DayOfWeekWebtoon create(DayOfWeek dayOfWeek, Webtoon webtoon) {
+		return DayOfWeekWebtoon.builder()
+			.dayOfWeek(dayOfWeek)
+			.webtoon(webtoon)
+			.build();
+	}
 }

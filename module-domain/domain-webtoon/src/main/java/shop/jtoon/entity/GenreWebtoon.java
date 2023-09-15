@@ -44,4 +44,11 @@ public class GenreWebtoon extends BaseTimeEntity {
 		this.genre = requireNonNull(genre, WEBTOON_GENRE_IS_NULL.getMessage());
 		this.webtoon = requireNonNull(webtoon, WEBTOON_IS_NULL.getMessage());
 	}
+
+	public static GenreWebtoon create(Genre genre, Webtoon webtoon) {
+		return GenreWebtoon.builder()
+			.genre(genre)
+			.webtoon(webtoon)
+			.build();
+	}
 }

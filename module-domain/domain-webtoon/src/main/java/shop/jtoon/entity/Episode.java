@@ -68,11 +68,7 @@ public class Episode extends BaseTimeEntity {
 		LocalDateTime openedAt,
 		Webtoon webtoon
 	) {
-		if (no <= 0) {
-			throw new InvalidRequestException(EPISODE_NUMBER_POSITIVE);
-		}
-
-		this.no = no;
+		this.no = validateEpisodeNumber(no);
 		this.title = requireNonNull(title, EPISODE_TITLE_IS_NULL.getMessage());
 		this.mainUrl = requireNonNull(mainUrl, EPISODE_MAIN_URL_IS_NULL.getMessage());
 		this.thumbnailUrl = thumbnailUrl;
@@ -83,5 +79,13 @@ public class Episode extends BaseTimeEntity {
 
 	public int getCookieCount() {
 		return webtoon.getCookieCount();
+	}
+
+	private int validateEpisodeNumber(int no) {
+		if (no <= 0) {
+			throw new InvalidRequestException(EPISODE_NUMBER_POSITIVE);
+		}
+
+		return no;
 	}
 }
