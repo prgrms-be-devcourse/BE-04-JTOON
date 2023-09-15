@@ -2,11 +2,16 @@ package shop.jtoon.webtoon.request;
 
 import java.time.LocalDateTime;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import shop.jtoon.common.FileName;
+import shop.jtoon.common.ImageType;
 import shop.jtoon.dto.CreateEpisodeDto;
+import shop.jtoon.dto.UploadImageDto;
 import shop.jtoon.response.WebtoonRes;
 
 public record CreateEpisodeReq(
@@ -25,6 +30,15 @@ public record CreateEpisodeReq(
 			.title(title)
 			.hasComment(hasComment)
 			.openedAt(openedAt)
+			.build();
+	}
+
+	public UploadImageDto toUploadImageDto(ImageType imageType, String webtoonTitle, MultipartFile image) {
+		return UploadImageDto.builder()
+			.imageType(imageType)
+			.webtoonTitle(webtoonTitle)
+			.fileName(FileName.forEpisode(no))
+			.image(image)
 			.build();
 	}
 }
