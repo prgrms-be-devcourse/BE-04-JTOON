@@ -1,6 +1,5 @@
 package shop.jtoon.payment.presentation;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
 import org.springframework.http.HttpStatus;
@@ -9,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.siot.IamportRestClient.exception.IamportResponseException;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +23,7 @@ public class PaymentController {
 
 	@PostMapping("/validation")
 	@ResponseStatus(HttpStatus.CREATED)
-	public BigDecimal validatePayment(@RequestBody @Valid PaymentReq paymentReq)
-		throws IamportResponseException, IOException {
+	public BigDecimal validatePayment(@RequestBody @Valid PaymentReq paymentReq) {
 		return paymentApplicationService.validatePayment(paymentReq);
 	}
 }

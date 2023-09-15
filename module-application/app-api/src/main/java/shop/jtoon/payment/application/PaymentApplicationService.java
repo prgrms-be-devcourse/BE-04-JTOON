@@ -1,12 +1,9 @@
 package shop.jtoon.payment.application;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.siot.IamportRestClient.exception.IamportResponseException;
 
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.dto.PaymentDto;
@@ -25,7 +22,7 @@ public class PaymentApplicationService {
 	private final MemberCookieDomainService memberCookieDomainService;
 
 	@Transactional
-	public BigDecimal validatePayment(PaymentReq paymentReq) throws IamportResponseException, IOException {
+	public BigDecimal validatePayment(PaymentReq paymentReq) {
 		PaymentDto paymentDto = paymentReq.toDto();
 		iamportService.validateIamport(paymentDto.impUid(), paymentDto.amount());
 		paymentInfoDomainService.validatePayment(paymentDto);

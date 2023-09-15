@@ -12,6 +12,7 @@ import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 
+import shop.jtoon.exception.IamportException;
 import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.type.ErrorStatus;
 
@@ -28,10 +29,14 @@ public class IamportService {
 		this.iamportClient = new IamportClient(restApiKey, restSecretKey);
 	}
 
-	public void validateIamport(String impUid, BigDecimal amount) throws IamportResponseException, IOException {
-		IamportResponse<Payment> irsp = iamportClient.paymentByImpUid(impUid);
-		BigDecimal realAmount = irsp.getResponse().getAmount();
-		validateAmount(realAmount, amount);
+	public void validateIamport(String impUid, BigDecimal amount) {
+		try {
+			IamportResponse<Payment> irsp = iamportClient.paymentByImpUid(impUid);
+			BigDecimal realAmount = irsp.getResponse().getAmount();
+			validateAmount(realAmount, amount);
+		} catch (IamportResponseException | IOException e) {
+			throw new IamportException(e.getMessage());
+		}
 	}
 
 	private void validateAmount(BigDecimal realAmount, BigDecimal amount) {
