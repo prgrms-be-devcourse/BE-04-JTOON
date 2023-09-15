@@ -4,7 +4,6 @@ import static shop.jtoon.entity.QEpisode.*;
 
 import java.util.List;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,7 +15,6 @@ import shop.jtoon.util.DynamicQuery;
 
 @Repository
 @RequiredArgsConstructor
-@ComponentScan("shop.jtoon.config.JpaConfig")
 public class EpisodeSearchRepository {
 
 	private final JPAQueryFactory jpaQueryFactory;
