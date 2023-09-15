@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.payment.application.PaymentApplicationService;
+import shop.jtoon.payment.request.CancelReq;
 import shop.jtoon.payment.request.PaymentReq;
 
 @RestController
@@ -25,5 +26,11 @@ public class PaymentController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public BigDecimal validatePayment(@RequestBody @Valid PaymentReq paymentReq) {
 		return paymentApplicationService.validatePayment(paymentReq);
+	}
+
+	@PostMapping("/cancel")
+	@ResponseStatus(HttpStatus.OK)
+	public void cancelPayment(@RequestBody @Valid CancelReq cancelReq) {
+		paymentApplicationService.cancelPayment(cancelReq);
 	}
 }
