@@ -6,6 +6,7 @@ include 'module-application:app-api'
 include 'module-domain'
 include 'module-domain:domain-member'
 include 'module-domain:domain-payment'
+include 'module-domain:domain-security'
 include 'module-domain:domain-webtoon'
 include 'module-domain:domain-jpa'
 

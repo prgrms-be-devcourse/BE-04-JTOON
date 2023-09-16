@@ -2,7 +2,6 @@ project(':module-domain:domain-jpa') {
     bootJar.enabled = false
 
     dependencies {
-        api project(':module-domain:domain-jpa')
         implementation project(':module-core')
     }
 }
@@ -17,6 +16,16 @@ project(':module-domain:domain-member') {
 }
 
 project(':module-domain:domain-payment') {
+    bootJar.enabled = false
+
+    dependencies {
+        api project(':module-domain:domain-jpa')
+        implementation project(':module-domain:domain-member')
+        implementation project(':module-core')
+    }
+}
+
+project(':module-domain:domain-security') {
     bootJar.enabled = false
 
     dependencies {
