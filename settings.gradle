@@ -15,6 +15,5 @@ include 'module-internal:core-web'
 include 'module-internal:s3-client'
 include 'module-internal:iamport-client'
 include 'module-internal:smtp-client'
-include 'module-internal:oauth2-client'
 
 include 'module-core'

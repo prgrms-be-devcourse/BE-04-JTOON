@@ -1,5 +1,6 @@
 package shop.jtoon.service;
 
+import static shop.jtoon.type.ErrorStatus.*;
 import static shop.jtoon.util.SecurityConstant.*;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import shop.jtoon.entity.RefreshToken;
+import shop.jtoon.exception.NotFoundException;
 import shop.jtoon.repository.RefreshTokenRepository;
 import shop.jtoon.response.LoginRes;
 
@@ -63,7 +65,7 @@ public class TokenDomainService {
 
 	public String reGenerateAccessToken(String refreshToken) {
 		RefreshToken findRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken)
-			.orElseThrow(() -> new BadCredentialsException("No refresh token found"));
+			.orElseThrow(() -> new NotFoundException(MEMBER_REFRESH_TOKEN_NOT_FOUND));
 
 		return generateAccessToken(findRefreshToken.getEmail());
 	}
@@ -90,7 +92,7 @@ public class TokenDomainService {
 		} catch (ExpiredJwtException e) {
 			log.error("Expired access Token", e);
 		} catch (Exception e) {
-			throw new BadCredentialsException("Invalid access token", e);
+			throw new BadCredentialsException(MEMBER_INVALID_ACCESS_TOKEN.getMessage(), e);
 		}
 
 		return false;
@@ -98,10 +100,10 @@ public class TokenDomainService {
 
 	public void verifyRefreshTokenDb(String refreshToken) {
 		RefreshToken findRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken)
-			.orElseThrow(() -> new BadCredentialsException("No refresh token found"));
+			.orElseThrow(() -> new NotFoundException(MEMBER_REFRESH_TOKEN_NOT_FOUND));
 
 		if (!findRefreshToken.matches(refreshToken)) {
-			throw new BadCredentialsException("No refresh token match");
+			throw new BadCredentialsException(MEMBER_REFRESH_TOKEN_NOT_MATCH.getMessage());
 		}
 	}
 
@@ -109,7 +111,7 @@ public class TokenDomainService {
 	public void updateRefreshTokenDb(String accessToken, String newRefreshToken) {
 		String email = getClaimsBodyEmail(accessToken);
 		RefreshToken findRefreshToken = refreshTokenRepository.findById(email)
-			.orElseThrow(() -> new BadCredentialsException("No refresh token found"));
+			.orElseThrow(() -> new NotFoundException(MEMBER_REFRESH_TOKEN_NOT_FOUND));
 		findRefreshToken.updateToken(newRefreshToken);
 	}
 

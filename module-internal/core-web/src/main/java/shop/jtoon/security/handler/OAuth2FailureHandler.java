@@ -26,7 +26,7 @@ public class OAuth2FailureHandler extends SimpleUrlAuthenticationFailureHandler 
 		log.error("===== OAuthenticationFailure!!! =====", exception);
 
 		if (exception instanceof BadCredentialsException) {
-			errorMessage = ErrorStatus.MEMBER_WRONG_LOGIN_FORMAT.toString();
+			errorMessage = ErrorStatus.MEMBER_WRONG_LOGIN_INFO.toString();
 		} else if (exception instanceof InternalAuthenticationServiceException) {
 			errorMessage = ErrorStatus.MEMBER_LOGIN_SERVER_ERROR.toString();
 		} else if (exception instanceof AuthenticationCredentialsNotFoundException) {

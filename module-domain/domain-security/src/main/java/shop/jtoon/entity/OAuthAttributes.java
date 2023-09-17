@@ -1,10 +1,13 @@
 package shop.jtoon.entity;
 
+import org.springframework.security.authentication.BadCredentialsException;
+
 import java.util.Map;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import shop.jtoon.dto.SignUpDto;
+import shop.jtoon.type.ErrorStatus;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record OAuthAttributes(
@@ -21,7 +24,7 @@ public record OAuthAttributes(
 		return switch (loginType) {
 			case NAVER -> ofNaver(loginType, nameAttributeKey, attributes);
 			case KAKAO -> ofKakao(loginType, nameAttributeKey, attributes);
-			case LOCAL -> throw new IllegalArgumentException("기본 로그인 정보가 존재합니다.");
+			case LOCAL -> throw new BadCredentialsException(ErrorStatus.MEMBER_DUPLICATE_SOCIAL_LOGIN.getMessage());
 		};
 	}
 

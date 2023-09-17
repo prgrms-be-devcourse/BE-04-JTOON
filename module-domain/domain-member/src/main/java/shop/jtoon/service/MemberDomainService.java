@@ -1,9 +1,9 @@
 package shop.jtoon.service;
 
+import static shop.jtoon.type.ErrorStatus.*;
 import static shop.jtoon.util.SecurityConstant.*;
 
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +15,8 @@ import shop.jtoon.dto.SignUpDto;
 import shop.jtoon.entity.LoginType;
 import shop.jtoon.entity.Member;
 import shop.jtoon.exception.DuplicatedException;
+import shop.jtoon.exception.NotFoundException;
 import shop.jtoon.repository.MemberRepository;
-import shop.jtoon.type.ErrorStatus;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,14 +38,14 @@ public class MemberDomainService {
 	@Transactional
 	public void localLoginMember(LoginDto loginDto) {
 		Member member = memberRepository.findByEmail(loginDto.email())
-			.orElseThrow(() -> new BadCredentialsException("너 안돼!"));
+			.orElseThrow(() -> new BadCredentialsException(MEMBER_WRONG_LOGIN_INFO.getMessage()));
 
 		if (!passwordEncoder.matches(loginDto.password(), member.getPassword())) {
-			throw new BadCredentialsException("너 안돼!");
+			throw new BadCredentialsException(MEMBER_WRONG_LOGIN_INFO.getMessage());
 		}
 
 		if (!member.getLoginType().equals(LoginType.LOCAL)) {
-			throw new BadCredentialsException("소셜 로그인으로 등록된 아이디입니다.");
+			throw new BadCredentialsException(MEMBER_DUPLICATE_SOCIAL_LOGIN.getMessage());
 		}
 
 		member.updateLastLogin();
@@ -53,7 +53,7 @@ public class MemberDomainService {
 
 	public void validateDuplicateEmail(String email) {
 		if (memberRepository.findByEmail(email).isPresent()) {
-			throw new DuplicatedException(ErrorStatus.MEMBER_EMAIL_CONFLICT);
+			throw new DuplicatedException(MEMBER_EMAIL_CONFLICT);
 		}
 	}
 
@@ -66,6 +66,6 @@ public class MemberDomainService {
 
 	public Member findByEmail(String email) {
 		return memberRepository.findByEmail(email)
-			.orElseThrow(() -> new UsernameNotFoundException(ErrorStatus.MEMBER_EMAIL_CONFLICT.toString()));
+			.orElseThrow(() -> new NotFoundException(MEMBER_EMAIL_CONFLICT));
 	}
 }

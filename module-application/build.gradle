@@ -9,7 +9,6 @@ project(':module-application:app-api') {
         // Internal Layer
         implementation project(':module-internal:core-web')
         implementation project(':module-internal:iamport-client')
-        implementation project(':module-internal:oauth2-client')
         implementation project(':module-internal:s3-client')
         implementation project(':module-internal:smtp-client')
 
