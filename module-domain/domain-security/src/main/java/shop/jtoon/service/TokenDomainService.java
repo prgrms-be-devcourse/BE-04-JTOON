@@ -4,7 +4,6 @@ import static shop.jtoon.type.ErrorStatus.*;
 import static shop.jtoon.util.SecurityConstant.*;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +21,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import shop.jtoon.entity.RefreshToken;
+import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.exception.NotFoundException;
 import shop.jtoon.repository.RefreshTokenRepository;
 import shop.jtoon.response.LoginRes;
@@ -92,7 +92,8 @@ public class TokenDomainService {
 		} catch (ExpiredJwtException e) {
 			log.error("Expired access Token", e);
 		} catch (Exception e) {
-			throw new BadCredentialsException(MEMBER_INVALID_ACCESS_TOKEN.getMessage(), e);
+			log.error("Expire가 아닌 무효한 Token", e);
+			throw new InvalidRequestException(MEMBER_INVALID_ACCESS_TOKEN);
 		}
 
 		return false;
@@ -103,7 +104,7 @@ public class TokenDomainService {
 			.orElseThrow(() -> new NotFoundException(MEMBER_REFRESH_TOKEN_NOT_FOUND));
 
 		if (!findRefreshToken.matches(refreshToken)) {
-			throw new BadCredentialsException(MEMBER_REFRESH_TOKEN_NOT_MATCH.getMessage());
+			throw new InvalidRequestException(MEMBER_REFRESH_TOKEN_NOT_MATCH);
 		}
 	}
 

@@ -1,7 +1,5 @@
 package shop.jtoon.error.handler;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -10,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.List;
 import shop.jtoon.error.model.ErrorResponse;
 import shop.jtoon.exception.DuplicatedException;
 import shop.jtoon.exception.ForbiddenException;
@@ -59,7 +58,7 @@ public class GlobalExceptionHandler {
 		return makeResponseErrorFormat(e.getErrorStatus());
 	}
 
-	@ResponseStatus(HttpStatus.FORBIDDEN)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(ForbiddenException.class)
 	protected ErrorResponse handleForbiddenException(ForbiddenException e) {
 		return makeResponseErrorFormat(e.getErrorStatus());

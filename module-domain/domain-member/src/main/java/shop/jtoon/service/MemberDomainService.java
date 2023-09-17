@@ -3,7 +3,6 @@ package shop.jtoon.service;
 import static shop.jtoon.type.ErrorStatus.*;
 import static shop.jtoon.util.SecurityConstant.*;
 
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +14,7 @@ import shop.jtoon.dto.SignUpDto;
 import shop.jtoon.entity.LoginType;
 import shop.jtoon.entity.Member;
 import shop.jtoon.exception.DuplicatedException;
+import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.exception.NotFoundException;
 import shop.jtoon.repository.MemberRepository;
 
@@ -38,14 +38,14 @@ public class MemberDomainService {
 	@Transactional
 	public void localLoginMember(LoginDto loginDto) {
 		Member member = memberRepository.findByEmail(loginDto.email())
-			.orElseThrow(() -> new BadCredentialsException(MEMBER_WRONG_LOGIN_INFO.getMessage()));
+			.orElseThrow(() -> new InvalidRequestException(MEMBER_WRONG_LOGIN_INFO));
 
 		if (!passwordEncoder.matches(loginDto.password(), member.getPassword())) {
-			throw new BadCredentialsException(MEMBER_WRONG_LOGIN_INFO.getMessage());
+			throw new InvalidRequestException(MEMBER_WRONG_LOGIN_INFO);
 		}
 
 		if (!member.getLoginType().equals(LoginType.LOCAL)) {
-			throw new BadCredentialsException(MEMBER_DUPLICATE_SOCIAL_LOGIN.getMessage());
+			throw new InvalidRequestException(MEMBER_DUPLICATE_SOCIAL_LOGIN);
 		}
 
 		member.updateLastLogin();

@@ -58,6 +58,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		} catch (NullPointerException e) {
 			log.error("Cookie is null");
+		} catch (Exception e) {
+			log.error("Login Failed");
+			handlerExceptionResolver.resolveException(request, response, null, e);
+
+			return;
 		}
 
 		filterChain.doFilter(request, response);

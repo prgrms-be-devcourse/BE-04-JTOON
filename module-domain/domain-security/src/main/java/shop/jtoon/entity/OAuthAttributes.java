@@ -1,13 +1,13 @@
 package shop.jtoon.entity;
 
-import org.springframework.security.authentication.BadCredentialsException;
+import static shop.jtoon.type.ErrorStatus.*;
 
 import java.util.Map;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import shop.jtoon.dto.SignUpDto;
-import shop.jtoon.type.ErrorStatus;
+import shop.jtoon.exception.InvalidRequestException;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record OAuthAttributes(
@@ -24,7 +24,7 @@ public record OAuthAttributes(
 		return switch (loginType) {
 			case NAVER -> ofNaver(loginType, nameAttributeKey, attributes);
 			case KAKAO -> ofKakao(loginType, nameAttributeKey, attributes);
-			case LOCAL -> throw new BadCredentialsException(ErrorStatus.MEMBER_DUPLICATE_SOCIAL_LOGIN.getMessage());
+			case LOCAL -> throw new InvalidRequestException(MEMBER_DUPLICATE_SOCIAL_LOGIN);
 		};
 	}
 
