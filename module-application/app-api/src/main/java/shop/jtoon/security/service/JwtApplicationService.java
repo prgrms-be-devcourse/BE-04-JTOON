@@ -4,12 +4,13 @@ import static shop.jtoon.util.SecurityConstant.*;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import shop.jtoon.entity.CustomUserDetails;
+import shop.jtoon.dto.MemberDto;
 import shop.jtoon.entity.Member;
 import shop.jtoon.response.LoginRes;
 import shop.jtoon.security.request.LoginReq;
@@ -54,9 +55,9 @@ public class JwtApplicationService implements JwtService {
 	public Authentication getAuthentication(String token) {
 		String claimsEmail = tokenDomainService.getClaimsBodyEmail(token);
 		Member member = memberDomainService.findByEmail(claimsEmail);
-		UserDetails userDetails = new CustomUserDetails(member);
 
-		return new UsernamePasswordAuthenticationToken(userDetails, BLANK, userDetails.getAuthorities());
+		return new UsernamePasswordAuthenticationToken(MemberDto.from(member), BLANK,
+			List.of(new SimpleGrantedAuthority(member.getRole().toString())));
 	}
 
 	@Override

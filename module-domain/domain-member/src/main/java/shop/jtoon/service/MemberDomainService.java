@@ -66,6 +66,6 @@ public class MemberDomainService {
 
 	public Member findByEmail(String email) {
 		return memberRepository.findByEmail(email)
-			.orElseThrow(() -> new NotFoundException(MEMBER_EMAIL_CONFLICT));
+			.orElseThrow(() -> new NotFoundException(MEMBER_EMAIL_NOT_FOUND));
 	}
 }

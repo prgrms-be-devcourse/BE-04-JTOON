@@ -21,6 +21,7 @@ public enum ErrorStatus {
 	MEMBER_LOGIN_TYPE_INVALID_FORMAT("올바른 로그인 타입이 아닙니다."),
 	MEMBER_MESSAGE_SEND_FAILED("이메일 인증 메세지 전송 실패"),
 	MEMBER_EMAIL_CONFLICT("Email 중복"),
+	MEMBER_EMAIL_NOT_FOUND("존재하지 않는 Email입니다."),
 	MEMBER_COOKIE_NOT_FOUND("회원의 쿠키 정보가 존재하지 않습니다."),
 	MEMBER_DUPLICATE_SOCIAL_LOGIN("이미 다른 (소셜)로그인 등록된 회원입니다"),
 	MEMBER_WRONG_LOGIN_INFO("아이디 또는 비밀번호가 맞지 않습니다."),
