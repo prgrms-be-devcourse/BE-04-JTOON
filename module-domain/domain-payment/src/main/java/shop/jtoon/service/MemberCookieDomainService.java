@@ -37,6 +37,7 @@ public class MemberCookieDomainService {
         MemberCookie memberCookie = findMemberCookie(member);
         memberCookie.decreaseCookieCount(cookieCount);
 
+
         return memberCookie.getCookieCount();
     }
 

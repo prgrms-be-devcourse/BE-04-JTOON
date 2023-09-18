@@ -11,6 +11,7 @@ import shop.jtoon.dto.MemberDto;
 import shop.jtoon.entity.CookieItem;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.MemberCookie;
+import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.exception.NotFoundException;
 import shop.jtoon.factory.CreatorFactory;
 import shop.jtoon.repository.MemberCookieRepository;
@@ -19,6 +20,7 @@ import shop.jtoon.type.ErrorStatus;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -68,5 +70,59 @@ class MemberCookieDomainServiceTest {
         assertThatThrownBy(() -> memberCookieDomainService.createMemberCookie(CookieItem.COOKIE_ONE, memberDto))
             .isInstanceOf(NotFoundException.class)
             .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
+    }
+
+    @DisplayName("useCookie - 해당 회원에 대한 쿠키 정보가 존재하지 않을 때, - NotFoundException (MemberCookie)")
+    @Test
+    void useCookie_NotFoundException_MemberCookie() {
+        // Given
+        given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.of(member));
+        given(memberCookieRepository.findByMember(any(Member.class))).willReturn(Optional.empty());
+
+        // When, Then
+        assertThatThrownBy(() -> memberCookieDomainService.useCookie(2, memberDto))
+            .isInstanceOf(NotFoundException.class)
+            .hasMessage(ErrorStatus.MEMBER_COOKIE_NOT_FOUND.getMessage());
+    }
+
+    @DisplayName("useCookie - 해당 이메일에 대한 회원이 존재하지 않을 때, - NotFoundException (Member)")
+    @Test
+    void useCookie_NotFoundException_Member() {
+        // Given
+        given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
+
+        // When, Then
+        assertThatThrownBy(() -> memberCookieDomainService.useCookie(2, memberDto))
+            .isInstanceOf(NotFoundException.class)
+            .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
+    }
+
+    @DisplayName("useCookie - 사용할 쿠키 갯수가 해당 회원이 가진 쿠키 갯수보다 적을 때, - InvalidRequestException")
+    @Test
+    void useCookie_InvalidRequestException() {
+        // Given
+        MemberCookie memberCookie = MemberCookie.create(0, member);
+        given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.of(member));
+        given(memberCookieRepository.findByMember(any(Member.class))).willReturn(Optional.of(memberCookie));
+
+        // When, Then
+        assertThatThrownBy(() -> memberCookieDomainService.useCookie(2, memberDto))
+            .isInstanceOf(InvalidRequestException.class)
+            .hasMessage(ErrorStatus.EPISODE_NOT_ENOUGH_COOKIES.getMessage());
+    }
+
+    @DisplayName("useCookie - 쿠키 갯수가 충분할 때, - 남은 쿠키 갯수")
+    @Test
+    void useCookie_CookieCount() {
+        // Given
+        MemberCookie memberCookie = MemberCookie.create(7, member);
+        given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.of(member));
+        given(memberCookieRepository.findByMember(any(Member.class))).willReturn(Optional.of(memberCookie));
+
+        // When
+        int actual = memberCookieDomainService.useCookie(2, memberDto);
+
+        // Then
+        assertThat(actual).isEqualTo(5);
     }
 }
