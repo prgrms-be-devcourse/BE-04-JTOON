@@ -3,12 +3,15 @@ package shop.jtoon.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.jtoon.dto.MemberDto;
 import shop.jtoon.dto.PaymentDto;
 import shop.jtoon.dto.PaymentInfoRes;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.PaymentInfo;
 import shop.jtoon.exception.DuplicatedException;
 import shop.jtoon.exception.InvalidRequestException;
+import shop.jtoon.exception.NotFoundException;
+import shop.jtoon.repository.MemberRepository;
 import shop.jtoon.repository.PaymentInfoRepository;
 import shop.jtoon.repository.PaymentInfoSearchRepository;
 import shop.jtoon.type.ErrorStatus;
@@ -21,12 +24,14 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class PaymentInfoDomainService {
 
+    private final MemberRepository memberRepository;
     private final PaymentInfoRepository paymentInfoRepository;
     private final PaymentInfoSearchRepository paymentInfoSearchRepository;
 
     @Transactional
-    public void createPaymentInfo(PaymentDto paymentDto) {
-        Member member = null; // TODO: member 조회 기능 추가
+    public void createPaymentInfo(PaymentDto paymentDto, MemberDto memberDto) {
+        Member member = memberRepository.findByEmail(memberDto.email())
+            .orElseThrow(() -> new NotFoundException(ErrorStatus.MEMBER_EMAIL_NOT_FOUND));
         PaymentInfo paymentInfo = paymentDto.toEntity(member);
         paymentInfoRepository.save(paymentInfo);
     }
@@ -38,8 +43,9 @@ public class PaymentInfoDomainService {
         validateMerchantUid(paymentDto.merchantUid());
     }
 
-    public List<PaymentInfoRes> getPaymentsInfo(List<String> merchantsUid) {
-        Member member = null; // TODO: member 조회 기능 추가
+    public List<PaymentInfoRes> getPaymentsInfo(List<String> merchantsUid, MemberDto memberDto) {
+        Member member = memberRepository.findByEmail(memberDto.email())
+            .orElseThrow(() -> new NotFoundException(ErrorStatus.MEMBER_EMAIL_NOT_FOUND));
         List<PaymentInfo> paymentsInfo = paymentInfoSearchRepository.searchByMerchantsUidAndEmail(
             merchantsUid,
             member.getEmail()

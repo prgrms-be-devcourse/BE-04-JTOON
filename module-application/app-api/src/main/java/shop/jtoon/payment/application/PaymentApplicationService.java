@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.jtoon.dto.CancelDto;
+import shop.jtoon.dto.MemberDto;
 import shop.jtoon.dto.PaymentDto;
 import shop.jtoon.dto.PaymentInfoRes;
 import shop.jtoon.payment.request.CancelReq;
@@ -26,12 +27,12 @@ public class PaymentApplicationService {
     private final MemberCookieDomainService memberCookieDomainService;
 
     @Transactional
-    public BigDecimal validatePayment(PaymentReq paymentReq) {
+    public BigDecimal validatePayment(PaymentReq paymentReq, MemberDto memberDto) {
         PaymentDto paymentDto = paymentReq.toDto();
         iamportService.validateIamport(paymentDto.impUid(), paymentDto.amount());
         paymentInfoDomainService.validatePaymentInfo(paymentDto);
-        paymentInfoDomainService.createPaymentInfo(paymentDto);
-        memberCookieDomainService.createMemberCookie(paymentDto.cookieItem());
+        paymentInfoDomainService.createPaymentInfo(paymentDto, memberDto);
+        memberCookieDomainService.createMemberCookie(paymentDto.cookieItem(), memberDto);
 
         return paymentDto.amount();
     }
@@ -43,7 +44,7 @@ public class PaymentApplicationService {
         iamportService.cancelIamport(cancelDto);
     }
 
-    public List<PaymentInfoRes> getPayments(ConditionReq conditionReq) {
-        return paymentInfoDomainService.getPaymentsInfo(conditionReq.merchantsUid());
+    public List<PaymentInfoRes> getPayments(ConditionReq conditionReq, MemberDto memberDto) {
+        return paymentInfoDomainService.getPaymentsInfo(conditionReq.merchantsUid(), memberDto);
     }
 }

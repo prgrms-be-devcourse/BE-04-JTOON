@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import shop.jtoon.annotation.CurrentUser;
+import shop.jtoon.dto.MemberDto;
 import shop.jtoon.dto.PaymentInfoRes;
 import shop.jtoon.payment.application.PaymentApplicationService;
 import shop.jtoon.payment.request.CancelReq;
@@ -22,8 +24,8 @@ public class PaymentController {
 
     @PostMapping("/validation")
     @ResponseStatus(HttpStatus.CREATED)
-    public BigDecimal validatePayment(@RequestBody @Valid PaymentReq paymentReq) {
-        return paymentApplicationService.validatePayment(paymentReq);
+    public BigDecimal validatePayment(@RequestBody @Valid PaymentReq paymentReq, @CurrentUser MemberDto memberDto) {
+        return paymentApplicationService.validatePayment(paymentReq, memberDto);
     }
 
     @PostMapping("/cancel")
@@ -33,7 +35,7 @@ public class PaymentController {
     }
 
     @PostMapping("/search")
-    public List<PaymentInfoRes> getPayments(@RequestBody ConditionReq conditionReq) {
-        return paymentApplicationService.getPayments(conditionReq);
+    public List<PaymentInfoRes> getPayments(@RequestBody ConditionReq conditionReq, @CurrentUser MemberDto memberDto) {
+        return paymentApplicationService.getPayments(conditionReq, memberDto);
     }
 }
