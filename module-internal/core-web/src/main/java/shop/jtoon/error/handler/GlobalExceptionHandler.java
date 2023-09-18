@@ -76,10 +76,10 @@ public class GlobalExceptionHandler {
 
     private ErrorResponse makeResponseErrorFormat(ErrorStatus error, BindException e) {
         List<FieldError> fieldErrors = e.getBindingResult()
-                .getFieldErrors();
+            .getFieldErrors();
         List<ErrorResponse.FieldErrorStatus> errors = fieldErrors.stream()
-                .map(ErrorResponse.FieldErrorStatus::of)
-                .toList();
+            .map(ErrorResponse.FieldErrorStatus::of)
+            .toList();
 
         return new ErrorResponse(error.getMessage(), errors);
     }
