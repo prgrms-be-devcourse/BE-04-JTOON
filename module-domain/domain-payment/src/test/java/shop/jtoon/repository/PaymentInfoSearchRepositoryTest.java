@@ -50,9 +50,9 @@ class PaymentInfoSearchRepositoryTest {
         assertThat(paymentInfoSearchRepository).isNotNull();
     }
 
-    @DisplayName("searchByMerchantsUidAndEmail - 해당 이메일과 일치하는 회원의 결제 정보 조회")
+    @DisplayName("searchByMerchantsUidAndEmail - 해당 이메일과 일치하는 회원의 결제 정보 조회 - 모든 결제 정보")
     @Test
-    void searchByMerchantsUidAndEmail_PaymentInfo_List() {
+    void searchByMerchantsUidAndEmail_PaymentInfo_List1() {
         // When
         List<PaymentInfo> actual = paymentInfoSearchRepository
             .searchByMerchantsUidAndEmail(null, member.getEmail());
@@ -61,7 +61,7 @@ class PaymentInfoSearchRepositoryTest {
         assertThat(actual).hasSize(2);
     }
 
-    @DisplayName("searchByMerchantsUidAndEmail - 해당 이메일과 일치하고 주문번호들과 일치하는 결제 정보 조회")
+    @DisplayName("searchByMerchantsUidAndEmail - 해당 이메일과 일치하고 주문번호들과 일치하는 결제 정보 조회 - 결제 정보 2건")
     @Test
     void searchByMerchantsUidAndEmail_PaymentInfo_List2() {
         //Given
@@ -77,7 +77,7 @@ class PaymentInfoSearchRepositoryTest {
         assertThat(actual).hasSize(2);
     }
 
-    @DisplayName("searchByMerchantsUidAndEmail - 해당 이메일과 일치하고 주문번호와 일치하는 결제 정보 조회")
+    @DisplayName("searchByMerchantsUidAndEmail - 해당 이메일과 일치하고 주문번호와 일치하는 결제 정보 조회 - 결제 정보 1건")
     @Test
     void searchByMerchantsUidAndEmail_PaymentInfo() {
         //Given
@@ -90,5 +90,35 @@ class PaymentInfoSearchRepositoryTest {
 
         // Then
         assertThat(actual).hasSize(1);
+    }
+
+    @DisplayName("searchByMerchantsUidAndEmail - 해당 이메일과 일치하지만 주문번호가 일치하지 않는 경우 - 0건")
+    @Test
+    void searchByMerchantsUidAndEmail_PaymentInfo_Null1() {
+        //Given
+        List<String> merchantsUid = new ArrayList<>();
+        merchantsUid.add(paymentInfo1.getMerchantUid());
+
+        // When
+        List<PaymentInfo> actual = paymentInfoSearchRepository
+            .searchByMerchantsUidAndEmail(merchantsUid, "notfoundemail@naver.com");
+
+        // Then
+        assertThat(actual).hasSize(0);
+    }
+
+    @DisplayName("searchByMerchantsUidAndEmail - 해당 이메일과 일치하지 않지만 주문번호가 일치하는 경우 - 0건")
+    @Test
+    void searchByMerchantsUidAndEmail_PaymentInfo_Null2() {
+        //Given
+        List<String> merchantsUid = new ArrayList<>();
+        merchantsUid.add("notfoundmerchantuid");
+
+        // When
+        List<PaymentInfo> actual = paymentInfoSearchRepository
+            .searchByMerchantsUidAndEmail(merchantsUid, member.getEmail());
+
+        // Then
+        assertThat(actual).hasSize(0);
     }
 }
