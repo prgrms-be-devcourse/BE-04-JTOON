@@ -62,8 +62,7 @@ class PaymentInfoDomainServiceTest {
             .createInvalidAmountPaymentDto("imp789", "mer789", member.getEmail());
     }
 
-
-    @DisplayName("createPaymentInfo - 한 회원의 결제 정보가 성공적으로 저장될 때, - Void ")
+    @DisplayName("createPaymentInfo - 한 회원의 결제 정보가 성공적으로 저장될 때, - Void")
     @Test
     void createPaymentInfo_Void() {
         // Given
