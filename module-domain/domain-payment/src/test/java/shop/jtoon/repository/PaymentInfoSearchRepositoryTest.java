@@ -61,6 +61,22 @@ class PaymentInfoSearchRepositoryTest {
         assertThat(actual).hasSize(2);
     }
 
+    @DisplayName("searchByMerchantsUidAndEmail - 해당 이메일과 일치하고 주문번호들과 일치하는 결제 정보 조회")
+    @Test
+    void searchByMerchantsUidAndEmail_PaymentInfo_List2() {
+        //Given
+        List<String> merchantsUid = new ArrayList<>();
+        merchantsUid.add(paymentInfo1.getMerchantUid());
+        merchantsUid.add(paymentInfo2.getMerchantUid());
+
+        // When
+        List<PaymentInfo> actual = paymentInfoSearchRepository
+            .searchByMerchantsUidAndEmail(merchantsUid, member.getEmail());
+
+        // Then
+        assertThat(actual).hasSize(2);
+    }
+
     @DisplayName("searchByMerchantsUidAndEmail - 해당 이메일과 일치하고 주문번호와 일치하는 결제 정보 조회")
     @Test
     void searchByMerchantsUidAndEmail_PaymentInfo() {
