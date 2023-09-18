@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.dto.LoginDto;
+import shop.jtoon.dto.MemberDto;
 import shop.jtoon.dto.SignUpDto;
 import shop.jtoon.entity.LoginType;
 import shop.jtoon.entity.Member;
@@ -64,8 +65,9 @@ public class MemberDomainService {
 		return member.orElseGet(() -> memberRepository.save(signUpDto.toEntity(BLANK)));
 	}
 
-	public Member findByEmail(String email) {
-		return memberRepository.findByEmail(email)
+	public MemberDto findMemberDtoByEmail(String email) {
+		Member member =  memberRepository.findByEmail(email)
 			.orElseThrow(() -> new NotFoundException(MEMBER_EMAIL_NOT_FOUND));
+		return MemberDto.toDto(member);
 	}
 }

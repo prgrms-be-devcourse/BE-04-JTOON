@@ -48,7 +48,7 @@ public class ApiInformationAspect {
 	@AfterReturning(value = "allMemberApi() || allPaymentApi() || allWebtoonApi()", returning = "returnObject")
 	public void afterReturnLogApiInfo(JoinPoint joinPoint, Object returnObject) {
 		threadAndMethodInformation(Thread.currentThread(), joinPoint.getSignature());
-		log.info("[ Return Type : {} ]", returnObject.getClass().getSimpleName());
+		// log.info("[ Return Type : {} ]", returnObject.getClass().getSimpleName());
 		log.info("[ Return Value : {} ]", returnObject);
 	}
 

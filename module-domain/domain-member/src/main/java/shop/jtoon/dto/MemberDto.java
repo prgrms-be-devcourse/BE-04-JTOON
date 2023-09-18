@@ -3,6 +3,7 @@ package shop.jtoon.dto;
 import lombok.Builder;
 import shop.jtoon.entity.Gender;
 import shop.jtoon.entity.Member;
+import shop.jtoon.entity.Role;
 
 @Builder
 public record MemberDto(
@@ -10,6 +11,7 @@ public record MemberDto(
 	String name,
 	String nickname,
 	Gender gender,
+	Role role,
 	String phone
 ) {
 	public static MemberDto toDto(Member member) {
@@ -18,6 +20,7 @@ public record MemberDto(
 			.name(member.getName())
 			.nickname(member.getNickname())
 			.gender(member.getGender())
+			.role(member.getRole())
 			.phone(member.getPhone())
 			.build();
 	}

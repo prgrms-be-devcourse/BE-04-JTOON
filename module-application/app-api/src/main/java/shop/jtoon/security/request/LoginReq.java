@@ -8,7 +8,7 @@ import shop.jtoon.dto.LoginDto;
 
 public record LoginReq(
 	@Pattern(regexp = EMAIL_PATTERN) String email,
-	@NotBlank String password
+	@Pattern(regexp = PASSWORD_PATTERN) @NotBlank String password
 ) {
 	public LoginDto toDto() {
 		return LoginDto.builder()

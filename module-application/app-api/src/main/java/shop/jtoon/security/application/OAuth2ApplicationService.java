@@ -15,7 +15,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.entity.LoginType;
 import shop.jtoon.entity.Member;
-import shop.jtoon.entity.OAuthAttributes;
+import shop.jtoon.dto.OAuthAttributes;
 import shop.jtoon.exception.DuplicatedException;
 import shop.jtoon.security.service.CustomOAuth2UserService;
 import shop.jtoon.service.MemberDomainService;

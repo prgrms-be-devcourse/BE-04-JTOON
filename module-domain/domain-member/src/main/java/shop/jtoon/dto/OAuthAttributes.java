@@ -1,12 +1,13 @@
-package shop.jtoon.entity;
+package shop.jtoon.dto;
 
 import static shop.jtoon.type.ErrorStatus.*;
 
 import java.util.Map;
 import java.util.UUID;
+
 import lombok.AccessLevel;
 import lombok.Builder;
-import shop.jtoon.dto.SignUpDto;
+import shop.jtoon.entity.LoginType;
 import shop.jtoon.exception.InvalidRequestException;
 
 @Builder(access = AccessLevel.PRIVATE)

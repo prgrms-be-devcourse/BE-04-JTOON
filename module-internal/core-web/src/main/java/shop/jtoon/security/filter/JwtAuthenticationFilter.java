@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import shop.jtoon.security.service.JwtService;
+import shop.jtoon.security.service.JwtInternalService;
 import shop.jtoon.security.util.TokenCookie;
 
 @Slf4j
@@ -26,7 +26,7 @@ import shop.jtoon.security.util.TokenCookie;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final HandlerExceptionResolver handlerExceptionResolver;
-	private final JwtService jwtService;
+	private final JwtInternalService jwtInternalService;
 
 	@Override
 	protected void doFilterInternal(
@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			if (accessToken != null && accessToken.startsWith(BEARER_VALUE)) {
 				accessToken = accessToken.split(SPLIT_DATA)[1];
 
-				if (!jwtService.isTokenValid(accessToken)) {
+				if (!jwtInternalService.isTokenValid(accessToken)) {
 					String refreshToken = validateAndGetRefreshToken(request);
 					accessToken = regenerateTokens(refreshToken, response);
 				}
@@ -75,16 +75,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			.findFirst()
 			.orElse(null);
 		refreshToken = refreshToken.split(SPLIT_DATA)[1];
-		jwtService.isTokenValid(refreshToken);
-		jwtService.verifyRefreshTokenDb(refreshToken);
+		jwtInternalService.isTokenValid(refreshToken);
+		jwtInternalService.verifyRefreshTokenDb(refreshToken);
 
 		return refreshToken;
 	}
 
 	private String regenerateTokens(String refreshToken, HttpServletResponse response) {
-		String newAccessToken = jwtService.reGenerateAccessToken(refreshToken);
-		String newRefreshToken = jwtService.generateRefreshToken();
-		jwtService.updateRefreshTokenDb(newAccessToken, newRefreshToken);
+		String newAccessToken = jwtInternalService.reGenerateAccessToken(refreshToken);
+		String newRefreshToken = jwtInternalService.generateRefreshToken();
+		jwtInternalService.updateRefreshTokenDb(newAccessToken, newRefreshToken);
 		Cookie accessCookie = TokenCookie.of(ACCESS_TOKEN_HEADER, newAccessToken);
 		Cookie refreshCookie = TokenCookie.of(REFRESH_TOKEN_HEADER, newRefreshToken);
 		response.addCookie(accessCookie);
@@ -94,7 +94,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private void authenticate(String accessToken) {
-		Authentication auth = jwtService.getAuthentication(accessToken);
+		Authentication auth = jwtInternalService.getAuthentication(accessToken);
 		SecurityContextHolder.getContext().setAuthentication(auth);
 	}
 }

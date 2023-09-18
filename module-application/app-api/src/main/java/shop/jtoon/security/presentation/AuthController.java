@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import shop.jtoon.response.LoginRes;
+import shop.jtoon.security.application.AuthenticationApplicationService;
 import shop.jtoon.security.request.LoginReq;
-import shop.jtoon.security.service.JwtApplicationService;
+import shop.jtoon.security.application.JwtApplicationService;
+import shop.jtoon.security.service.JwtInternalService;
 import shop.jtoon.security.util.TokenCookie;
 
 @RestController
@@ -22,12 +23,18 @@ import shop.jtoon.security.util.TokenCookie;
 public class AuthController {
 
 	private final JwtApplicationService jwtApplicationService;
+	private final JwtInternalService jwtInternalService;
+	private final AuthenticationApplicationService authenticationApplicationService;
 
 	@PostMapping("/local-login")
 	public void login(@RequestBody @Valid LoginReq loginReq, HttpServletResponse response) {
-		LoginRes loginRes = jwtApplicationService.getLoginTokens(loginReq);
-		response.addCookie(TokenCookie.of(ACCESS_TOKEN_HEADER, loginRes.accessToken()));
-		response.addCookie(TokenCookie.of(REFRESH_TOKEN_HEADER, loginRes.refreshToken()));
+		authenticationApplicationService.loginMember(loginReq);
+		String accessToken = jwtInternalService.generateAccessToken(loginReq.email());
+		String refreshToken = jwtInternalService.generateRefreshToken();
+		jwtApplicationService.saveRefreshTokenDb(loginReq.email(), refreshToken);
+
+		response.addCookie(TokenCookie.of(ACCESS_TOKEN_HEADER, accessToken));
+		response.addCookie(TokenCookie.of(REFRESH_TOKEN_HEADER,refreshToken));
 	}
 
 	@GetMapping
