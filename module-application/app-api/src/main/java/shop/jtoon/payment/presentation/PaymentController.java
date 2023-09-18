@@ -1,6 +1,7 @@
 package shop.jtoon.payment.presentation;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import shop.jtoon.dto.PaymentInfoDto;
 import shop.jtoon.payment.application.PaymentApplicationService;
 import shop.jtoon.payment.request.CancelReq;
+import shop.jtoon.payment.request.ConditionReq;
 import shop.jtoon.payment.request.PaymentReq;
 
 @RestController
@@ -32,5 +35,10 @@ public class PaymentController {
 	@ResponseStatus(HttpStatus.OK)
 	public void cancelPayment(@RequestBody @Valid CancelReq cancelReq) {
 		paymentApplicationService.cancelPayment(cancelReq);
+	}
+
+	@PostMapping("/search")
+	public List<PaymentInfoDto> getPayments(@RequestBody ConditionReq conditionReq) {
+		return paymentApplicationService.getPayments(conditionReq);
 	}
 }
