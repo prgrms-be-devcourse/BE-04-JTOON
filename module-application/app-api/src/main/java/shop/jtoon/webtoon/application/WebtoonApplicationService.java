@@ -55,14 +55,14 @@ public class WebtoonApplicationService {
 	) {
 		WebtoonRes webtoonRes = webtoonDomainService.getWebtoonById(webtoonId);
 		webtoonDomainService.validateAuthor(member, webtoonRes.author());
-		UploadImageDto uploadMainImageReq = request.toUploadImageDto(EPISODE_MAIN, webtoonRes.title(), mainImage);
-		UploadImageDto uploadThumbnailImageReq = request.toUploadImageDto(
+		UploadImageDto uploadMainImageDto = request.toUploadImageDto(EPISODE_MAIN, webtoonRes.title(), mainImage);
+		UploadImageDto uploadThumbnailImageDto = request.toUploadImageDto(
 			EPISODE_THUMBNAIL,
 			webtoonRes.title(),
 			thumbnailImage
 		);
-		String mainUrl = s3Service.uploadImage(uploadMainImageReq);
-		String thumbnailUrl = s3Service.uploadImage(uploadThumbnailImageReq);
+		String mainUrl = s3Service.uploadImage(uploadMainImageDto);
+		String thumbnailUrl = s3Service.uploadImage(uploadThumbnailImageDto);
 		CreateEpisodeDto dto = request.toDto(webtoonRes, mainUrl, thumbnailUrl);
 		episodeDomainService.createEpisode(dto);
 	}

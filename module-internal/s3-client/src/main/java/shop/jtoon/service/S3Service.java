@@ -16,9 +16,9 @@ public class S3Service {
 	@Value("${spring.cloud.aws.cloud-front.url}")
 	private String IMAGE_URL;
 
-	public String uploadImage(UploadImageDto request) {
-		String key = request.toKey();
-		s3Uploader.uploadImage(key, request.image());
+	public String uploadImage(UploadImageDto dto) {
+		String key = dto.toKey();
+		s3Uploader.uploadImage(key, dto.image());
 
 		return IMAGE_URL + key;
 	}
