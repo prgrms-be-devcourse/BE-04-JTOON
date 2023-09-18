@@ -104,7 +104,7 @@ class PaymentInfoSearchRepositoryTest {
             .searchByMerchantsUidAndEmail(merchantsUid, "notfoundemail@naver.com");
 
         // Then
-        assertThat(actual).hasSize(0);
+        assertThat(actual).isEmpty();
     }
 
     @DisplayName("searchByMerchantsUidAndEmail - 해당 이메일과 일치하지 않지만 주문번호가 일치하는 경우 - 0건")
@@ -119,6 +119,6 @@ class PaymentInfoSearchRepositoryTest {
             .searchByMerchantsUidAndEmail(merchantsUid, member.getEmail());
 
         // Then
-        assertThat(actual).hasSize(0);
+        assertThat(actual).isEmpty();
     }
 }

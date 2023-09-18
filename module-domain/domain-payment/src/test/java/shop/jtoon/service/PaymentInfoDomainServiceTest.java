@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import shop.jtoon.dto.MemberDto;
 import shop.jtoon.dto.PaymentDto;
+import shop.jtoon.dto.PaymentInfoRes;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.PaymentInfo;
 import shop.jtoon.exception.DuplicatedException;
@@ -20,10 +21,15 @@ import shop.jtoon.repository.PaymentInfoRepository;
 import shop.jtoon.repository.PaymentInfoSearchRepository;
 import shop.jtoon.type.ErrorStatus;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -129,5 +135,51 @@ class PaymentInfoDomainServiceTest {
         assertThatThrownBy(() -> paymentInfoDomainService.validatePaymentInfo(paymentDto))
             .isInstanceOf(DuplicatedException.class)
             .hasMessage(ErrorStatus.PAYMENT_MERCHANT_UID_DUPLICATED.getMessage());
+    }
+
+    @DisplayName("getPaymentsInfo - 해당 이메일에 대한 회원이 존재하지 않을 때, - NotFoundException")
+    @Test
+    void getPaymentsInfo_NotFoundException() {
+        // Given
+        given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
+
+        // When, Then
+        assertThatThrownBy(() -> paymentInfoDomainService.getPaymentsInfo(null, memberDto))
+            .isInstanceOf(NotFoundException.class)
+            .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
+    }
+
+    @DisplayName("getPaymentsInfo - 조회 결과가 없을 때, - Empty List")
+    @Test
+    void getPaymentsInfo_EmptyList() {
+        // Given
+        List<PaymentInfo> paymentInfos = new ArrayList<>();
+        given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.of(member));
+        given(paymentInfoSearchRepository.searchByMerchantsUidAndEmail(anyList(), any(String.class)))
+            .willReturn(paymentInfos);
+
+        // When
+        List<PaymentInfoRes> actual = paymentInfoDomainService.getPaymentsInfo(Collections.emptyList(), memberDto);
+
+        // Then
+        assertThat(actual).isEmpty();
+    }
+
+    @DisplayName("getPaymentsInfo - 조회 결과가 2개 일때, - PaymentInfoRes List")
+    @Test
+    void getPaymentsInfo_PaymentInfoResList() {
+        // Given
+        List<PaymentInfo> paymentInfos = new ArrayList<>();
+        paymentInfos.add(CreatorFactory.createPaymentInfo("imp123", "mer123", member));
+        paymentInfos.add(CreatorFactory.createPaymentInfo("imp456", "mer789", member));
+        given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.of(member));
+        given(paymentInfoSearchRepository.searchByMerchantsUidAndEmail(anyList(), any(String.class)))
+            .willReturn(paymentInfos);
+
+        // When
+        List<PaymentInfoRes> actual = paymentInfoDomainService.getPaymentsInfo(Collections.emptyList(), memberDto);
+
+        // Then
+        assertThat(actual).hasSize(2);
     }
 }
