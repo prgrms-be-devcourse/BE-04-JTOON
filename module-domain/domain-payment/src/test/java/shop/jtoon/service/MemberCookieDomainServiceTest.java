@@ -125,4 +125,44 @@ class MemberCookieDomainServiceTest {
         // Then
         assertThat(actual).isEqualTo(5);
     }
+
+    @DisplayName("getMemberCookie - 해당 이메일에 대한 회원이 존재하지 않을 때, - NotFoundException (Member)")
+    @Test
+    void getMemberCookie_NotFoundException() {
+        // Given
+        given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
+
+        // When, Then
+        assertThatThrownBy(() -> memberCookieDomainService.getMemberCookie(memberDto))
+            .isInstanceOf(NotFoundException.class)
+            .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
+    }
+
+    @DisplayName("getMemberCookie - 해당 회원에 대한 쿠키 정보가 존재하지 않을 때, - NotFoundException (MemberCookie)")
+    @Test
+    void getMemberCookie_NotFoundException_MemberCookie() {
+        // Given
+        given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.of(member));
+        given(memberCookieRepository.findByMember(any(Member.class))).willReturn(Optional.empty());
+
+        // When, Then
+        assertThatThrownBy(() -> memberCookieDomainService.getMemberCookie(memberDto))
+            .isInstanceOf(NotFoundException.class)
+            .hasMessage(ErrorStatus.MEMBER_COOKIE_NOT_FOUND.getMessage());
+    }
+
+    @DisplayName("getMemberCookie - 해당 회원이 가진 쿠키 갯수를 성공적으로 조회, - 쿠키 갯수")
+    @Test
+    void getMemberCookie_CookieCount() {
+        // Given
+        MemberCookie memberCookie = MemberCookie.create(7, member);
+        given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.of(member));
+        given(memberCookieRepository.findByMember(any(Member.class))).willReturn(Optional.of(memberCookie));
+
+        // When
+        int actual = memberCookieDomainService.getMemberCookie(memberDto);
+
+        // Then
+        assertThat(actual).isEqualTo(7);
+    }
 }
