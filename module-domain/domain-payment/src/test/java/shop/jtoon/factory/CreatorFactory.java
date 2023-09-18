@@ -1,5 +1,6 @@
 package shop.jtoon.factory;
 
+import shop.jtoon.dto.PaymentDto;
 import shop.jtoon.entity.*;
 
 import java.math.BigDecimal;
@@ -10,10 +11,21 @@ public class CreatorFactory {
         return PaymentInfo.builder()
             .impUid(impUid)
             .merchantUid(merchantUid)
-            .payMethod("카드")
+            .payMethod("card")
             .cookieItem(CookieItem.COOKIE_ONE)
             .amount(BigDecimal.valueOf(1000))
             .member(member)
+            .build();
+    }
+
+    public static PaymentDto createPaymentDto(String impUid, String merchantUid, String email) {
+        return PaymentDto.builder()
+            .impUid(impUid)
+            .merchantUid(merchantUid)
+            .payMethod("card")
+            .cookieItem(CookieItem.COOKIE_ONE)
+            .amount(BigDecimal.valueOf(1000))
+            .buyerEmail(email)
             .build();
     }
 
