@@ -70,4 +70,9 @@ public class MemberDomainService {
 			.orElseThrow(() -> new NotFoundException(MEMBER_EMAIL_NOT_FOUND));
 		return MemberDto.toDto(member);
 	}
+
+	public Member findByEmail(String email) {
+		return  memberRepository.findByEmail(email)
+			.orElseThrow(() -> new NotFoundException(MEMBER_EMAIL_NOT_FOUND));
+	}
 }
