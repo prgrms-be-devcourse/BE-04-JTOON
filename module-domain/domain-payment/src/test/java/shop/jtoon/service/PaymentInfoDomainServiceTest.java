@@ -11,6 +11,8 @@ import shop.jtoon.dto.MemberDto;
 import shop.jtoon.dto.PaymentDto;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.PaymentInfo;
+import shop.jtoon.exception.DuplicatedException;
+import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.exception.NotFoundException;
 import shop.jtoon.factory.CreatorFactory;
 import shop.jtoon.repository.MemberRepository;
@@ -43,16 +45,19 @@ class PaymentInfoDomainServiceTest {
     private Member member;
     private MemberDto memberDto;
     private PaymentDto paymentDto;
+    private PaymentDto invalidAmountPaymentDto;
 
     @BeforeEach
     void beforeEach() {
         member = CreatorFactory.createMember("example123@naver.com");
         memberDto = MemberDto.toDto(member);
         paymentDto = CreatorFactory.createPaymentDto("imp123", "mer123", member.getEmail());
+        invalidAmountPaymentDto = CreatorFactory
+            .createInvalidAmountPaymentDto("imp789", "mer789", member.getEmail());
     }
 
 
-    @DisplayName("createPaymentInfo - 한 회원의 결제 정보가 성공적으로 저장됨 - Void ")
+    @DisplayName("createPaymentInfo - 한 회원의 결제 정보가 성공적으로 저장될 때, - Void ")
     @Test
     void createPaymentInfo_Void() {
         // Given
@@ -75,5 +80,54 @@ class PaymentInfoDomainServiceTest {
         assertThatThrownBy(() -> paymentInfoDomainService.createPaymentInfo(paymentDto, memberDto))
             .isInstanceOf(NotFoundException.class)
             .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
+    }
+
+    @DisplayName("validatePaymentInfo - 결제 정보에 대한 검증이 성공적으로 끝났을 때, - Void")
+    @Test
+    void validatePaymentInfo_Void() {
+        // Given
+        given(paymentInfoRepository.existsByImpUid(any(String.class))).willReturn(false);
+        given(paymentInfoRepository.existsByMerchantUid(any(String.class))).willReturn(false);
+
+        // When
+        paymentInfoDomainService.validatePaymentInfo(paymentDto);
+
+        // Then
+        verify(paymentInfoRepository).existsByImpUid(any(String.class));
+        verify(paymentInfoRepository).existsByMerchantUid(any(String.class));
+    }
+
+    @DisplayName("validatePaymentInfo - 결제 정보의 쿠키 가격과 실제 서버에 존재하는 쿠키 가격이 다를 때, - InvalidRequestException")
+    @Test
+    void validatePaymentInfo_InvalidRequestException() {
+        // When, Then
+        assertThatThrownBy(() -> paymentInfoDomainService.validatePaymentInfo(invalidAmountPaymentDto))
+            .isInstanceOf(InvalidRequestException.class)
+            .hasMessage(ErrorStatus.PAYMENT_AMOUNT_INVALID.getMessage());
+    }
+
+    @DisplayName("validatePaymentInfo - 결제 고유번호가 중복 됐을 때, - DuplicatedException (ImpUid)")
+    @Test
+    void validatePaymentInfo_DuplicatedException_ImpUid() {
+        // Given
+        given(paymentInfoRepository.existsByImpUid(any(String.class))).willReturn(true);
+
+        // When, Then
+        assertThatThrownBy(() -> paymentInfoDomainService.validatePaymentInfo(paymentDto))
+            .isInstanceOf(DuplicatedException.class)
+            .hasMessage(ErrorStatus.PAYMENT_IMP_UID_DUPLICATED.getMessage());
+    }
+
+    @DisplayName("validatePaymentInfo - 주문번호가 중복 됐을 때, - DuplicatedException (MerchantUid)")
+    @Test
+    void validatePaymentInfo_DuplicatedException_MerchantUid() {
+        // Given
+        given(paymentInfoRepository.existsByImpUid(any(String.class))).willReturn(false);
+        given(paymentInfoRepository.existsByMerchantUid(any(String.class))).willReturn(true);
+
+        // When, Then
+        assertThatThrownBy(() -> paymentInfoDomainService.validatePaymentInfo(paymentDto))
+            .isInstanceOf(DuplicatedException.class)
+            .hasMessage(ErrorStatus.PAYMENT_MERCHANT_UID_DUPLICATED.getMessage());
     }
 }

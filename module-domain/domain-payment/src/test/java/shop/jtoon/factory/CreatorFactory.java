@@ -24,7 +24,18 @@ public class CreatorFactory {
             .merchantUid(merchantUid)
             .payMethod("card")
             .cookieItem(CookieItem.COOKIE_ONE)
-            .amount(BigDecimal.valueOf(1000))
+            .amount(CookieItem.COOKIE_ONE.getAmount())
+            .buyerEmail(email)
+            .build();
+    }
+
+    public static PaymentDto createInvalidAmountPaymentDto(String impUid, String merchantUid, String email) {
+        return PaymentDto.builder()
+            .impUid(impUid)
+            .merchantUid(merchantUid)
+            .payMethod("card")
+            .cookieItem(CookieItem.COOKIE_ONE)
+            .amount(CookieItem.COOKIE_TWO.getAmount())
             .buyerEmail(email)
             .build();
     }
