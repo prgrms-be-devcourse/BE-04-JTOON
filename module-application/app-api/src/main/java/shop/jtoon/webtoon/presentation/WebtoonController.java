@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.enums.DayOfWeek;
 import shop.jtoon.global.MemberThreadLocal;
-import shop.jtoon.response.EpisodeRes;
+import shop.jtoon.response.EpisodeInfoRes;
 import shop.jtoon.response.EpisodesRes;
 import shop.jtoon.response.WebtoonInfoRes;
 import shop.jtoon.response.WebtoonItemRes;
@@ -73,7 +73,7 @@ public class WebtoonController {
 	}
 
 	@GetMapping("/episodes/{episodeId}")
-	public EpisodeRes getEpisode(@PathVariable Long episodeId) {
+	public EpisodeInfoRes getEpisode(@PathVariable Long episodeId) {
 		return webtoonService.getEpisode(episodeId);
 	}
 

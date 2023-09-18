@@ -77,8 +77,11 @@ public class Episode extends BaseTimeEntity {
 		this.webtoon = requireNonNull(webtoon, WEBTOON_IS_NULL.getMessage());
 	}
 
-	public int getCookieCount() {
-		return webtoon.getCookieCount();
+	public static Episode createOfId(Long episodeId) {
+		Episode episode = new Episode();
+		episode.id = episodeId;
+
+		return episode;
 	}
 
 	private int validateEpisodeNumber(int no) {

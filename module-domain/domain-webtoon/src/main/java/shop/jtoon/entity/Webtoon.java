@@ -3,8 +3,6 @@ package shop.jtoon.entity;
 import static java.util.Objects.*;
 import static shop.jtoon.type.ErrorStatus.*;
 
-import java.util.Objects;
-
 import org.hibernate.annotations.ColumnDefault;
 
 import jakarta.persistence.Column;
@@ -75,8 +73,11 @@ public class Webtoon extends BaseTimeEntity {
 		this.author = requireNonNull(author, WEBTOON_AUTHOR_IS_NULL.getMessage());
 	}
 
-	public boolean isAuthor(Member member) {
-		return Objects.equals(author.getId(), member.getId());
+	public static Webtoon createOfId(Long webtoonId) {
+		Webtoon webtoon = new Webtoon();
+		webtoon.id = webtoonId;
+
+		return webtoon;
 	}
 
 	private int validateCookieCount(int cookieCount) {
