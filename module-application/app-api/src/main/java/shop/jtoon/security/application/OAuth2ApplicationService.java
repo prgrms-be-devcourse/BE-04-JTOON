@@ -1,4 +1,4 @@
-package shop.jtoon.security.service;
+package shop.jtoon.security.application;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -17,6 +17,7 @@ import shop.jtoon.entity.LoginType;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.OAuthAttributes;
 import shop.jtoon.exception.DuplicatedException;
+import shop.jtoon.security.service.CustomOAuth2UserService;
 import shop.jtoon.service.MemberDomainService;
 import shop.jtoon.type.ErrorStatus;
 

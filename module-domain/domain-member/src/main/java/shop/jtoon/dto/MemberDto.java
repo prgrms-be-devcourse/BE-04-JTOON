@@ -12,7 +12,7 @@ public record MemberDto(
 	Gender gender,
 	String phone
 ) {
-	public static MemberDto from(Member member) {
+	public static MemberDto toDto(Member member) {
 		return MemberDto.builder()
 			.email(member.getEmail())
 			.name(member.getName())

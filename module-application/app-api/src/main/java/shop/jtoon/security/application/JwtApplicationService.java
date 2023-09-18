@@ -1,4 +1,4 @@
-package shop.jtoon.security.service;
+package shop.jtoon.security.application;
 
 import static shop.jtoon.util.SecurityConstant.*;
 
@@ -14,6 +14,7 @@ import shop.jtoon.dto.MemberDto;
 import shop.jtoon.entity.Member;
 import shop.jtoon.response.LoginRes;
 import shop.jtoon.security.request.LoginReq;
+import shop.jtoon.security.service.JwtService;
 import shop.jtoon.service.MemberDomainService;
 import shop.jtoon.service.TokenDomainService;
 
@@ -56,7 +57,7 @@ public class JwtApplicationService implements JwtService {
 		String claimsEmail = tokenDomainService.getClaimsBodyEmail(token);
 		Member member = memberDomainService.findByEmail(claimsEmail);
 
-		return new UsernamePasswordAuthenticationToken(MemberDto.from(member), BLANK,
+		return new UsernamePasswordAuthenticationToken(MemberDto.toDto(member), BLANK,
 			List.of(new SimpleGrantedAuthority(member.getRole().toString())));
 	}
 
