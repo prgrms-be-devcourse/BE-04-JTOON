@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.jtoon.dto.PaymentDto;
-import shop.jtoon.dto.PaymentInfoDto;
+import shop.jtoon.dto.PaymentInfoRes;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.PaymentInfo;
 import shop.jtoon.exception.DuplicatedException;
@@ -38,16 +38,16 @@ public class PaymentInfoDomainService {
         validateMerchantUid(paymentDto.merchantUid());
     }
 
-    public List<PaymentInfoDto> getPaymentsInfo(List<String> merchantsUid) {
+    public List<PaymentInfoRes> getPaymentsInfo(List<String> merchantsUid) {
         Member member = null; // TODO: member 조회 기능 추가
         List<PaymentInfo> paymentsInfo = paymentInfoSearchRepository.searchByMerchantsUidAndEmail(
-                merchantsUid,
-                member.getEmail()
+            merchantsUid,
+            member.getEmail()
         );
 
         return paymentsInfo.stream()
-                .map(PaymentInfoDto::toDto)
-                .toList();
+            .map(PaymentInfoRes::toDto)
+            .toList();
     }
 
     private void validateAmount(BigDecimal amount, BigDecimal cookieAmount) {
