@@ -1,15 +1,17 @@
 package shop.jtoon.payment.application;
 
-import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.siot.IamportRestClient.exception.IamportResponseException;
-
 import lombok.RequiredArgsConstructor;
+import shop.jtoon.dto.CancelDto;
 import shop.jtoon.dto.PaymentDto;
+import shop.jtoon.dto.PaymentInfoDto;
+import shop.jtoon.payment.request.CancelReq;
+import shop.jtoon.payment.request.ConditionReq;
 import shop.jtoon.payment.request.PaymentReq;
 import shop.jtoon.service.IamportService;
 import shop.jtoon.service.MemberCookieDomainService;
@@ -25,13 +27,24 @@ public class PaymentApplicationService {
 	private final MemberCookieDomainService memberCookieDomainService;
 
 	@Transactional
-	public BigDecimal validatePayment(PaymentReq paymentReq) throws IamportResponseException, IOException {
+	public BigDecimal validatePayment(PaymentReq paymentReq) {
 		PaymentDto paymentDto = paymentReq.toDto();
 		iamportService.validateIamport(paymentDto.impUid(), paymentDto.amount());
-		paymentInfoDomainService.validatePayment(paymentDto);
-		paymentInfoDomainService.createPayment(paymentDto);
+		paymentInfoDomainService.validatePaymentInfo(paymentDto);
+		paymentInfoDomainService.createPaymentInfo(paymentDto);
 		memberCookieDomainService.createMemberCookie(paymentDto.cookieItem());
 
 		return paymentDto.amount();
+	}
+
+	@Transactional
+	public void cancelPayment(CancelReq cancelReq) {
+		CancelDto cancelDto = cancelReq.toDto();
+		iamportService.validateIamport(cancelReq.impUid(), cancelDto.checksum());
+		iamportService.cancelIamport(cancelDto);
+	}
+
+	public List<PaymentInfoDto> getPayments(ConditionReq conditionReq) {
+		return paymentInfoDomainService.getPaymentsInfo(conditionReq.merchantsUid());
 	}
 }

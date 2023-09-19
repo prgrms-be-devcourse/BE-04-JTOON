@@ -1,7 +1,7 @@
 package shop.jtoon.payment.presentation;
 
-import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.siot.IamportRestClient.exception.IamportResponseException;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import shop.jtoon.dto.PaymentInfoDto;
 import shop.jtoon.payment.application.PaymentApplicationService;
+import shop.jtoon.payment.request.CancelReq;
+import shop.jtoon.payment.request.ConditionReq;
 import shop.jtoon.payment.request.PaymentReq;
 
 @RestController
@@ -26,8 +27,18 @@ public class PaymentController {
 
 	@PostMapping("/validation")
 	@ResponseStatus(HttpStatus.CREATED)
-	public BigDecimal validatePayment(@RequestBody @Valid PaymentReq paymentReq)
-		throws IamportResponseException, IOException {
+	public BigDecimal validatePayment(@RequestBody @Valid PaymentReq paymentReq) {
 		return paymentApplicationService.validatePayment(paymentReq);
+	}
+
+	@PostMapping("/cancel")
+	@ResponseStatus(HttpStatus.OK)
+	public void cancelPayment(@RequestBody @Valid CancelReq cancelReq) {
+		paymentApplicationService.cancelPayment(cancelReq);
+	}
+
+	@PostMapping("/search")
+	public List<PaymentInfoDto> getPayments(@RequestBody ConditionReq conditionReq) {
+		return paymentApplicationService.getPayments(conditionReq);
 	}
 }

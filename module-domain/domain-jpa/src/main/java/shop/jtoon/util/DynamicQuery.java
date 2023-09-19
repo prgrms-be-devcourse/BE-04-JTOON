@@ -1,7 +1,11 @@
 package shop.jtoon.util;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
+
+import org.springframework.util.CollectionUtils;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 
@@ -17,5 +21,17 @@ public class DynamicQuery {
 		}
 
 		return function.apply(value);
+	}
+
+	public static <T> BooleanExpression filterCondition(T condition, Function<T, BooleanExpression> function) {
+		T tempCondition = condition;
+
+		if (tempCondition instanceof List<?> c && CollectionUtils.isEmpty(c)) {
+			tempCondition = null;
+		}
+
+		return Optional.ofNullable(tempCondition)
+			.map(function)
+			.orElse(null);
 	}
 }

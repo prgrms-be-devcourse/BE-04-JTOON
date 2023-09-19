@@ -41,6 +41,7 @@ project(':module-domain:domain-webtoon') {
     dependencies {
         api project(':module-domain:domain-jpa')
         implementation project(':module-domain:domain-member')
+        implementation project(':module-domain:domain-payment')
         implementation project(':module-core')
     }
 }

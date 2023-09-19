@@ -9,12 +9,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
+
 import shop.jtoon.error.model.ErrorResponse;
-import shop.jtoon.exception.DuplicatedException;
-import shop.jtoon.exception.ForbiddenException;
-import shop.jtoon.exception.InvalidRequestException;
-import shop.jtoon.exception.NotFoundException;
-import shop.jtoon.exception.UnauthorizedException;
+import shop.jtoon.exception.*;
 import shop.jtoon.type.ErrorStatus;
 
 @RestControllerAdvice

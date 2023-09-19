@@ -25,7 +25,7 @@ import shop.jtoon.type.ErrorStatus;
 @Entity
 @Table(name = "payments_info")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PaymentInfo {
+public class PaymentInfo extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
