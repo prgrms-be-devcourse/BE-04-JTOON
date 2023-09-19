@@ -33,7 +33,8 @@ public class SecurityConfig {
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return web -> web.ignoring()
 			.requestMatchers("/members/sign-up")
-			.requestMatchers("/local-login");
+			.requestMatchers("/members/email-authorization")
+			.requestMatchers("/members/local-login");
 	}
 
 	@Bean
@@ -41,7 +42,6 @@ public class SecurityConfig {
 		http
 			.authorizeHttpRequests(request -> request
 				.requestMatchers("/members").permitAll()
-				.requestMatchers("/members/email-authorization").permitAll()
 				.requestMatchers("/members/**").hasAuthority("USER")
 				.anyRequest().permitAll())
 			.csrf(AbstractHttpConfigurer::disable)

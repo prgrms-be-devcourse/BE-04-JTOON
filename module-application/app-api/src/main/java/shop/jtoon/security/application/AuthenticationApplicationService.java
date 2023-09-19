@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.dto.MemberDto;
-import shop.jtoon.security.request.LoginReq;
 import shop.jtoon.security.service.AuthenticationService;
 import shop.jtoon.service.MemberDomainService;
 
@@ -19,10 +18,6 @@ import shop.jtoon.service.MemberDomainService;
 public class AuthenticationApplicationService implements AuthenticationService {
 
 	private final MemberDomainService memberDomainService;
-
-	public void loginMember(LoginReq loginReq) {
-		memberDomainService.localLoginMember(loginReq.toDto());
-	}
 
 	@Override
 	public Authentication getAuthentication(String claimsEmail) {
