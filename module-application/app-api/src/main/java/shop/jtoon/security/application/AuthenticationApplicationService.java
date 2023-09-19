@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import shop.jtoon.dto.MemberDto;
 import shop.jtoon.security.request.LoginReq;
 import shop.jtoon.security.service.AuthenticationService;
-import shop.jtoon.security.service.JwtInternalService;
 import shop.jtoon.service.MemberDomainService;
 
 @Service
@@ -20,14 +19,9 @@ import shop.jtoon.service.MemberDomainService;
 public class AuthenticationApplicationService implements AuthenticationService {
 
 	private final MemberDomainService memberDomainService;
-	private final JwtInternalService jwtInternalService;
 
-	public String[] loginMember(LoginReq loginReq) {
+	public void loginMember(LoginReq loginReq) {
 		memberDomainService.localLoginMember(loginReq.toDto());
-		String accessToken = jwtInternalService.generateAccessToken(loginReq.email());
-		String refreshToken = jwtInternalService.generateRefreshToken();
-
-		return new String[] {accessToken, refreshToken};
 	}
 
 	@Override
