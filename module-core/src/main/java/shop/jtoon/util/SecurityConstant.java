@@ -8,6 +8,8 @@ public final class SecurityConstant {
 
 	public static final String ACCESS_TOKEN_HEADER = "Access_Token";
 	public static final String REFRESH_TOKEN_HEADER = "Refresh_Token";
+	public static final int ACCESS_TOKEN_INDEX = 0;
+	public static final int REFRESH_TOKEN_INDEX = 1;
 	public static final String BEARER_VALUE = "Bearer";
 	public static final String BLANK = " ";
 	public static final String SPLIT_DATA = "\\+";

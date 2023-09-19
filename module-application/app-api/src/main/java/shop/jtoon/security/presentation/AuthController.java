@@ -13,9 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.security.application.AuthenticationApplicationService;
-import shop.jtoon.security.request.LoginReq;
 import shop.jtoon.security.application.JwtApplicationService;
-import shop.jtoon.security.service.JwtInternalService;
+import shop.jtoon.security.request.LoginReq;
 import shop.jtoon.security.util.TokenCookie;
 
 @RestController
@@ -23,18 +22,15 @@ import shop.jtoon.security.util.TokenCookie;
 public class AuthController {
 
 	private final JwtApplicationService jwtApplicationService;
-	private final JwtInternalService jwtInternalService;
 	private final AuthenticationApplicationService authenticationApplicationService;
 
 	@PostMapping("/local-login")
 	public void login(@RequestBody @Valid LoginReq loginReq, HttpServletResponse response) {
-		authenticationApplicationService.loginMember(loginReq);
-		String accessToken = jwtInternalService.generateAccessToken(loginReq.email());
-		String refreshToken = jwtInternalService.generateRefreshToken();
-		jwtApplicationService.saveRefreshTokenDb(loginReq.email(), refreshToken);
+		String[] tokens = authenticationApplicationService.loginMember(loginReq);
+		jwtApplicationService.saveRefreshTokenDb(loginReq.email(), tokens[REFRESH_TOKEN_INDEX]);
 
-		response.addCookie(TokenCookie.of(ACCESS_TOKEN_HEADER, accessToken));
-		response.addCookie(TokenCookie.of(REFRESH_TOKEN_HEADER,refreshToken));
+		response.addCookie(TokenCookie.of(ACCESS_TOKEN_HEADER, tokens[ACCESS_TOKEN_INDEX]));
+		response.addCookie(TokenCookie.of(REFRESH_TOKEN_HEADER, tokens[REFRESH_TOKEN_INDEX]));
 	}
 
 	@GetMapping

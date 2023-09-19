@@ -7,6 +7,7 @@ import shop.jtoon.entity.Role;
 
 @Builder
 public record MemberDto(
+	Long id,
 	String email,
 	String name,
 	String nickname,
@@ -16,6 +17,7 @@ public record MemberDto(
 ) {
 	public static MemberDto toDto(Member member) {
 		return MemberDto.builder()
+			.id(member.getId())
 			.email(member.getEmail())
 			.name(member.getName())
 			.nickname(member.getNickname())
