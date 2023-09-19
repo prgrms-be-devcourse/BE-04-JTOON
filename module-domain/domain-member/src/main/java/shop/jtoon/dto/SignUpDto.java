@@ -16,7 +16,6 @@ public record SignUpDto(
 	String phone,
 	String loginType
 ) {
-
 	public Member toEntity(String encryptedPassword) {
 		return Member.builder()
 			.email(email)

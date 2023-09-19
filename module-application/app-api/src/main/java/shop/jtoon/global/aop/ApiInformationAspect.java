@@ -1,8 +1,5 @@
 package shop.jtoon.global.aop;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -12,6 +9,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -49,7 +48,7 @@ public class ApiInformationAspect {
 	@AfterReturning(value = "allMemberApi() || allPaymentApi() || allWebtoonApi()", returning = "returnObject")
 	public void afterReturnLogApiInfo(JoinPoint joinPoint, Object returnObject) {
 		threadAndMethodInformation(Thread.currentThread(), joinPoint.getSignature());
-		log.info("[ Return Type : {} ]", returnObject.getClass().getSimpleName());
+		// log.info("[ Return Type : {} ]", returnObject.getClass().getSimpleName());
 		log.info("[ Return Value : {} ]", returnObject);
 	}
 

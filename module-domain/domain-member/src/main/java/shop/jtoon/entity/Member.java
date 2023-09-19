@@ -1,6 +1,7 @@
 package shop.jtoon.entity;
 
 import static java.util.Objects.*;
+import static shop.jtoon.util.RegExp.*;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,9 +32,11 @@ public class Member extends BaseTimeEntity {
 	@Column(name = "member_id")
 	private Long id;
 
+	@Pattern(regexp = EMAIL_PATTERN)
 	@Column(name = "email", nullable = false, unique = true, length = 40, updatable = false)
 	private String email;
 
+	@Pattern(regexp = PASSWORD_PATTERN)
 	@Column(name = "password", nullable = false)
 	private String password;
 
@@ -46,6 +50,7 @@ public class Member extends BaseTimeEntity {
 	@Column(name = "gender", nullable = false, updatable = false)
 	private Gender gender;
 
+	@Pattern(regexp = PHONE_PATTERN)
 	@Column(name = "phone", nullable = false, unique = true, length = 11)
 	private String phone;
 
