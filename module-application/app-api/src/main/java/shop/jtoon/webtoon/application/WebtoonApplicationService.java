@@ -12,15 +12,17 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.dto.CreateEpisodeDto;
 import shop.jtoon.dto.CreateWebtoonDto;
+import shop.jtoon.dto.PurchaseEpisodeDto;
 import shop.jtoon.dto.UploadImageDto;
-import shop.jtoon.entity.Member;
 import shop.jtoon.entity.enums.DayOfWeek;
+import shop.jtoon.response.EpisodeInfoRes;
 import shop.jtoon.response.EpisodeRes;
 import shop.jtoon.response.EpisodesRes;
 import shop.jtoon.response.WebtoonInfoRes;
 import shop.jtoon.response.WebtoonItemRes;
 import shop.jtoon.response.WebtoonRes;
 import shop.jtoon.service.EpisodeDomainService;
+import shop.jtoon.service.MemberCookieDomainService;
 import shop.jtoon.service.S3Service;
 import shop.jtoon.service.WebtoonDomainService;
 import shop.jtoon.type.CustomPageRequest;
@@ -34,36 +36,37 @@ public class WebtoonApplicationService {
 
 	private final WebtoonDomainService webtoonDomainService;
 	private final EpisodeDomainService episodeDomainService;
+	private final MemberCookieDomainService memberCookieDomainService;
 	private final S3Service s3Service;
 
 	@Transactional
-	public void createWebtoon(Member member, MultipartFile thumbnailImage, CreateWebtoonReq request) {
+	public void createWebtoon(Long memberId, MultipartFile thumbnailImage, CreateWebtoonReq request) {
 		webtoonDomainService.validateDuplicateTitle(request.title());
 		UploadImageDto uploadImageDto = request.toUploadImageDto(WEBTOON_THUMBNAIL, thumbnailImage);
 		String thumbnailUrl = s3Service.uploadImage(uploadImageDto);
-		CreateWebtoonDto dto = request.toDto(member, thumbnailUrl);
+		CreateWebtoonDto dto = request.toDto(memberId, thumbnailUrl);
 		webtoonDomainService.createWebtoon(dto);
 	}
 
 	@Transactional
 	public void createEpisode(
-		Member member,
+		Long memberId,
 		Long webtoonId,
 		MultipartFile mainImage,
 		MultipartFile thumbnailImage,
 		CreateEpisodeReq request
 	) {
-		WebtoonRes webtoonRes = webtoonDomainService.getWebtoonById(webtoonId);
-		webtoonDomainService.validateAuthor(member, webtoonRes.author());
-		UploadImageDto uploadMainImageDto = request.toUploadImageDto(EPISODE_MAIN, webtoonRes.title(), mainImage);
+		WebtoonRes webtoon = webtoonDomainService.getWebtoonById(webtoonId);
+		webtoonDomainService.validateAuthor(memberId, webtoon.author());
+		UploadImageDto uploadMainImageDto = request.toUploadImageDto(EPISODE_MAIN, webtoon.title(), mainImage);
 		UploadImageDto uploadThumbnailImageDto = request.toUploadImageDto(
 			EPISODE_THUMBNAIL,
-			webtoonRes.title(),
+			webtoon.title(),
 			thumbnailImage
 		);
 		String mainUrl = s3Service.uploadImage(uploadMainImageDto);
 		String thumbnailUrl = s3Service.uploadImage(uploadThumbnailImageDto);
-		CreateEpisodeDto dto = request.toDto(webtoonRes, mainUrl, thumbnailUrl);
+		CreateEpisodeDto dto = request.toDto(webtoonId, mainUrl, thumbnailUrl);
 		episodeDomainService.createEpisode(dto);
 	}
 
@@ -79,12 +82,15 @@ public class WebtoonApplicationService {
 		return episodeDomainService.getEpisodes(webtoonId, request);
 	}
 
-	public EpisodeRes getEpisode(Long episodeId) {
+	public EpisodeInfoRes getEpisode(Long episodeId) {
 		return episodeDomainService.getEpisode(episodeId);
 	}
 
 	@Transactional
-	public void purchaseEpisode(Member member, Long episodeId) {
-		episodeDomainService.purchaseEpisode(member, episodeId);
+	public void purchaseEpisode(Long memberId, Long episodeId) {
+		EpisodeRes episode = episodeDomainService.getEpisodeById(episodeId);
+		memberCookieDomainService.useCookie(memberId, episode.getCookieCount());
+		PurchaseEpisodeDto dto = PurchaseEpisodeDto.of(memberId, episodeId);
+		episodeDomainService.purchaseEpisode(dto);
 	}
 }

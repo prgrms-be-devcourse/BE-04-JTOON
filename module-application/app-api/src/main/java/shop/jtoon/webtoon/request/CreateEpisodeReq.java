@@ -12,7 +12,6 @@ import shop.jtoon.common.FileName;
 import shop.jtoon.common.ImageType;
 import shop.jtoon.dto.CreateEpisodeDto;
 import shop.jtoon.dto.UploadImageDto;
-import shop.jtoon.response.WebtoonRes;
 
 public record CreateEpisodeReq(
 	@Min(1) int no,
@@ -21,9 +20,9 @@ public record CreateEpisodeReq(
 	@NotNull LocalDateTime openedAt
 ) {
 
-	public CreateEpisodeDto toDto(WebtoonRes webtoonRes, String mainUrl, String thumbnailUrl) {
+	public CreateEpisodeDto toDto(Long webtoonId, String mainUrl, String thumbnailUrl) {
 		return CreateEpisodeDto.builder()
-			.webtoonRes(webtoonRes)
+			.webtoonId(webtoonId)
 			.mainUrl(mainUrl)
 			.thumbnailUrl(thumbnailUrl)
 			.no(no)

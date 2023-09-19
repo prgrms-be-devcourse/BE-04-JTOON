@@ -6,11 +6,10 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import shop.jtoon.entity.Episode;
 import shop.jtoon.entity.Webtoon;
-import shop.jtoon.response.WebtoonRes;
 
 @Builder
 public record CreateEpisodeDto(
-	WebtoonRes webtoonRes,
+	Long webtoonId,
 	String mainUrl,
 	String thumbnailUrl,
 	int no,
@@ -19,7 +18,7 @@ public record CreateEpisodeDto(
 	LocalDateTime openedAt
 ) {
 
-	public Episode toEpisodeEntity(Webtoon webtoon) {
+	public Episode toEntity() {
 		return Episode.builder()
 			.no(no)
 			.title(title)
@@ -27,18 +26,7 @@ public record CreateEpisodeDto(
 			.openedAt(openedAt)
 			.mainUrl(mainUrl)
 			.thumbnailUrl(thumbnailUrl)
-			.webtoon(webtoon)
-			.build();
-	}
-
-	public Webtoon toWebtoonEntity() {
-		return Webtoon.builder()
-			.title(webtoonRes.title())
-			.description(webtoonRes.description())
-			.ageLimit(webtoonRes.ageLimit())
-			.thumbnailUrl(webtoonRes.thumbnailUrl())
-			.cookieCount(webtoonRes.cookieCount())
-			.author(webtoonRes.author())
+			.webtoon(Webtoon.createOfId(webtoonId))
 			.build();
 	}
 }

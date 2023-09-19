@@ -72,8 +72,8 @@ public class WebtoonDomainService {
 		}
 	}
 
-	public void validateAuthor(Member member, Member author) {
-		if (!member.isAuthor(author)) {
+	public void validateAuthor(Long memberId, Member author) {
+		if (!author.isEqual(memberId)) {
 			throw new InvalidRequestException(WEBTOON_NOT_AUTHOR);
 		}
 	}
