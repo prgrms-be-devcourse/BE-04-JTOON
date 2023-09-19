@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum ErrorStatus {
-
+  
     COMMON_DTO_FIELD_INVALID_FORMAT("올바른 요청 정보가 아닙니다."),
 
     MEMBER_IS_NULL("회원 값이 NULL 입니다."),
@@ -21,7 +21,14 @@ public enum ErrorStatus {
     MEMBER_LOGIN_TYPE_INVALID_FORMAT("올바른 로그인 타입이 아닙니다."),
     MEMBER_MESSAGE_SEND_FAILED("이메일 인증 메세지 전송 실패"),
     MEMBER_EMAIL_CONFLICT("Email 중복"),
-    MEMBER_EMAIL_NOT_FOUND("해당 이메일을 가진 회원은 존재하지 않습니다."),
+    MEMBER_EMAIL_NOT_FOUND("존재하지 않는 Email입니다."),
+	  MEMBER_DUPLICATE_SOCIAL_LOGIN("이미 다른 (소셜)로그인 등록된 회원입니다"),
+	  MEMBER_WRONG_LOGIN_INFO("아이디 또는 비밀번호가 맞지 않습니다."),
+	  MEMBER_LOGIN_SERVER_ERROR("내부적으로 발생한 시스템 문제로 인해 요청처리 불가."),
+	  MEMBER_LOGIN_REJECTED("인증 요청이 거부되었습니다."),
+	  MEMBER_REFRESH_TOKEN_NOT_FOUND("Refresh Token을 찾지 못했습니다."),
+	  MEMBER_REFRESH_TOKEN_NOT_MATCH("Refresh Token이 일치하지 않습니다."),
+	  MEMBER_INVALID_ACCESS_TOKEN("유효하지 않은 Access Token입니다."),
 
     PAYMENT_IMP_UID_IS_NULL("결제 고유번호 값이 NULL 입니다."),
     PAYMENT_MERCHANT_UID_IS_NULL("주문번호 값이 NULL 입니다."),
