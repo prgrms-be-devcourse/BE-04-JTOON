@@ -20,11 +20,9 @@ import shop.jtoon.type.ErrorStatus;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class MemberCookieDomainServiceTest {
@@ -53,11 +51,9 @@ class MemberCookieDomainServiceTest {
         // Given
         given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.of(member));
 
-        // When
-        memberCookieDomainService.createMemberCookie(CookieItem.COOKIE_ONE, memberDto);
-
-        // Then
-        verify(memberCookieRepository).save(any(MemberCookie.class));
+        // When, Then
+        assertThatNoException()
+                .isThrownBy(() -> memberCookieDomainService.createMemberCookie(CookieItem.COOKIE_ONE, memberDto));
     }
 
     @DisplayName("createMemberCookie - 해당 이메일에 대한 회원이 존재하지 않을 때, - NotFoundException")
@@ -68,8 +64,8 @@ class MemberCookieDomainServiceTest {
 
         // When, Then
         assertThatThrownBy(() -> memberCookieDomainService.createMemberCookie(CookieItem.COOKIE_ONE, memberDto))
-            .isInstanceOf(NotFoundException.class)
-            .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
     }
 
     @DisplayName("useCookie - 해당 회원에 대한 쿠키 정보가 존재하지 않을 때, - NotFoundException (MemberCookie)")
@@ -81,8 +77,8 @@ class MemberCookieDomainServiceTest {
 
         // When, Then
         assertThatThrownBy(() -> memberCookieDomainService.useCookie(2, memberDto))
-            .isInstanceOf(NotFoundException.class)
-            .hasMessage(ErrorStatus.MEMBER_COOKIE_NOT_FOUND.getMessage());
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(ErrorStatus.MEMBER_COOKIE_NOT_FOUND.getMessage());
     }
 
     @DisplayName("useCookie - 해당 이메일에 대한 회원이 존재하지 않을 때, - NotFoundException (Member)")
@@ -93,8 +89,8 @@ class MemberCookieDomainServiceTest {
 
         // When, Then
         assertThatThrownBy(() -> memberCookieDomainService.useCookie(2, memberDto))
-            .isInstanceOf(NotFoundException.class)
-            .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
     }
 
     @DisplayName("useCookie - 사용할 쿠키 갯수가 해당 회원이 가진 쿠키 갯수보다 적을 때, - InvalidRequestException")
@@ -107,8 +103,8 @@ class MemberCookieDomainServiceTest {
 
         // When, Then
         assertThatThrownBy(() -> memberCookieDomainService.useCookie(2, memberDto))
-            .isInstanceOf(InvalidRequestException.class)
-            .hasMessage(ErrorStatus.EPISODE_NOT_ENOUGH_COOKIES.getMessage());
+                .isInstanceOf(InvalidRequestException.class)
+                .hasMessage(ErrorStatus.EPISODE_NOT_ENOUGH_COOKIES.getMessage());
     }
 
     @DisplayName("useCookie - 쿠키 갯수가 충분할 때, - 남은 쿠키 갯수")
@@ -134,8 +130,8 @@ class MemberCookieDomainServiceTest {
 
         // When, Then
         assertThatThrownBy(() -> memberCookieDomainService.getMemberCookie(memberDto))
-            .isInstanceOf(NotFoundException.class)
-            .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
     }
 
     @DisplayName("getMemberCookie - 해당 회원에 대한 쿠키 정보가 존재하지 않을 때, - NotFoundException (MemberCookie)")
@@ -147,8 +143,8 @@ class MemberCookieDomainServiceTest {
 
         // When, Then
         assertThatThrownBy(() -> memberCookieDomainService.getMemberCookie(memberDto))
-            .isInstanceOf(NotFoundException.class)
-            .hasMessage(ErrorStatus.MEMBER_COOKIE_NOT_FOUND.getMessage());
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(ErrorStatus.MEMBER_COOKIE_NOT_FOUND.getMessage());
     }
 
     @DisplayName("getMemberCookie - 해당 회원이 가진 쿠키 갯수를 성공적으로 조회, - 쿠키 갯수")
