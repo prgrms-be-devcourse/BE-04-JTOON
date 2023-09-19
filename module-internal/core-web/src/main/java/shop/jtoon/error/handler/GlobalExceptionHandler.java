@@ -1,7 +1,5 @@
 package shop.jtoon.error.handler;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -10,13 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.List;
+
 import shop.jtoon.error.model.ErrorResponse;
-import shop.jtoon.exception.DuplicatedException;
-import shop.jtoon.exception.ForbiddenException;
-import shop.jtoon.exception.IamportException;
-import shop.jtoon.exception.InvalidRequestException;
-import shop.jtoon.exception.NotFoundException;
-import shop.jtoon.exception.UnauthorizedException;
+import shop.jtoon.exception.*;
 import shop.jtoon.type.ErrorStatus;
 
 @RestControllerAdvice
@@ -33,12 +28,6 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(NullPointerException.class)
 	public ErrorResponse handleNullPointerException(NullPointerException e) {
-		return makeResponseErrorFormat(e.getMessage());
-	}
-
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(IamportException.class)
-	protected ErrorResponse handleIamportException(IamportException e) {
 		return makeResponseErrorFormat(e.getMessage());
 	}
 
@@ -66,7 +55,7 @@ public class GlobalExceptionHandler {
 		return makeResponseErrorFormat(e.getErrorStatus());
 	}
 
-	@ResponseStatus(HttpStatus.FORBIDDEN)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(ForbiddenException.class)
 	protected ErrorResponse handleForbiddenException(ForbiddenException e) {
 		return makeResponseErrorFormat(e.getErrorStatus());

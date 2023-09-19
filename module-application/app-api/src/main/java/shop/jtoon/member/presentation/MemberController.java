@@ -30,6 +30,5 @@ public class MemberController {
 	@GetMapping("/email-authorization")
 	public String authenticateEmail(@RequestParam(value = "email") String email) {
 		return memberApplicationService.sendEmailAuthentication(email);
-
 	}
 }

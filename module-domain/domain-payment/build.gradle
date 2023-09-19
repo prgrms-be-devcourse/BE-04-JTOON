@@ -7,6 +7,9 @@ dependencies {
     annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
     annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 
+    // H2
+    runtimeOnly 'com.h2database:h2'
+
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

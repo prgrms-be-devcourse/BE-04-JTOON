@@ -29,11 +29,3 @@ project(':module-internal:smtp-client') {
         implementation project(':module-core')
     }
 }
-
-project(':module-internal:oauth2-client') {
-    bootJar.enabled = false
-
-    dependencies {
-        implementation project(':module-core')
-    }
-}
