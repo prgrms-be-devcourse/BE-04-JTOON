@@ -82,11 +82,18 @@ public class Member extends BaseTimeEntity {
 		this.loginType = loginType;
 	}
 
+	public static Member createOfId(Long memberId) {
+		Member member = new Member();
+		member.id = memberId;
+
+		return member;
+	}
+
 	public void updateLastLogin() {
 		lastLoginDate = LocalDateTime.now();
 	}
 
-	public boolean isAuthor(Member author) {
-		return Objects.equals(this.id, author.getId());
+	public boolean isEqual(Long memberId) {
+		return Objects.equals(this.id, memberId);
 	}
 }

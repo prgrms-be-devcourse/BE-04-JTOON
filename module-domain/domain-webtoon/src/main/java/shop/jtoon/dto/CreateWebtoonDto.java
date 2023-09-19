@@ -14,7 +14,7 @@ import shop.jtoon.entity.enums.Genre;
 
 @Builder
 public record CreateWebtoonDto(
-	Member member,
+	Long memberId,
 	String thumbnailUrl,
 	String title,
 	String description,
@@ -31,7 +31,7 @@ public record CreateWebtoonDto(
 			.ageLimit(ageLimit)
 			.thumbnailUrl(thumbnailUrl)
 			.cookieCount(cookieCount)
-			.author(member)
+			.author(Member.createOfId(memberId))
 			.build();
 	}
 

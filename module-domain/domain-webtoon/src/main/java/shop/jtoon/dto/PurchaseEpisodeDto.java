@@ -7,20 +7,20 @@ import shop.jtoon.entity.PurchasedEpisode;
 
 @Builder
 public record PurchaseEpisodeDto(
-	Member member,
+	Long memberId,
 	Long episodeId
 ) {
 
-	public static PurchaseEpisodeDto of(Member member, Long episodeId) {
+	public static PurchaseEpisodeDto of(Long memberId, Long episodeId) {
 		return PurchaseEpisodeDto.builder()
-			.member(member)
+			.memberId(memberId)
 			.episodeId(episodeId)
 			.build();
 	}
 
 	public PurchasedEpisode toEntity() {
 		return PurchasedEpisode.builder()
-			.member(member)
+			.member(Member.createOfId(memberId))
 			.episode(Episode.createOfId(episodeId))
 			.build();
 	}

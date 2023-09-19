@@ -15,7 +15,9 @@ public record EpisodeRes(
 	String thumbnailUrl,
 	boolean hasComment,
 	LocalDateTime openedAt,
-	Webtoon webtoon
+	Webtoon webtoon,
+	LocalDateTime createdAt,
+	LocalDateTime updatedAt
 ) {
 
 	public static EpisodeRes from(Episode episode) {
@@ -28,6 +30,8 @@ public record EpisodeRes(
 			.hasComment(episode.isHasComment())
 			.openedAt(episode.getOpenedAt())
 			.webtoon(episode.getWebtoon())
+			.createdAt(episode.getCreatedAt())
+			.updatedAt(episode.getUpdatedAt())
 			.build();
 	}
 

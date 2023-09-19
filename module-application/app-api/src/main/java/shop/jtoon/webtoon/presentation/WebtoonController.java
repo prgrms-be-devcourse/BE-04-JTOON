@@ -16,9 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import shop.jtoon.entity.Member;
+import shop.jtoon.annotation.CurrentUser;
+import shop.jtoon.dto.MemberDto;
 import shop.jtoon.entity.enums.DayOfWeek;
-import shop.jtoon.global.MemberThreadLocal;
 import shop.jtoon.response.EpisodeInfoRes;
 import shop.jtoon.response.EpisodesRes;
 import shop.jtoon.response.WebtoonInfoRes;
@@ -38,21 +38,24 @@ public class WebtoonController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createWebtoon(@RequestPart MultipartFile thumbnailImage, @RequestPart @Valid CreateWebtoonReq request) {
-		Member member = MemberThreadLocal.getMember();
-		webtoonService.createWebtoon(member, thumbnailImage, request);
+	public void createWebtoon(
+		@CurrentUser MemberDto member,
+		@RequestPart MultipartFile thumbnailImage,
+		@RequestPart @Valid CreateWebtoonReq request
+	) {
+		webtoonService.createWebtoon(member.id(), thumbnailImage, request);
 	}
 
 	@PostMapping("/{webtoonId}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createEpisode(
+		@CurrentUser MemberDto member,
 		@PathVariable Long webtoonId,
 		@RequestPart MultipartFile mainImage,
 		@RequestPart(required = false) MultipartFile thumbnailImage,
 		@RequestPart @Valid CreateEpisodeReq request
 	) {
-		Member member = MemberThreadLocal.getMember();
-		webtoonService.createEpisode(member, webtoonId, mainImage, thumbnailImage, request);
+		webtoonService.createEpisode(member.id(), webtoonId, mainImage, thumbnailImage, request);
 	}
 
 	@GetMapping
@@ -78,8 +81,7 @@ public class WebtoonController {
 	}
 
 	@PostMapping("/episodes/{episodeId}/purchase")
-	public void purchaseEpisode(@PathVariable Long episodeId) {
-		Member member = MemberThreadLocal.getMember();
-		webtoonService.purchaseEpisode(member, episodeId);
+	public void purchaseEpisode(@CurrentUser MemberDto member, @PathVariable Long episodeId) {
+		webtoonService.purchaseEpisode(member.id(), episodeId);
 	}
 }

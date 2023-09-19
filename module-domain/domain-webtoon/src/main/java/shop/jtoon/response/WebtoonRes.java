@@ -1,5 +1,7 @@
 package shop.jtoon.response;
 
+import java.time.LocalDateTime;
+
 import lombok.Builder;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.Webtoon;
@@ -14,7 +16,9 @@ public record WebtoonRes(
 	String thumbnailUrl,
 	int cookieCount,
 	int favoriteCount,
-	Member author
+	Member author,
+	LocalDateTime createdAt,
+	LocalDateTime updatedAt
 ) {
 
 	public static WebtoonRes from(Webtoon webtoon) {
@@ -27,6 +31,8 @@ public record WebtoonRes(
 			.cookieCount(webtoon.getCookieCount())
 			.favoriteCount(webtoon.getFavoriteCount())
 			.author(webtoon.getAuthor())
+			.createdAt(webtoon.getCreatedAt())
+			.updatedAt(webtoon.getUpdatedAt())
 			.build();
 	}
 }

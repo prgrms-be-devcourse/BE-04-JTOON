@@ -14,7 +14,6 @@ import shop.jtoon.dto.CreateEpisodeDto;
 import shop.jtoon.dto.CreateWebtoonDto;
 import shop.jtoon.dto.PurchaseEpisodeDto;
 import shop.jtoon.dto.UploadImageDto;
-import shop.jtoon.entity.Member;
 import shop.jtoon.entity.enums.DayOfWeek;
 import shop.jtoon.response.EpisodeInfoRes;
 import shop.jtoon.response.EpisodeRes;
@@ -41,24 +40,24 @@ public class WebtoonApplicationService {
 	private final S3Service s3Service;
 
 	@Transactional
-	public void createWebtoon(Member member, MultipartFile thumbnailImage, CreateWebtoonReq request) {
+	public void createWebtoon(Long memberId, MultipartFile thumbnailImage, CreateWebtoonReq request) {
 		webtoonDomainService.validateDuplicateTitle(request.title());
 		UploadImageDto uploadImageDto = request.toUploadImageDto(WEBTOON_THUMBNAIL, thumbnailImage);
 		String thumbnailUrl = s3Service.uploadImage(uploadImageDto);
-		CreateWebtoonDto dto = request.toDto(member, thumbnailUrl);
+		CreateWebtoonDto dto = request.toDto(memberId, thumbnailUrl);
 		webtoonDomainService.createWebtoon(dto);
 	}
 
 	@Transactional
 	public void createEpisode(
-		Member member,
+		Long memberId,
 		Long webtoonId,
 		MultipartFile mainImage,
 		MultipartFile thumbnailImage,
 		CreateEpisodeReq request
 	) {
 		WebtoonRes webtoon = webtoonDomainService.getWebtoonById(webtoonId);
-		webtoonDomainService.validateAuthor(member, webtoon.author());
+		webtoonDomainService.validateAuthor(memberId, webtoon.author());
 		UploadImageDto uploadMainImageDto = request.toUploadImageDto(EPISODE_MAIN, webtoon.title(), mainImage);
 		UploadImageDto uploadThumbnailImageDto = request.toUploadImageDto(
 			EPISODE_THUMBNAIL,
@@ -88,10 +87,10 @@ public class WebtoonApplicationService {
 	}
 
 	@Transactional
-	public void purchaseEpisode(Member member, Long episodeId) {
+	public void purchaseEpisode(Long memberId, Long episodeId) {
 		EpisodeRes episode = episodeDomainService.getEpisodeById(episodeId);
-		memberCookieDomainService.useCookie(member, episode.getCookieCount());
-		PurchaseEpisodeDto dto = PurchaseEpisodeDto.of(member, episodeId);
+		memberCookieDomainService.useCookie(memberId, episode.getCookieCount());
+		PurchaseEpisodeDto dto = PurchaseEpisodeDto.of(memberId, episodeId);
 		episodeDomainService.purchaseEpisode(dto);
 	}
 }
