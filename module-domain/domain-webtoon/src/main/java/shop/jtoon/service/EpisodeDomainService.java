@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.dto.CreateEpisodeDto;
+import shop.jtoon.dto.GetEpisodesDto;
 import shop.jtoon.dto.PurchaseEpisodeDto;
 import shop.jtoon.entity.Episode;
 import shop.jtoon.entity.PurchasedEpisode;
@@ -19,7 +20,6 @@ import shop.jtoon.repository.PurchasedEpisodeRepository;
 import shop.jtoon.response.EpisodeInfoRes;
 import shop.jtoon.response.EpisodeRes;
 import shop.jtoon.response.EpisodesRes;
-import shop.jtoon.type.CustomPageRequest;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,8 +36,8 @@ public class EpisodeDomainService {
 		episodeRepository.save(episode);
 	}
 
-	public List<EpisodesRes> getEpisodes(Long webtoonId, CustomPageRequest request) {
-		return episodeSearchRepository.getEpisodes(webtoonId, request)
+	public List<EpisodesRes> getEpisodes(GetEpisodesDto dto) {
+		return episodeSearchRepository.getEpisodes(dto.webtoonId(), dto.size(), dto.offset())
 			.stream()
 			.map(EpisodesRes::from)
 			.toList();

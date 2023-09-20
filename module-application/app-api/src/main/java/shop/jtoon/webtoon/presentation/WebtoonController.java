@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,10 +22,10 @@ import shop.jtoon.response.EpisodeInfoRes;
 import shop.jtoon.response.EpisodesRes;
 import shop.jtoon.response.WebtoonInfoRes;
 import shop.jtoon.response.WebtoonItemRes;
-import shop.jtoon.type.CustomPageRequest;
 import shop.jtoon.webtoon.application.WebtoonApplicationService;
 import shop.jtoon.webtoon.request.CreateEpisodeReq;
 import shop.jtoon.webtoon.request.CreateWebtoonReq;
+import shop.jtoon.webtoon.request.GetEpisodesReq;
 import shop.jtoon.webtoon.request.GetWebtoonsReq;
 
 @RestController
@@ -69,9 +68,9 @@ public class WebtoonController {
 		return webtoonService.getWebtoon(webtoonId);
 	}
 
-	@GetMapping("/list")
+	@GetMapping("/{webtoonId}/episodes")
 	@ResponseStatus(HttpStatus.OK)
-	public List<EpisodesRes> getEpisodes(@RequestParam Long webtoonId, CustomPageRequest request) {
+	public List<EpisodesRes> getEpisodes(@PathVariable Long webtoonId, GetEpisodesReq request) {
 		return webtoonService.getEpisodes(webtoonId, request);
 	}
 

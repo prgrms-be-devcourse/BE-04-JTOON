@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.dto.CreateEpisodeDto;
 import shop.jtoon.dto.CreateWebtoonDto;
+import shop.jtoon.dto.GetEpisodesDto;
 import shop.jtoon.dto.PurchaseEpisodeDto;
 import shop.jtoon.dto.UploadImageDto;
 import shop.jtoon.entity.enums.DayOfWeek;
@@ -27,9 +28,9 @@ import shop.jtoon.service.EpisodeDomainService;
 import shop.jtoon.service.MemberCookieDomainService;
 import shop.jtoon.service.S3Service;
 import shop.jtoon.service.WebtoonDomainService;
-import shop.jtoon.type.CustomPageRequest;
 import shop.jtoon.webtoon.request.CreateEpisodeReq;
 import shop.jtoon.webtoon.request.CreateWebtoonReq;
+import shop.jtoon.webtoon.request.GetEpisodesReq;
 import shop.jtoon.webtoon.request.GetWebtoonsReq;
 
 @Service
@@ -93,8 +94,9 @@ public class WebtoonApplicationService {
 		return webtoonDomainService.getWebtoon(webtoonId);
 	}
 
-	public List<EpisodesRes> getEpisodes(Long webtoonId, CustomPageRequest request) {
-		return episodeDomainService.getEpisodes(webtoonId, request);
+	public List<EpisodesRes> getEpisodes(Long webtoonId, GetEpisodesReq request) {
+		GetEpisodesDto dto = request.toDto(webtoonId);
+		return episodeDomainService.getEpisodes(dto);
 	}
 
 	public EpisodeInfoRes getEpisode(Long episodeId) {
