@@ -1,25 +1,23 @@
 package shop.jtoon.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.dto.UploadImageDto;
-import shop.jtoon.util.S3Uploader;
+import shop.jtoon.util.S3Client;
 
 @Service
 @RequiredArgsConstructor
 public class S3Service {
 
-	private final S3Uploader s3Uploader;
-
-	@Value("${spring.cloud.aws.cloud-front.url}")
-	private String IMAGE_URL;
+	private final S3Client s3Client;
 
 	public String uploadImage(UploadImageDto dto) {
 		String key = dto.toKey();
-		s3Uploader.uploadImage(key, dto.image());
+		return s3Client.uploadImage(key, dto.image());
+	}
 
-		return IMAGE_URL + key;
+	public void deleteImage(String imageUrl) {
+		s3Client.delete(imageUrl);
 	}
 }
