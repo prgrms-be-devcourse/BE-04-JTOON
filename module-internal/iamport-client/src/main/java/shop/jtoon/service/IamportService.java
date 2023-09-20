@@ -8,7 +8,6 @@ import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.jtoon.dto.CancelDto;
 import shop.jtoon.exception.IamportException;
 import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.type.ErrorStatus;
@@ -34,13 +33,13 @@ public class IamportService {
     }
 
     @Transactional
-    public void cancelIamport(CancelDto cancelDto) {
+    public void cancelIamport(String impUid, String reason, BigDecimal checksum, String refundHolder) {
         try {
-            IamportResponse<Payment> irsp = iamportClient.paymentByImpUid(cancelDto.impUid());
+            IamportResponse<Payment> irsp = iamportClient.paymentByImpUid(impUid);
             CancelData cancelData = new CancelData(irsp.getResponse().getImpUid(), true);
-            cancelData.setReason(cancelDto.reason());
-            cancelData.setChecksum(cancelDto.checksum());
-            cancelData.setRefund_holder(cancelDto.refundHolder());
+            cancelData.setReason(reason);
+            cancelData.setChecksum(checksum);
+            cancelData.setRefund_holder(refundHolder);
             iamportClient.cancelPaymentByImpUid(cancelData);
         } catch (IamportResponseException | IOException e) {
             throw new IamportException(e.getMessage());
