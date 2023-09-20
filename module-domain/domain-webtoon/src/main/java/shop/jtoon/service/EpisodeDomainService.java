@@ -13,6 +13,7 @@ import shop.jtoon.dto.GetEpisodesDto;
 import shop.jtoon.dto.PurchaseEpisodeDto;
 import shop.jtoon.entity.Episode;
 import shop.jtoon.entity.PurchasedEpisode;
+import shop.jtoon.exception.DuplicatedException;
 import shop.jtoon.exception.NotFoundException;
 import shop.jtoon.repository.EpisodeRepository;
 import shop.jtoon.repository.EpisodeSearchRepository;
@@ -58,5 +59,11 @@ public class EpisodeDomainService {
 		return episodeRepository.findById(episodeId)
 			.map(EpisodeRes::from)
 			.orElseThrow(() -> new NotFoundException(EPISODE_NOT_FOUND));
+	}
+
+	public void validateDuplicateNo(Long webtoonId, int no) {
+		if (episodeRepository.existsByWebtoonIdAndNo(webtoonId, no)) {
+			throw new DuplicatedException(EPISODE_NUMBER_DUPLICATED);
+		}
 	}
 }

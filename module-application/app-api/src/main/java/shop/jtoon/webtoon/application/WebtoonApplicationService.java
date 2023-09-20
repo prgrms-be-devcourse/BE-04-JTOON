@@ -67,6 +67,7 @@ public class WebtoonApplicationService {
 	) {
 		WebtoonRes webtoon = webtoonDomainService.getWebtoonById(webtoonId);
 		webtoonDomainService.validateAuthor(memberId, webtoon.author());
+		episodeDomainService.validateDuplicateNo(webtoonId, request.no());
 		UploadImageDto uploadMainImageDto = request.toUploadImageDto(EPISODE_MAIN, webtoon.title(), mainImage);
 		UploadImageDto uploadThumbnailImageDto = request.toUploadImageDto(
 			EPISODE_THUMBNAIL,
