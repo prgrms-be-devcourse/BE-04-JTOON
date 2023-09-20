@@ -37,7 +37,7 @@ public class MemberApplicationService {
 		memberDomainService.localLoginMember(loginReq.toDto());
 		String accessToken = jwtInternalService.generateAccessToken(loginReq.email());
 		String refreshToken = jwtInternalService.generateRefreshToken();
-		jwtApplicationService.saveRefreshTokenDb(refreshToken, loginReq.email());
+		jwtApplicationService.saveRefreshToken(refreshToken, loginReq.email());
 
 		response.addCookie(TokenCookie.of(ACCESS_TOKEN_HEADER, accessToken));
 		response.addCookie(TokenCookie.of(REFRESH_TOKEN_HEADER, refreshToken));

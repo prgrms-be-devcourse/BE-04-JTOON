@@ -18,7 +18,7 @@ public class JwtApplicationService implements RefreshTokenService {
 	}
 
 	@Override
-	public void saveRefreshTokenDb(String refreshToken, String email) {
+	public void saveRefreshToken(String refreshToken, String email) {
 		redisTokenDomainService.saveRefreshToken(refreshToken, email);
 	}
 

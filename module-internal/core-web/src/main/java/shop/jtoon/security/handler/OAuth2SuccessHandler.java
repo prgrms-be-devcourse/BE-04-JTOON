@@ -33,6 +33,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		String refreshToken = jwtInternalService.generateRefreshToken();
 		response.addCookie(TokenCookie.of(ACCESS_TOKEN_HEADER, accessToken));
 		response.addCookie(TokenCookie.of(REFRESH_TOKEN_HEADER, refreshToken));
-		jwtService.saveRefreshTokenDb(refreshToken, email);
+		jwtService.saveRefreshToken(refreshToken, email);
 	}
 }
