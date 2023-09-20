@@ -25,7 +25,7 @@ project(':module-domain:domain-payment') {
     }
 }
 
-project(':module-domain:domain-security') {
+project(':module-domain:domain-redis') {
     bootJar.enabled = false
 
     dependencies {

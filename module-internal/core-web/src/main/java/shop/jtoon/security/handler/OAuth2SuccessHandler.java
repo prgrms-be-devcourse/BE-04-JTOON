@@ -2,9 +2,6 @@ package shop.jtoon.security.handler;
 
 import static shop.jtoon.util.SecurityConstant.*;
 
-import java.util.Map;
-import java.util.Objects;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -12,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.security.service.JwtInternalService;
 import shop.jtoon.security.service.RefreshTokenService;
@@ -34,6 +33,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		String refreshToken = jwtInternalService.generateRefreshToken();
 		response.addCookie(TokenCookie.of(ACCESS_TOKEN_HEADER, accessToken));
 		response.addCookie(TokenCookie.of(REFRESH_TOKEN_HEADER, refreshToken));
-		jwtService.saveRefreshTokenDb(email, refreshToken);
+		jwtService.saveRefreshTokenDb(refreshToken, email);
 	}
 }

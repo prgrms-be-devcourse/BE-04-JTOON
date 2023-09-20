@@ -45,7 +45,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				accessToken = accessToken.split(SPLIT_DATA)[1];
 
 				if (!jwtInternalService.isTokenValid(accessToken)) {
-					String refreshToken = validateAndGetRefreshToken(request);
+					String refreshToken = getRefreshToken(request);
+					jwtInternalService.validateRefreshTokenRedis(refreshToken);
 					accessToken = regenerateTokens(refreshToken, response);
 				}
 
@@ -68,15 +69,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
-	private String validateAndGetRefreshToken(HttpServletRequest request) {
+	private String getRefreshToken(HttpServletRequest request) {
 		String refreshToken = Arrays.stream(request.getCookies())
 			.filter(coo -> coo.getName().equals(REFRESH_TOKEN_HEADER))
 			.map(Cookie::getValue)
 			.findFirst()
 			.orElse(null);
 		refreshToken = refreshToken.split(SPLIT_DATA)[1];
-		jwtInternalService.isTokenValid(refreshToken);
-		jwtInternalService.verifyRefreshTokenDb(refreshToken);
 
 		return refreshToken;
 	}
@@ -84,7 +83,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private String regenerateTokens(String refreshToken, HttpServletResponse response) {
 		String newAccessToken = jwtInternalService.reGenerateAccessToken(refreshToken);
 		String newRefreshToken = jwtInternalService.generateRefreshToken();
-		jwtInternalService.updateRefreshTokenDb(newAccessToken, newRefreshToken);
+		jwtInternalService.updateRefreshTokenDb(newAccessToken, newRefreshToken, refreshToken);
 		Cookie accessCookie = TokenCookie.of(ACCESS_TOKEN_HEADER, newAccessToken);
 		Cookie refreshCookie = TokenCookie.of(REFRESH_TOKEN_HEADER, newRefreshToken);
 		response.addCookie(accessCookie);

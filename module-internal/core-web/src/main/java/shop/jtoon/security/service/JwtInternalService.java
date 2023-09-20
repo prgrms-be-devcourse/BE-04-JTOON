@@ -3,12 +3,6 @@ package shop.jtoon.security.service;
 import static shop.jtoon.type.ErrorStatus.*;
 import static shop.jtoon.util.SecurityConstant.*;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -19,9 +13,15 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import shop.jtoon.exception.InvalidRequestException;
+import shop.jtoon.exception.UnauthorizedException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -67,10 +67,6 @@ public class JwtInternalService {
 		return false;
 	}
 
-	public void verifyRefreshTokenDb(String refreshToken) {
-		jwtService.verifyRefreshTokenDb(refreshToken);
-	}
-
 	public String reGenerateAccessToken(String refreshToken) {
 		String email = jwtService.getRefreshTokenEmail(refreshToken);
 		return generateAccessToken(email);
@@ -99,9 +95,15 @@ public class JwtInternalService {
 		return headers;
 	}
 
-	public void updateRefreshTokenDb(String accessToken, String newRefreshToken) {
+	public void updateRefreshTokenDb(String accessToken, String newRefreshToken, String oldRefreshToken) {
 		String email = getClaimsBodyEmail(accessToken);
-		jwtService.updateRefreshTokenDb(email, newRefreshToken);
+		jwtService.updateRefreshToken(newRefreshToken, email, oldRefreshToken);
+	}
+
+	public void validateRefreshTokenRedis(String refreshToken) throws UnauthorizedException {
+		if (!jwtService.hasRefreshToken(refreshToken)) {
+			throw new UnauthorizedException(MEMBER_REFRESH_TOKEN_NOT_FOUND);
+		}
 	}
 
 	public String getClaimsBodyEmail(String token) {

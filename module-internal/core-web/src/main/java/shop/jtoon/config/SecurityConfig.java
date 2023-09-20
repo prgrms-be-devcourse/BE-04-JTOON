@@ -34,14 +34,14 @@ public class SecurityConfig {
 		return web -> web.ignoring()
 			.requestMatchers("/members/sign-up")
 			.requestMatchers("/members/email-authorization")
-			.requestMatchers("/members/local-login");
+			.requestMatchers("/members/local-login")
+			;
 	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests(request -> request
-				.requestMatchers("/members").permitAll()
 				.requestMatchers("/members/**").hasAuthority("USER")
 				.anyRequest().permitAll())
 			.csrf(AbstractHttpConfigurer::disable)
