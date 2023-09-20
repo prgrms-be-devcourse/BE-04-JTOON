@@ -85,14 +85,14 @@ public class WebtoonDomainService {
 	}
 
 	private List<String> getDayOfWeeks(Long webtoonId) {
-		return dayOfWeekWebtoonRepository.findById(webtoonId)
+		return dayOfWeekWebtoonRepository.findByWebtoonId(webtoonId)
 			.stream()
-			.map(webtoon -> webtoon.getDayOfWeek().name())
+			.map(w -> w.getDayOfWeek().name())
 			.toList();
 	}
 
 	private List<GenreRes> getGenres(Long webtoonId) {
-		return genreWebtoonRepository.findById(webtoonId)
+		return genreWebtoonRepository.findByWebtoonId(webtoonId)
 			.stream()
 			.map(GenreRes::from)
 			.toList();

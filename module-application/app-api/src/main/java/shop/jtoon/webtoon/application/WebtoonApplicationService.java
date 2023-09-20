@@ -1,6 +1,7 @@
 package shop.jtoon.webtoon.application;
 
 import static shop.jtoon.common.ImageType.*;
+import static shop.jtoon.type.ErrorStatus.*;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import shop.jtoon.dto.CreateWebtoonDto;
 import shop.jtoon.dto.PurchaseEpisodeDto;
 import shop.jtoon.dto.UploadImageDto;
 import shop.jtoon.entity.enums.DayOfWeek;
+import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.response.EpisodeInfoRes;
 import shop.jtoon.response.EpisodeRes;
 import shop.jtoon.response.EpisodesRes;
@@ -44,8 +46,14 @@ public class WebtoonApplicationService {
 		webtoonDomainService.validateDuplicateTitle(request.title());
 		UploadImageDto uploadImageDto = request.toUploadImageDto(WEBTOON_THUMBNAIL, thumbnailImage);
 		String thumbnailUrl = s3Service.uploadImage(uploadImageDto);
-		CreateWebtoonDto dto = request.toDto(memberId, thumbnailUrl);
-		webtoonDomainService.createWebtoon(dto);
+
+		try {
+			CreateWebtoonDto dto = request.toDto(memberId, thumbnailUrl);
+			webtoonDomainService.createWebtoon(dto);
+		} catch (RuntimeException e) {
+			s3Service.deleteImage(thumbnailUrl);
+			throw new InvalidRequestException(WEBTOON_CREATE_FAIL);
+		}
 	}
 
 	@Transactional
@@ -66,8 +74,15 @@ public class WebtoonApplicationService {
 		);
 		String mainUrl = s3Service.uploadImage(uploadMainImageDto);
 		String thumbnailUrl = s3Service.uploadImage(uploadThumbnailImageDto);
-		CreateEpisodeDto dto = request.toDto(webtoonId, mainUrl, thumbnailUrl);
-		episodeDomainService.createEpisode(dto);
+
+		try {
+			CreateEpisodeDto dto = request.toDto(webtoonId, mainUrl, thumbnailUrl);
+			episodeDomainService.createEpisode(dto);
+		} catch (RuntimeException e) {
+			s3Service.deleteImage(mainUrl);
+			s3Service.deleteImage(thumbnailUrl);
+			throw new InvalidRequestException(EPISODE_CREATE_FAIL);
+		}
 	}
 
 	public Map<DayOfWeek, List<WebtoonItemRes>> getWebtoons(GetWebtoonsReq request) {

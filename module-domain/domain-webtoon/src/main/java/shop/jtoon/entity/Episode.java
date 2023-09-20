@@ -43,9 +43,8 @@ public class Episode extends BaseTimeEntity {
 	@Column(name = "main_url", nullable = false, length = 500)
 	private String mainUrl;
 
-	@ColumnDefault("'default thumbnail url'")
 	@Column(name = "thumbnail_url", nullable = false, length = 500)
-	private String thumbnailUrl = "default thumbnail url";
+	private String thumbnailUrl;
 
 	@ColumnDefault("1")
 	@Column(name = "has_comment", nullable = false)
@@ -71,7 +70,7 @@ public class Episode extends BaseTimeEntity {
 		this.no = validateEpisodeNumber(no);
 		this.title = requireNonNull(title, EPISODE_TITLE_IS_NULL.getMessage());
 		this.mainUrl = requireNonNull(mainUrl, EPISODE_MAIN_URL_IS_NULL.getMessage());
-		this.thumbnailUrl = thumbnailUrl;
+		this.thumbnailUrl = requireNonNull(thumbnailUrl, EPISODE_THUMBNAIL_URL_IS_NULL.getMessage());
 		this.hasComment = hasComment;
 		this.openedAt = requireNonNull(openedAt, EPISODE_OPENED_AT_IS_NULL.getMessage());
 		this.webtoon = requireNonNull(webtoon, WEBTOON_IS_NULL.getMessage());

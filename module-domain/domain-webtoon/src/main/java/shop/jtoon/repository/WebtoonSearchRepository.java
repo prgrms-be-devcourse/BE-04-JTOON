@@ -24,8 +24,8 @@ public class WebtoonSearchRepository {
 
 	public List<DayOfWeekWebtoon> findWebtoons(DayOfWeek dayOfWeek, String keyword) {
 		return jpaQueryFactory.selectFrom(dayOfWeekWebtoon)
-			.innerJoin(dayOfWeekWebtoon.webtoon, webtoon)
-			.innerJoin(webtoon.author, member)
+			.join(dayOfWeekWebtoon.webtoon, webtoon)
+			.join(webtoon.author, member)
 			.where(
 				DynamicQuery.generateEq(dayOfWeek, dayOfWeekWebtoon.dayOfWeek::eq),
 				DynamicQuery.generateEq(keyword, this::containsKeyword)

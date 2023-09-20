@@ -3,8 +3,6 @@ package shop.jtoon.entity;
 import static java.util.Objects.*;
 import static shop.jtoon.type.ErrorStatus.*;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,9 +39,8 @@ public class Webtoon extends BaseTimeEntity {
 	@Column(name = "age_limit", nullable = false)
 	private AgeLimit ageLimit;
 
-	@ColumnDefault("'default thumbnail url'")
 	@Column(name = "thumbnail_url", nullable = false, length = 500)
-	private String thumbnailUrl = "default thumbnail url";
+	private String thumbnailUrl;
 
 	@Column(name = "cookie_count", nullable = false)
 	private int cookieCount;
@@ -64,11 +61,10 @@ public class Webtoon extends BaseTimeEntity {
 		int cookieCount,
 		Member author
 	) {
-
 		this.title = requireNonNull(title, WEBTOON_TITLE_IS_NULL.getMessage());
 		this.description = requireNonNull(description, WEBTOON_DESCRIPTION_IS_NULL.getMessage());
 		this.ageLimit = requireNonNull(ageLimit, WEBTOON_AGE_LIMIT_IS_NULL.getMessage());
-		this.thumbnailUrl = thumbnailUrl;
+		this.thumbnailUrl = requireNonNull(thumbnailUrl, WEBTOON_THUMBNAIL_URL_IS_NULL.getMessage());
 		this.cookieCount = validateCookieCount(cookieCount);
 		this.author = requireNonNull(author, WEBTOON_AUTHOR_IS_NULL.getMessage());
 	}

@@ -33,12 +33,12 @@ public class MemberCookieDomainService {
 
 	@Transactional
 	public void useCookie(Long memberId, int cookieCount) {
-		MemberCookie memberCookie = getCookieByMember(memberId);
+		MemberCookie memberCookie = getByMemberId(memberId);
 		memberCookie.decreaseCookieCount(cookieCount);
 	}
 
-	private MemberCookie getCookieByMember(Long memberId) {
-		return memberCookieRepository.findByMember(Member.createOfId(memberId))
+	private MemberCookie getByMemberId(Long memberId) {
+		return memberCookieRepository.findByMemberId(memberId)
 			.orElseThrow(() -> new NotFoundException(MEMBER_COOKIE_NOT_FOUND));
 	}
 }
