@@ -19,7 +19,7 @@ import shop.jtoon.annotation.CurrentUser;
 import shop.jtoon.dto.MemberDto;
 import shop.jtoon.entity.enums.DayOfWeek;
 import shop.jtoon.response.EpisodeInfoRes;
-import shop.jtoon.response.EpisodesRes;
+import shop.jtoon.response.EpisodeItemRes;
 import shop.jtoon.response.WebtoonInfoRes;
 import shop.jtoon.response.WebtoonItemRes;
 import shop.jtoon.webtoon.application.WebtoonApplicationService;
@@ -70,7 +70,7 @@ public class WebtoonController {
 
 	@GetMapping("/{webtoonId}/episodes")
 	@ResponseStatus(HttpStatus.OK)
-	public List<EpisodesRes> getEpisodes(@PathVariable Long webtoonId, GetEpisodesReq request) {
+	public List<EpisodeItemRes> getEpisodes(@PathVariable Long webtoonId, GetEpisodesReq request) {
 		return webtoonService.getEpisodes(webtoonId, request);
 	}
 

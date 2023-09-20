@@ -18,8 +18,8 @@ import shop.jtoon.repository.EpisodeRepository;
 import shop.jtoon.repository.EpisodeSearchRepository;
 import shop.jtoon.repository.PurchasedEpisodeRepository;
 import shop.jtoon.response.EpisodeInfoRes;
+import shop.jtoon.response.EpisodeItemRes;
 import shop.jtoon.response.EpisodeRes;
-import shop.jtoon.response.EpisodesRes;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,10 +36,10 @@ public class EpisodeDomainService {
 		episodeRepository.save(episode);
 	}
 
-	public List<EpisodesRes> getEpisodes(GetEpisodesDto dto) {
+	public List<EpisodeItemRes> getEpisodes(GetEpisodesDto dto) {
 		return episodeSearchRepository.getEpisodes(dto.webtoonId(), dto.size(), dto.offset())
 			.stream()
-			.map(EpisodesRes::from)
+			.map(EpisodeItemRes::from)
 			.toList();
 	}
 

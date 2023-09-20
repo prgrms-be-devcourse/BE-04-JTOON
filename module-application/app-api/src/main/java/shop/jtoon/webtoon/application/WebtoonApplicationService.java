@@ -19,8 +19,8 @@ import shop.jtoon.dto.UploadImageDto;
 import shop.jtoon.entity.enums.DayOfWeek;
 import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.response.EpisodeInfoRes;
+import shop.jtoon.response.EpisodeItemRes;
 import shop.jtoon.response.EpisodeRes;
-import shop.jtoon.response.EpisodesRes;
 import shop.jtoon.response.WebtoonInfoRes;
 import shop.jtoon.response.WebtoonItemRes;
 import shop.jtoon.response.WebtoonRes;
@@ -94,7 +94,7 @@ public class WebtoonApplicationService {
 		return webtoonDomainService.getWebtoon(webtoonId);
 	}
 
-	public List<EpisodesRes> getEpisodes(Long webtoonId, GetEpisodesReq request) {
+	public List<EpisodeItemRes> getEpisodes(Long webtoonId, GetEpisodesReq request) {
 		GetEpisodesDto dto = request.toDto(webtoonId);
 		return episodeDomainService.getEpisodes(dto);
 	}
