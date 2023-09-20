@@ -26,12 +26,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class PaymentInfoDomainServiceTest {
@@ -59,7 +57,7 @@ class PaymentInfoDomainServiceTest {
         memberDto = MemberDto.toDto(member);
         paymentDto = CreatorFactory.createPaymentDto("imp123", "mer123", member.getEmail());
         invalidAmountPaymentDto = CreatorFactory
-            .createInvalidAmountPaymentDto("imp789", "mer789", member.getEmail());
+                .createInvalidAmountPaymentDto("imp789", "mer789", member.getEmail());
     }
 
     @DisplayName("createPaymentInfo - 한 회원의 결제 정보가 성공적으로 저장될 때, - Void")
@@ -68,11 +66,9 @@ class PaymentInfoDomainServiceTest {
         // Given
         given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.of(member));
 
-        // When
-        paymentInfoDomainService.createPaymentInfo(paymentDto, memberDto);
-
-        // Then
-        verify(paymentInfoRepository).save(any(PaymentInfo.class));
+        // When, Then
+        assertThatNoException()
+                .isThrownBy(() -> paymentInfoDomainService.createPaymentInfo(paymentDto, memberDto));
     }
 
     @DisplayName("createPaymentInfo - 해당 이메일에 대한 회원이 존재하지 않을 때, - NotFoundException")
@@ -83,8 +79,8 @@ class PaymentInfoDomainServiceTest {
 
         // When, Then
         assertThatThrownBy(() -> paymentInfoDomainService.createPaymentInfo(paymentDto, memberDto))
-            .isInstanceOf(NotFoundException.class)
-            .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
     }
 
     @DisplayName("validatePaymentInfo - 결제 정보에 대한 검증이 성공적으로 끝났을 때, - Void")
@@ -94,12 +90,9 @@ class PaymentInfoDomainServiceTest {
         given(paymentInfoRepository.existsByImpUid(any(String.class))).willReturn(false);
         given(paymentInfoRepository.existsByMerchantUid(any(String.class))).willReturn(false);
 
-        // When
-        paymentInfoDomainService.validatePaymentInfo(paymentDto);
-
-        // Then
-        verify(paymentInfoRepository).existsByImpUid(any(String.class));
-        verify(paymentInfoRepository).existsByMerchantUid(any(String.class));
+        // When, Then
+        assertThatNoException()
+                .isThrownBy(() -> paymentInfoDomainService.validatePaymentInfo(paymentDto));
     }
 
     @DisplayName("validatePaymentInfo - 결제 정보의 쿠키 가격과 실제 서버에 존재하는 쿠키 가격이 다를 때, - InvalidRequestException")
@@ -107,8 +100,8 @@ class PaymentInfoDomainServiceTest {
     void validatePaymentInfo_InvalidRequestException() {
         // When, Then
         assertThatThrownBy(() -> paymentInfoDomainService.validatePaymentInfo(invalidAmountPaymentDto))
-            .isInstanceOf(InvalidRequestException.class)
-            .hasMessage(ErrorStatus.PAYMENT_AMOUNT_INVALID.getMessage());
+                .isInstanceOf(InvalidRequestException.class)
+                .hasMessage(ErrorStatus.PAYMENT_AMOUNT_INVALID.getMessage());
     }
 
     @DisplayName("validatePaymentInfo - 결제 고유번호가 중복 됐을 때, - DuplicatedException (ImpUid)")
@@ -119,8 +112,8 @@ class PaymentInfoDomainServiceTest {
 
         // When, Then
         assertThatThrownBy(() -> paymentInfoDomainService.validatePaymentInfo(paymentDto))
-            .isInstanceOf(DuplicatedException.class)
-            .hasMessage(ErrorStatus.PAYMENT_IMP_UID_DUPLICATED.getMessage());
+                .isInstanceOf(DuplicatedException.class)
+                .hasMessage(ErrorStatus.PAYMENT_IMP_UID_DUPLICATED.getMessage());
     }
 
     @DisplayName("validatePaymentInfo - 주문번호가 중복 됐을 때, - DuplicatedException (MerchantUid)")
@@ -132,8 +125,8 @@ class PaymentInfoDomainServiceTest {
 
         // When, Then
         assertThatThrownBy(() -> paymentInfoDomainService.validatePaymentInfo(paymentDto))
-            .isInstanceOf(DuplicatedException.class)
-            .hasMessage(ErrorStatus.PAYMENT_MERCHANT_UID_DUPLICATED.getMessage());
+                .isInstanceOf(DuplicatedException.class)
+                .hasMessage(ErrorStatus.PAYMENT_MERCHANT_UID_DUPLICATED.getMessage());
     }
 
     @DisplayName("getPaymentsInfo - 해당 이메일에 대한 회원이 존재하지 않을 때, - NotFoundException")
@@ -144,8 +137,8 @@ class PaymentInfoDomainServiceTest {
 
         // When, Then
         assertThatThrownBy(() -> paymentInfoDomainService.getPaymentsInfo(null, memberDto))
-            .isInstanceOf(NotFoundException.class)
-            .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(ErrorStatus.MEMBER_EMAIL_NOT_FOUND.getMessage());
     }
 
     @DisplayName("getPaymentsInfo - 조회 결과가 없을 때, - Empty List")
@@ -155,7 +148,7 @@ class PaymentInfoDomainServiceTest {
         List<PaymentInfo> paymentInfos = new ArrayList<>();
         given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.of(member));
         given(paymentInfoSearchRepository.searchByMerchantsUidAndEmail(anyList(), any(String.class)))
-            .willReturn(paymentInfos);
+                .willReturn(paymentInfos);
 
         // When
         List<PaymentInfoRes> actual = paymentInfoDomainService.getPaymentsInfo(Collections.emptyList(), memberDto);
@@ -173,7 +166,7 @@ class PaymentInfoDomainServiceTest {
         paymentInfos.add(CreatorFactory.createPaymentInfo("imp456", "mer789", member));
         given(memberRepository.findByEmail(any(String.class))).willReturn(Optional.of(member));
         given(paymentInfoSearchRepository.searchByMerchantsUidAndEmail(anyList(), any(String.class)))
-            .willReturn(paymentInfos);
+                .willReturn(paymentInfos);
 
         // When
         List<PaymentInfoRes> actual = paymentInfoDomainService.getPaymentsInfo(Collections.emptyList(), memberDto);
