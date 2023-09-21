@@ -3,11 +3,12 @@ package shop.jtoon.service;
 import static shop.jtoon.type.ErrorStatus.*;
 import static shop.jtoon.util.SecurityConstant.*;
 
+import java.util.Optional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.dto.LoginDto;
 import shop.jtoon.dto.MemberDto;
@@ -66,13 +67,18 @@ public class MemberDomainService {
 	}
 
 	public MemberDto findMemberDtoByEmail(String email) {
-		Member member =  memberRepository.findByEmail(email)
+		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new NotFoundException(MEMBER_EMAIL_NOT_FOUND));
 		return MemberDto.toDto(member);
 	}
 
 	public Member findByEmail(String email) {
-		return  memberRepository.findByEmail(email)
+		return memberRepository.findByEmail(email)
 			.orElseThrow(() -> new NotFoundException(MEMBER_EMAIL_NOT_FOUND));
+	}
+
+	public Member findById(Long memberId) {
+		return memberRepository.findById(memberId)
+			.orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
 	}
 }

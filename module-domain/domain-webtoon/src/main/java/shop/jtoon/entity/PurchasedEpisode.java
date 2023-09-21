@@ -41,4 +41,11 @@ public class PurchasedEpisode extends BaseTimeEntity {
 		this.member = requireNonNull(member, MEMBER_IS_NULL.getMessage());
 		this.episode = requireNonNull(episode, EPISODE_IS_NULL.getMessage());
 	}
+
+	public static PurchasedEpisode create(Member member, Episode episode) {
+		return PurchasedEpisode.builder()
+			.member(member)
+			.episode(episode)
+			.build();
+	}
 }

@@ -86,6 +86,10 @@ public class Episode extends BaseTimeEntity {
 		return episode;
 	}
 
+	public int getCookieCount() {
+		return webtoon.getCookieCount();
+	}
+
 	private int validateEpisodeNumber(int no) {
 		if (no <= 0) {
 			throw new InvalidRequestException(EPISODE_NUMBER_POSITIVE);

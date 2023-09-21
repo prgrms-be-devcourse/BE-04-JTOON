@@ -11,6 +11,7 @@ public enum ErrorStatus {
 	COMMON_DTO_FIELD_INVALID_FORMAT("올바른 요청 정보가 아닙니다."),
 
 	MEMBER_IS_NULL("회원 값이 NULL 입니다."),
+	MEMBER_NOT_FOUND("존재하지 않는 회원입니다."),
 	MEMBER_EMAIL_INVALID_FORMAT("올바른 이메일 형식이 아닙니다."),
 	MEMBER_PASSWORD_INVALID_FORMAT("올바른 비밀번호형식이 아닙니다."),
 	MEMBER_NAME_INVALID_FORMAT("올바른 이름이 아닙니다."),
