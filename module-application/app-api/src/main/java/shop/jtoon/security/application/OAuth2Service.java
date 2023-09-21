@@ -13,20 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import shop.jtoon.dto.OAuthAttributes;
 import shop.jtoon.entity.LoginType;
 import shop.jtoon.entity.Member;
-import shop.jtoon.dto.OAuthAttributes;
 import shop.jtoon.exception.DuplicatedException;
+import shop.jtoon.member.application.MemberService;
 import shop.jtoon.security.service.CustomOAuth2UserService;
-import shop.jtoon.service.MemberDomainService;
 import shop.jtoon.type.ErrorStatus;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class OAuth2ApplicationService implements CustomOAuth2UserService {
+public class OAuth2Service implements CustomOAuth2UserService {
 
-	private final MemberDomainService memberDomainService;
+	private final MemberService memberService;
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -40,7 +40,7 @@ public class OAuth2ApplicationService implements CustomOAuth2UserService {
 			.getUserNameAttributeName();
 		Map<String, Object> attributes = oauth2User.getAttributes();
 		OAuthAttributes extractedAttributes = OAuthAttributes.of(loginType, userNameAttributeName, attributes);
-		Member member = memberDomainService.generateOrGetSocialMember(extractedAttributes.toSignUpDto());
+		Member member = memberService.generateOrGetSocialMember(extractedAttributes.toSignUpDto());
 
 		if (extractedAttributes.loginType() != member.getLoginType()) {
 			throw new DuplicatedException(ErrorStatus.MEMBER_DUPLICATE_SOCIAL_LOGIN);

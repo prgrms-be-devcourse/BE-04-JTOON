@@ -6,7 +6,5 @@ import java.util.Optional;
 import shop.jtoon.entity.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-	Optional<Member> findByPhone(String phone);
-	
 	Optional<Member> findByEmail(String email);
 }

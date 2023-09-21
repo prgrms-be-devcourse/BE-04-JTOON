@@ -3,12 +3,11 @@ package shop.jtoon.webtoon.application;
 import static shop.jtoon.common.ImageType.*;
 import static shop.jtoon.type.ErrorStatus.*;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.dto.UploadImageDto;
 import shop.jtoon.entity.Episode;
@@ -18,13 +17,13 @@ import shop.jtoon.entity.Webtoon;
 import shop.jtoon.exception.DuplicatedException;
 import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.exception.NotFoundException;
+import shop.jtoon.member.application.MemberService;
 import shop.jtoon.payment.application.MemberCookieService;
 import shop.jtoon.repository.EpisodeRepository;
 import shop.jtoon.repository.EpisodeSearchRepository;
 import shop.jtoon.repository.PurchasedEpisodeRepository;
 import shop.jtoon.response.EpisodeInfoRes;
 import shop.jtoon.response.EpisodeItemRes;
-import shop.jtoon.service.MemberDomainService;
 import shop.jtoon.service.S3Service;
 import shop.jtoon.webtoon.request.CreateEpisodeReq;
 import shop.jtoon.webtoon.request.GetEpisodesReq;
@@ -34,7 +33,7 @@ import shop.jtoon.webtoon.request.GetEpisodesReq;
 @RequiredArgsConstructor
 public class EpisodeService {
 
-	private final MemberDomainService memberService; //TODO MemberService 로 변경
+	private final MemberService memberService;
 	private final MemberCookieService memberCookieService;
 	private final WebtoonService webtoonService;
 	private final S3Service s3Service;

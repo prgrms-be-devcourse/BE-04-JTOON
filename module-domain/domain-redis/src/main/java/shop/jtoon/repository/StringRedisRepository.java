@@ -1,16 +1,16 @@
-package shop.jtoon.util;
+package shop.jtoon.repository;
 
 import static shop.jtoon.util.SecurityConstant.*;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 
-@Component
+@Repository
 @RequiredArgsConstructor
-public class StringRedisUtils {
+public class StringRedisRepository {
 
 	private final StringRedisTemplate redisTemplate;
 
