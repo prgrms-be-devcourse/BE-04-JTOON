@@ -9,19 +9,21 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.PaymentInfo;
+import shop.jtoon.exception.DuplicatedException;
 import shop.jtoon.payment.factory.CreatorFactory;
 import shop.jtoon.payment.request.PaymentReq;
 import shop.jtoon.payment.response.PaymentRes;
 import shop.jtoon.repository.PaymentInfoRepository;
 import shop.jtoon.repository.PaymentInfoSearchRepository;
 import shop.jtoon.service.PaymentInfoDomainService;
+import shop.jtoon.type.ErrorStatus;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
@@ -100,11 +102,32 @@ class PaymentInfoServiceTest {
         paymentInfoService.validatePaymentInfo(paymentReq);
 
         // Then
-        verify(paymentInfoDomainService).validatePaymentInfo(
-                any(String.class),
-                any(String.class),
-                any(String.class),
-                any(BigDecimal.class)
-        );
+        assertThatNoException()
+                .isThrownBy(() -> paymentInfoDomainService.validatePaymentInfo(any(String.class), any(BigDecimal.class)));
+    }
+
+    @DisplayName("validatePaymentInfo - 결제 고유번호가 중복 됐을 때, - DuplicatedException (ImpUid)")
+    @Test
+    void validatePaymentInfo_DuplicatedException_ImpUid() {
+        // Given
+        given(paymentInfoRepository.existsByImpUid(any(String.class))).willReturn(true);
+
+        // When, Then
+        assertThatThrownBy(() -> paymentInfoService.validatePaymentInfo(paymentReq))
+                .isInstanceOf(DuplicatedException.class)
+                .hasMessage(ErrorStatus.PAYMENT_IMP_UID_DUPLICATED.getMessage());
+    }
+
+    @DisplayName("validatePaymentInfo - 주문번호가 중복 됐을 때, - DuplicatedException (MerchantUid)")
+    @Test
+    void validatePaymentInfo_DuplicatedException_MerchantUid() {
+        // Given
+        given(paymentInfoRepository.existsByImpUid(any(String.class))).willReturn(false);
+        given(paymentInfoRepository.existsByMerchantUid(any(String.class))).willReturn(true);
+
+        // When, Then
+        assertThatThrownBy(() -> paymentInfoService.validatePaymentInfo(paymentReq))
+                .isInstanceOf(DuplicatedException.class)
+                .hasMessage(ErrorStatus.PAYMENT_MERCHANT_UID_DUPLICATED.getMessage());
     }
 }
