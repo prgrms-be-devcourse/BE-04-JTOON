@@ -46,7 +46,7 @@ jobs:
 
       - name: 설정파일 application-prod.yml 생성
         run: |
-          cd ./module-application/src/main/resources
+          cd ./module-application/app-api/src/main/resources
           touch ./application-prod.yml
           echo "${{ secrets.APPLICATION_PROD }}" > ./application-prod.yml
         shell: bash
