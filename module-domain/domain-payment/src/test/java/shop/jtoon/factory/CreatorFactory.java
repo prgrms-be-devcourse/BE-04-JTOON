@@ -1,6 +1,5 @@
 package shop.jtoon.factory;
 
-import shop.jtoon.dto.PaymentDto;
 import shop.jtoon.entity.*;
 
 import java.math.BigDecimal;
@@ -15,28 +14,6 @@ public class CreatorFactory {
                 .cookieItem(CookieItem.COOKIE_ONE)
                 .amount(BigDecimal.valueOf(1000))
                 .member(member)
-                .build();
-    }
-
-    public static PaymentDto createPaymentDto(String impUid, String merchantUid, String email) {
-        return PaymentDto.builder()
-                .impUid(impUid)
-                .merchantUid(merchantUid)
-                .payMethod("card")
-                .cookieItem(CookieItem.COOKIE_ONE)
-                .amount(CookieItem.COOKIE_ONE.getAmount())
-                .buyerEmail(email)
-                .build();
-    }
-
-    public static PaymentDto createInvalidAmountPaymentDto(String impUid, String merchantUid, String email) {
-        return PaymentDto.builder()
-                .impUid(impUid)
-                .merchantUid(merchantUid)
-                .payMethod("card")
-                .cookieItem(CookieItem.COOKIE_ONE)
-                .amount(CookieItem.COOKIE_TWO.getAmount())
-                .buyerEmail(email)
                 .build();
     }
 

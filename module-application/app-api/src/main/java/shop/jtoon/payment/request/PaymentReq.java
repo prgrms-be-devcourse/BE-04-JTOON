@@ -1,36 +1,36 @@
 package shop.jtoon.payment.request;
 
-import static shop.jtoon.util.RegExp.*;
+import jakarta.validation.constraints.*;
+import lombok.Builder;
+import shop.jtoon.entity.CookieItem;
+import shop.jtoon.entity.Member;
+import shop.jtoon.entity.PaymentInfo;
 
 import java.math.BigDecimal;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import shop.jtoon.dto.PaymentDto;
-import shop.jtoon.entity.CookieItem;
+import static shop.jtoon.util.RegExp.EMAIL_PATTERN;
+import static shop.jtoon.util.RegExp.PHONE_PATTERN;
 
+@Builder
 public record PaymentReq(
-	@NotBlank String impUid,
-	@NotBlank String merchantUid,
-	@NotBlank String payMethod,
-	@NotBlank String cookieItem,
-	@NotNull @DecimalMin("1") BigDecimal amount,
-	@Pattern(regexp = EMAIL_PATTERN) String buyerEmail,
-	@NotBlank @Size(max = 10) String buyerName,
-	@Pattern(regexp = PHONE_PATTERN) String buyerPhone
+        @NotBlank String impUid,
+        @NotBlank String merchantUid,
+        @NotBlank String payMethod,
+        @NotBlank String itemName,
+        @NotNull @DecimalMin("1") BigDecimal amount,
+        @Pattern(regexp = EMAIL_PATTERN) String buyerEmail,
+        @NotBlank @Size(max = 10) String buyerName,
+        @Pattern(regexp = PHONE_PATTERN) String buyerPhone
 ) {
 
-	public PaymentDto toDto() {
-		return PaymentDto.builder()
-			.impUid(this.impUid)
-			.merchantUid(this.merchantUid)
-			.payMethod(this.payMethod)
-			.cookieItem(CookieItem.from(this.cookieItem))
-			.amount(this.amount)
-			.buyerEmail(this.buyerEmail)
-			.build();
-	}
+    public PaymentInfo toEntity(Member member) {
+        return PaymentInfo.builder()
+                .impUid(this.impUid)
+                .merchantUid(this.merchantUid)
+                .payMethod(this.payMethod)
+                .cookieItem(CookieItem.from(this.itemName))
+                .amount(this.amount)
+                .member(member)
+                .build();
+    }
 }
