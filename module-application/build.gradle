@@ -4,7 +4,7 @@ project(':module-application:app-api') {
         implementation project(':module-domain:domain-member')
         implementation project(':module-domain:domain-payment')
         implementation project(':module-domain:domain-webtoon')
-        implementation project(':module-domain:domain-security')
+        implementation project(':module-domain:domain-redis')
 
         // Internal Layer
         implementation project(':module-internal:core-web')

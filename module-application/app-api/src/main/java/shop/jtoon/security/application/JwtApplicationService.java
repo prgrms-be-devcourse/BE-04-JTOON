@@ -1,38 +1,34 @@
 package shop.jtoon.security.application;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.security.service.RefreshTokenService;
-import shop.jtoon.service.TokenDomainService;
+import shop.jtoon.service.RedisTokenDomainService;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class JwtApplicationService implements RefreshTokenService {
 
-	private final TokenDomainService tokenDomainService;
-	
+	private final RedisTokenDomainService redisTokenDomainService;
+
 	@Override
 	public String getRefreshTokenEmail(String refreshToken) {
-		return tokenDomainService.getRefreshTokenEmail(refreshToken);
+		return redisTokenDomainService.getEmail(refreshToken);
 	}
 
 	@Override
-	public void verifyRefreshTokenDb(String refreshToken) {
-		tokenDomainService.verifyRefreshTokenDb(refreshToken);
+	public void saveRefreshToken(String refreshToken, String email) {
+		redisTokenDomainService.saveRefreshToken(refreshToken, email);
 	}
 
 	@Override
-	@Transactional
-	public void updateRefreshTokenDb(String email, String newRefreshToken) {
-		tokenDomainService.updateRefreshTokenDb(email, newRefreshToken);
+	public void updateRefreshToken(String newRefreshToken, String email, String oldRefreshToken) {
+		redisTokenDomainService.updateRefreshToken(newRefreshToken, email, oldRefreshToken);
 	}
 
 	@Override
-	@Transactional
-	public void saveRefreshTokenDb(String email, String refreshToken) {
-		tokenDomainService.saveRefreshTokenDb(email, refreshToken);
+	public boolean hasRefreshToken(String refreshToken) {
+		return redisTokenDomainService.hasRefreshToken(refreshToken);
 	}
 }
