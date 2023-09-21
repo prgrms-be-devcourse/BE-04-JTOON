@@ -12,22 +12,26 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import lombok.RequiredArgsConstructor;
-import shop.jtoon.security.filter.JwtAuthenticationFilter;
+import shop.jtoon.security.filter.AuthenticationFilter;
 import shop.jtoon.security.handler.OAuth2FailureHandler;
 import shop.jtoon.security.handler.OAuth2SuccessHandler;
+import shop.jtoon.security.service.AuthenticationService;
+import shop.jtoon.security.service.AuthorizationService;
 import shop.jtoon.security.service.CustomOAuth2UserService;
-import shop.jtoon.security.service.JwtInternalService;
+import shop.jtoon.security.service.JwtService;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
 
-	private final JwtInternalService jwtInternalService;
+	private final AuthorizationService authorizationService;
 	private final HandlerExceptionResolver handlerExceptionResolver;
 	private final CustomOAuth2UserService customOAuth2UserService;
 	private final OAuth2SuccessHandler oAuth2SuccessHandler;
 	private final OAuth2FailureHandler oAuth2FailureHandler;
+	private final AuthenticationService authenticationService;
+	private final JwtService jwtService;
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
@@ -48,7 +52,12 @@ public class SecurityConfig {
 			.httpBasic(AbstractHttpConfigurer::disable)
 			.formLogin(AbstractHttpConfigurer::disable)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(new JwtAuthenticationFilter(handlerExceptionResolver, jwtInternalService),
+			.addFilterBefore(
+				new AuthenticationFilter(
+					handlerExceptionResolver,
+					authorizationService,
+					authenticationService,
+					jwtService),
 				UsernamePasswordAuthenticationFilter.class)
 			.oauth2Login(login -> login
 				.userInfoEndpoint(endpoint -> endpoint.userService(customOAuth2UserService))

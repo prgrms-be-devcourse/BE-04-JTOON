@@ -1,4 +1,4 @@
-package shop.jtoon.service;
+package shop.jtoon.member.application;
 
 import static shop.jtoon.type.ErrorStatus.*;
 import static shop.jtoon.util.SecurityConstant.*;
@@ -7,9 +7,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import shop.jtoon.dto.LoginDto;
 import shop.jtoon.dto.MemberDto;
 import shop.jtoon.dto.SignUpDto;
 import shop.jtoon.entity.LoginType;
@@ -17,31 +17,43 @@ import shop.jtoon.entity.Member;
 import shop.jtoon.exception.DuplicatedException;
 import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.exception.NotFoundException;
+import shop.jtoon.member.request.SignUpReq;
 import shop.jtoon.repository.MemberRepository;
+import shop.jtoon.security.request.LoginReq;
+import shop.jtoon.security.service.JwtService;
+import shop.jtoon.security.service.RefreshTokenService;
+import shop.jtoon.security.util.TokenCookie;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberDomainService {
+public class MemberService {
 
+	private final JwtService jwtServiceImpl;
+	private final RefreshTokenService refreshTokenServiceImpl;
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
-	public void createMember(SignUpDto signUpDto) {
-		validateDuplicateEmail(signUpDto.email());
-		String encryptedPassword = passwordEncoder.encode(signUpDto.password());
-		Member member = signUpDto.toEntity(encryptedPassword);
+	public void signUp(SignUpReq signUpReq) {
+		validateDuplicateEmail(signUpReq.email());
+		String encryptedPassword = passwordEncoder.encode(signUpReq.password());
+		Member member = signUpReq.toEntity(encryptedPassword);
 
 		memberRepository.save(member);
 	}
 
-	@Transactional
-	public void localLoginMember(LoginDto loginDto) {
-		Member member = memberRepository.findByEmail(loginDto.email())
-			.orElseThrow(() -> new InvalidRequestException(MEMBER_WRONG_LOGIN_INFO));
+	public void validateDuplicateEmail(String email) {
+		if (memberRepository.findByEmail(email).isPresent()) {
+			throw new DuplicatedException(MEMBER_EMAIL_CONFLICT);
+		}
+	}
 
-		if (!passwordEncoder.matches(loginDto.password(), member.getPassword())) {
+	@Transactional
+	public void loginMember(LoginReq loginReq, HttpServletResponse response) {
+		Member member = findByEmail(loginReq.email());
+
+		if (!passwordEncoder.matches(loginReq.password(), member.getPassword())) {
 			throw new InvalidRequestException(MEMBER_WRONG_LOGIN_INFO);
 		}
 
@@ -50,12 +62,13 @@ public class MemberDomainService {
 		}
 
 		member.updateLastLogin();
-	}
 
-	public void validateDuplicateEmail(String email) {
-		if (memberRepository.findByEmail(email).isPresent()) {
-			throw new DuplicatedException(MEMBER_EMAIL_CONFLICT);
-		}
+		String accessToken = jwtServiceImpl.generateAccessToken(loginReq.email());
+		String refreshToken = jwtServiceImpl.generateRefreshToken();
+		refreshTokenServiceImpl.saveRefreshToken(refreshToken, loginReq.email());
+
+		response.addCookie(TokenCookie.of(ACCESS_TOKEN_HEADER, accessToken));
+		response.addCookie(TokenCookie.of(REFRESH_TOKEN_HEADER, refreshToken));
 	}
 
 	@Transactional
@@ -66,13 +79,13 @@ public class MemberDomainService {
 	}
 
 	public MemberDto findMemberDtoByEmail(String email) {
-		Member member =  memberRepository.findByEmail(email)
-			.orElseThrow(() -> new NotFoundException(MEMBER_EMAIL_NOT_FOUND));
+		Member member = findByEmail(email);
+
 		return MemberDto.toDto(member);
 	}
 
 	public Member findByEmail(String email) {
-		return  memberRepository.findByEmail(email)
+		return memberRepository.findByEmail(email)
 			.orElseThrow(() -> new NotFoundException(MEMBER_EMAIL_NOT_FOUND));
 	}
 }

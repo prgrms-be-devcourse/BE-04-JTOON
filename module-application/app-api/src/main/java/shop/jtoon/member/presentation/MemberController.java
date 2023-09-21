@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import shop.jtoon.member.application.MemberApplicationService;
+import shop.jtoon.member.application.EmailService;
+import shop.jtoon.member.application.MemberService;
 import shop.jtoon.member.request.SignUpReq;
 import shop.jtoon.security.request.LoginReq;
 
@@ -21,22 +22,23 @@ import shop.jtoon.security.request.LoginReq;
 @RequestMapping("/members")
 public class MemberController {
 
-	private final MemberApplicationService memberApplicationService;
+	private final MemberService memberService;
+	private final EmailService emailService;
 
 	@PostMapping("/sign-up")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void signUp(@RequestBody @Valid SignUpReq signUpReq) {
-		memberApplicationService.signUp(signUpReq);
+		memberService.signUp(signUpReq);
 	}
 
 	@GetMapping("/email-authorization")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void authenticateEmail(@RequestParam(value = "email") String email) {
-		memberApplicationService.sendEmailAuthentication(email);
+		emailService.sendEmailAuthentication(email);
 	}
 
 	@PostMapping("/local-login")
 	public void login(@RequestBody @Valid LoginReq loginReq, HttpServletResponse response) {
-		memberApplicationService.loginMember(loginReq, response);
+		memberService.loginMember(loginReq, response);
 	}
 }

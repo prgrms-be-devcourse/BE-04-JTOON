@@ -4,31 +4,31 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import shop.jtoon.util.StringRedisUtils;
+import shop.jtoon.repository.StringRedisRepository;
 
 @Service
 @RequiredArgsConstructor
-public class RedisTokenDomainService {
+public class RedisTokenService {
 
 	@Value("${jwt.refresh-expire}")
 	private long REFRESH_EXPIRE;
 
-	private final StringRedisUtils redisUtils;
+	private final StringRedisRepository redisRepository;
 
 	public void saveRefreshToken(String refreshToken, String email) {
-		redisUtils.save(refreshToken, email, REFRESH_EXPIRE);
+		redisRepository.save(refreshToken, email, REFRESH_EXPIRE);
 	}
 
 	public void updateRefreshToken(String newRefreshToken, String email, String oldRefreshToken) {
-		redisUtils.delete(oldRefreshToken);
+		redisRepository.delete(oldRefreshToken);
 		saveRefreshToken(newRefreshToken, email);
 	}
 
 	public String getEmail(String refreshToken) {
-		return redisUtils.getData(refreshToken);
+		return redisRepository.getData(refreshToken);
 	}
 
 	public boolean hasRefreshToken(String refreshToken) {
-		return redisUtils.hasKey(refreshToken);
+		return redisRepository.hasKey(refreshToken);
 	}
 }

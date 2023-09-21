@@ -1,4 +1,4 @@
-package shop.jtoon.config;
+package shop.jtoon.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

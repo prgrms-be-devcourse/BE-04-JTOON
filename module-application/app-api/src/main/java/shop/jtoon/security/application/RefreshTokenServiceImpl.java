@@ -4,31 +4,31 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.security.service.RefreshTokenService;
-import shop.jtoon.service.RedisTokenDomainService;
+import shop.jtoon.service.RedisTokenService;
 
 @Service
 @RequiredArgsConstructor
-public class JwtApplicationService implements RefreshTokenService {
+public class RefreshTokenServiceImpl implements RefreshTokenService {
 
-	private final RedisTokenDomainService redisTokenDomainService;
+	private final RedisTokenService redisTokenService;
 
 	@Override
 	public String getRefreshTokenEmail(String refreshToken) {
-		return redisTokenDomainService.getEmail(refreshToken);
+		return redisTokenService.getEmail(refreshToken);
 	}
 
 	@Override
 	public void saveRefreshToken(String refreshToken, String email) {
-		redisTokenDomainService.saveRefreshToken(refreshToken, email);
+		redisTokenService.saveRefreshToken(refreshToken, email);
 	}
 
 	@Override
 	public void updateRefreshToken(String newRefreshToken, String email, String oldRefreshToken) {
-		redisTokenDomainService.updateRefreshToken(newRefreshToken, email, oldRefreshToken);
+		redisTokenService.updateRefreshToken(newRefreshToken, email, oldRefreshToken);
 	}
 
 	@Override
 	public boolean hasRefreshToken(String refreshToken) {
-		return redisTokenDomainService.hasRefreshToken(refreshToken);
+		return redisTokenService.hasRefreshToken(refreshToken);
 	}
 }
