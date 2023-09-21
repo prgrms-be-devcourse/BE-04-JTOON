@@ -3,6 +3,7 @@ package shop.jtoon.response;
 import java.util.List;
 
 import lombok.Builder;
+import shop.jtoon.entity.Webtoon;
 import shop.jtoon.entity.enums.AgeLimit;
 
 @Builder
@@ -17,16 +18,16 @@ public record WebtoonInfoRes(
 	AuthorRes author
 ) {
 
-	public static WebtoonInfoRes of(WebtoonRes webtoonRes, List<String> dayOfWeeks, List<GenreRes> genres) {
+	public static WebtoonInfoRes of(Webtoon webtoon, List<String> dayOfWeeks, List<GenreRes> genres) {
 		return WebtoonInfoRes.builder()
-			.title(webtoonRes.title())
-			.description(webtoonRes.description())
+			.title(webtoon.getTitle())
+			.description(webtoon.getDescription())
 			.dayOfWeeks(dayOfWeeks)
 			.genres(genres)
-			.ageLimit(webtoonRes.ageLimit())
-			.thumbnailUrl(webtoonRes.thumbnailUrl())
-			.favoriteCount(webtoonRes.favoriteCount())
-			.author(AuthorRes.from(webtoonRes.author()))
+			.ageLimit(webtoon.getAgeLimit())
+			.thumbnailUrl(webtoon.getThumbnailUrl())
+			.favoriteCount(webtoon.getFavoriteCount())
+			.author(AuthorRes.from(webtoon.getAuthor()))
 			.build();
 	}
 }

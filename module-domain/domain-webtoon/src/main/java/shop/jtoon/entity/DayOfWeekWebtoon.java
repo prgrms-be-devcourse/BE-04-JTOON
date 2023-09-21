@@ -51,4 +51,8 @@ public class DayOfWeekWebtoon extends BaseTimeEntity {
 			.webtoon(webtoon)
 			.build();
 	}
+
+	public String getDayOfWeekName() {
+		return dayOfWeek.name();
+	}
 }

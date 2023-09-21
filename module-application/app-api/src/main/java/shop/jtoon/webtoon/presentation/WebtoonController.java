@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,13 +19,14 @@ import shop.jtoon.annotation.CurrentUser;
 import shop.jtoon.dto.MemberDto;
 import shop.jtoon.entity.enums.DayOfWeek;
 import shop.jtoon.response.EpisodeInfoRes;
-import shop.jtoon.response.EpisodesRes;
+import shop.jtoon.response.EpisodeItemRes;
 import shop.jtoon.response.WebtoonInfoRes;
 import shop.jtoon.response.WebtoonItemRes;
-import shop.jtoon.type.CustomPageRequest;
-import shop.jtoon.webtoon.application.WebtoonApplicationService;
+import shop.jtoon.webtoon.application.EpisodeService;
+import shop.jtoon.webtoon.application.WebtoonService;
 import shop.jtoon.webtoon.request.CreateEpisodeReq;
 import shop.jtoon.webtoon.request.CreateWebtoonReq;
+import shop.jtoon.webtoon.request.GetEpisodesReq;
 import shop.jtoon.webtoon.request.GetWebtoonsReq;
 
 @RestController
@@ -34,7 +34,8 @@ import shop.jtoon.webtoon.request.GetWebtoonsReq;
 @RequestMapping("/webtoons")
 public class WebtoonController {
 
-	private final WebtoonApplicationService webtoonService;
+	private final WebtoonService webtoonService;
+	private final EpisodeService episodeService;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -55,7 +56,7 @@ public class WebtoonController {
 		@RequestPart MultipartFile thumbnailImage,
 		@RequestPart @Valid CreateEpisodeReq request
 	) {
-		webtoonService.createEpisode(member.id(), webtoonId, mainImage, thumbnailImage, request);
+		episodeService.createEpisode(member.id(), webtoonId, mainImage, thumbnailImage, request);
 	}
 
 	@GetMapping
@@ -69,19 +70,19 @@ public class WebtoonController {
 		return webtoonService.getWebtoon(webtoonId);
 	}
 
-	@GetMapping("/list")
+	@GetMapping("/{webtoonId}/episodes")
 	@ResponseStatus(HttpStatus.OK)
-	public List<EpisodesRes> getEpisodes(@RequestParam Long webtoonId, CustomPageRequest request) {
-		return webtoonService.getEpisodes(webtoonId, request);
+	public List<EpisodeItemRes> getEpisodes(@PathVariable Long webtoonId, GetEpisodesReq request) {
+		return episodeService.getEpisodes(webtoonId, request);
 	}
 
 	@GetMapping("/episodes/{episodeId}")
 	public EpisodeInfoRes getEpisode(@PathVariable Long episodeId) {
-		return webtoonService.getEpisode(episodeId);
+		return episodeService.getEpisode(episodeId);
 	}
 
 	@PostMapping("/episodes/{episodeId}/purchase")
 	public void purchaseEpisode(@CurrentUser MemberDto member, @PathVariable Long episodeId) {
-		webtoonService.purchaseEpisode(member.id(), episodeId);
+		episodeService.purchaseEpisode(member.id(), episodeId);
 	}
 }

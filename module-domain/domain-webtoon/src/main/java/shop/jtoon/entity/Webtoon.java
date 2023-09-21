@@ -69,11 +69,10 @@ public class Webtoon extends BaseTimeEntity {
 		this.author = requireNonNull(author, WEBTOON_AUTHOR_IS_NULL.getMessage());
 	}
 
-	public static Webtoon createOfId(Long webtoonId) {
-		Webtoon webtoon = new Webtoon();
-		webtoon.id = webtoonId;
-
-		return webtoon;
+	public void validateAuthor(Long memberId) {
+		if (!author.isEqual(memberId)) {
+			throw new InvalidRequestException(WEBTOON_NOT_AUTHOR);
+		}
 	}
 
 	private int validateCookieCount(int cookieCount) {

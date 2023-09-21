@@ -11,6 +11,7 @@ public enum ErrorStatus {
 	COMMON_DTO_FIELD_INVALID_FORMAT("올바른 요청 정보가 아닙니다."),
 
 	MEMBER_IS_NULL("회원 값이 NULL 입니다."),
+	MEMBER_NOT_FOUND("존재하지 않는 회원입니다."),
 	MEMBER_EMAIL_INVALID_FORMAT("올바른 이메일 형식이 아닙니다."),
 	MEMBER_PASSWORD_INVALID_FORMAT("올바른 비밀번호형식이 아닙니다."),
 	MEMBER_NAME_INVALID_FORMAT("올바른 이름이 아닙니다."),
@@ -58,6 +59,7 @@ public enum ErrorStatus {
 	WEBTOON_GENRE_IS_NULL("웹툰 장르 값이 NULL 입니다."),
 
 	EPISODE_CREATE_FAIL("회차 생성에 실패했습니다."),
+	EPISODE_NUMBER_DUPLICATED("이미 존재하는 회차 번호입니다."),
 	EPISODE_IS_NULL("회차 값이 NULL 입니다."),
 	EPISODE_NOT_FOUND("존재하지 않는 회차입니다."),
 	EPISODE_NUMBER_POSITIVE("회차 번호는 양수여야 합니다."),

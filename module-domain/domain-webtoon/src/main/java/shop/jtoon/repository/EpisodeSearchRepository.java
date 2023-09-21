@@ -10,7 +10,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.entity.Episode;
-import shop.jtoon.type.CustomPageRequest;
 import shop.jtoon.util.DynamicQuery;
 
 @Repository
@@ -19,11 +18,11 @@ public class EpisodeSearchRepository {
 
 	private final JPAQueryFactory jpaQueryFactory;
 
-	public List<Episode> getEpisodes(Long webtoonId, CustomPageRequest request) {
+	public List<Episode> getEpisodes(Long webtoonId, int size, Long offset) {
 		return jpaQueryFactory.selectFrom(episode)
 			.where(DynamicQuery.generateEq(webtoonId, episode.webtoon.id::eq))
-			.limit(request.getSize())
-			.offset(request.getOffset())
+			.limit(size)
+			.offset(offset)
 			.orderBy(episode.no.desc())
 			.fetch();
 	}

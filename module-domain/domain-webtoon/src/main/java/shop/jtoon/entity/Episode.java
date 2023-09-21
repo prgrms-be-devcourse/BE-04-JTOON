@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +25,9 @@ import shop.jtoon.exception.InvalidRequestException;
 
 @Entity
 @Getter
-@Table(name = "episodes")
+@Table(name = "episodes", uniqueConstraints = {
+	@UniqueConstraint(columnNames = {"webtoon_id", "no"})
+})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Episode extends BaseTimeEntity {
 
@@ -81,6 +84,10 @@ public class Episode extends BaseTimeEntity {
 		episode.id = episodeId;
 
 		return episode;
+	}
+
+	public int getCookieCount() {
+		return webtoon.getCookieCount();
 	}
 
 	private int validateEpisodeNumber(int no) {
