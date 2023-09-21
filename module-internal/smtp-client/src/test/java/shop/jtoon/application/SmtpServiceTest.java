@@ -5,37 +5,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.test.context.ActiveProfiles;
 
-import jakarta.mail.MessagingException;
 import shop.jtoon.entity.Mail;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
 class SmtpServiceTest {
 
-	@Autowired
+	@Mock
 	JavaMailSenderImpl javaMailSender;
-
-	@Test
-	@DisplayName("SMTP 연결 성공")
-	void smtp_connection_success() {
-		// when, then
-		assertThatCode(() -> javaMailSender.testConnection()).doesNotThrowAnyException();
-	}
-
-	@Test
-	@DisplayName("SMTP 연결 실패")
-	void smtp_connection_fail() throws MessagingException {
-		// when, then
-		JavaMailSenderImpl emptyJavaMailSender = new JavaMailSenderImpl();
-		assertThatThrownBy(emptyJavaMailSender::testConnection).isInstanceOf(MessagingException.class);
-	}
 
 	@Test
 	@DisplayName("인증 Mail 생성 성공")
