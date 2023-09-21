@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +25,9 @@ import shop.jtoon.exception.InvalidRequestException;
 
 @Entity
 @Getter
-@Table(name = "episodes")
+@Table(name = "episodes", uniqueConstraints = {
+	@UniqueConstraint(columnNames = {"webtoon_id", "no"})
+})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Episode extends BaseTimeEntity {
 
@@ -43,9 +46,8 @@ public class Episode extends BaseTimeEntity {
 	@Column(name = "main_url", nullable = false, length = 500)
 	private String mainUrl;
 
-	@ColumnDefault("'default thumbnail url'")
 	@Column(name = "thumbnail_url", nullable = false, length = 500)
-	private String thumbnailUrl = "default thumbnail url";
+	private String thumbnailUrl;
 
 	@ColumnDefault("1")
 	@Column(name = "has_comment", nullable = false)
@@ -71,7 +73,7 @@ public class Episode extends BaseTimeEntity {
 		this.no = validateEpisodeNumber(no);
 		this.title = requireNonNull(title, EPISODE_TITLE_IS_NULL.getMessage());
 		this.mainUrl = requireNonNull(mainUrl, EPISODE_MAIN_URL_IS_NULL.getMessage());
-		this.thumbnailUrl = thumbnailUrl;
+		this.thumbnailUrl = requireNonNull(thumbnailUrl, EPISODE_THUMBNAIL_URL_IS_NULL.getMessage());
 		this.hasComment = hasComment;
 		this.openedAt = requireNonNull(openedAt, EPISODE_OPENED_AT_IS_NULL.getMessage());
 		this.webtoon = requireNonNull(webtoon, WEBTOON_IS_NULL.getMessage());
@@ -82,6 +84,10 @@ public class Episode extends BaseTimeEntity {
 		episode.id = episodeId;
 
 		return episode;
+	}
+
+	public int getCookieCount() {
+		return webtoon.getCookieCount();
 	}
 
 	private int validateEpisodeNumber(int no) {

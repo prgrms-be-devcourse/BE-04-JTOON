@@ -14,14 +14,20 @@ import shop.jtoon.type.ErrorStatus;
 
 @Component
 @RequiredArgsConstructor
-public class S3Uploader {
+public class S3Client {
 
 	private final S3Template s3Template;
 
 	@Value("${spring.cloud.aws.s3.bucket}")
 	private String BUCKET;
 
-	public void uploadImage(String key, MultipartFile file) {
+	@Value("${spring.cloud.aws.s3.url}")
+	private String S3_BASE_URL;
+
+	@Value("${spring.cloud.aws.cloud-front.url}")
+	private String CLOUD_FRONT_URL;
+
+	public String uploadImage(String key, MultipartFile file) {
 		try {
 			s3Template.upload(
 				BUCKET,
@@ -29,10 +35,15 @@ public class S3Uploader {
 				file.getInputStream(),
 				ObjectMetadata.builder().contentType("image/png").build()
 			);
+
+			return CLOUD_FRONT_URL + key;
 		} catch (IOException e) {
 			throw new InvalidRequestException(ErrorStatus.S3_UPLOAD_FAIL);
 		}
 	}
 
-	//TODO 업로드는 성공했지만, 비즈니스 로직 실패 시 delete 처리 추가
+	public void delete(String objectUrl) {
+		String s3Url = objectUrl.replace(CLOUD_FRONT_URL, S3_BASE_URL);
+		s3Template.deleteObject(s3Url);
+	}
 }

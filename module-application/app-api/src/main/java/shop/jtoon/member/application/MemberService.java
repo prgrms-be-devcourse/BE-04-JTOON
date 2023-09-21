@@ -84,7 +84,12 @@ public class MemberService {
 		return MemberDto.toDto(member);
 	}
 
-	public Member findByEmail(String email) {
+	public Member findById(Long id) {
+		return memberRepository.findById(id)
+			.orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
+	}
+
+	private Member findByEmail(String email) {
 		return memberRepository.findByEmail(email)
 			.orElseThrow(() -> new NotFoundException(MEMBER_EMAIL_NOT_FOUND));
 	}
