@@ -20,21 +20,6 @@ class SmtpServiceTest {
 	@Mock
 	JavaMailSenderImpl javaMailSender;
 
-	// @Test
-	// @DisplayName("SMTP 연결 성공")
-	// void smtp_connection_success() {
-	// 	// when, then
-	// 	assertThatCode(() -> javaMailSender.testConnection()).doesNotThrowAnyException();
-	// }
-	//
-	// @Test
-	// @DisplayName("SMTP 연결 실패")
-	// void smtp_connection_fail() throws MessagingException {
-	// 	// when, then
-	// 	JavaMailSenderImpl emptyJavaMailSender = new JavaMailSenderImpl();
-	// 	assertThatThrownBy(emptyJavaMailSender::testConnection).isInstanceOf(MessagingException.class);
-	// }
-
 	@Test
 	@DisplayName("인증 Mail 생성 성공")
 	void create_authentication_mail_success() {
