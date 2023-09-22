@@ -3,9 +3,6 @@ package shop.jtoon.entity;
 import static java.util.Objects.*;
 import static shop.jtoon.util.RegExp.*;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,6 +12,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,7 +35,6 @@ public class Member extends BaseTimeEntity {
 	@Column(name = "email", nullable = false, unique = true, length = 40, updatable = false)
 	private String email;
 
-	@Pattern(regexp = PASSWORD_PATTERN)
 	@Column(name = "password", nullable = false)
 	private String password;
 
