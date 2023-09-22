@@ -1,4 +1,5 @@
 dependencies {
+    // S3
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.2")
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'

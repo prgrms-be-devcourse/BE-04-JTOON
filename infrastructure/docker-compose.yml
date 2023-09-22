@@ -28,8 +28,9 @@ services:
   redis:
     image: redis:latest
     container_name: redis
+    hostname: ${hostname}
     command: redis-server
     ports:
       - ${redis-inbound}:${redis-outbound}
     volumes:
-      - ./data/:/data
+      - ./redis/data/:/data
