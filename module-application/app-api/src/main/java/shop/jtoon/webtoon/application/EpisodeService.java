@@ -3,11 +3,12 @@ package shop.jtoon.webtoon.application;
 import static shop.jtoon.common.ImageType.*;
 import static shop.jtoon.type.ErrorStatus.*;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.dto.UploadImageDto;
 import shop.jtoon.entity.Episode;

@@ -8,12 +8,14 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import shop.jtoon.common.FileName;
 import shop.jtoon.common.ImageType;
 import shop.jtoon.dto.UploadImageDto;
 import shop.jtoon.entity.Episode;
 import shop.jtoon.entity.Webtoon;
 
+@Builder
 public record CreateEpisodeReq(
 	@Min(1) int no,
 	@NotBlank @Size(max = 30) String title,
