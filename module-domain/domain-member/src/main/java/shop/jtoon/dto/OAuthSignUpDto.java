@@ -7,7 +7,7 @@ import shop.jtoon.entity.Member;
 import shop.jtoon.entity.Role;
 
 @Builder
-public record SignUpDto(
+public record OAuthSignUpDto(
 	String email,
 	String password,
 	String name,

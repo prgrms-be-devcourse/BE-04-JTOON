@@ -11,13 +11,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.dto.MemberDto;
-import shop.jtoon.dto.SignUpDto;
+import shop.jtoon.dto.OAuthSignUpDto;
 import shop.jtoon.entity.LoginType;
 import shop.jtoon.entity.Member;
 import shop.jtoon.exception.DuplicatedException;
 import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.exception.NotFoundException;
-import shop.jtoon.member.request.SignUpReq;
+import shop.jtoon.member.request.LocalSignUpReq;
 import shop.jtoon.repository.MemberRepository;
 import shop.jtoon.security.request.LoginReq;
 import shop.jtoon.security.service.JwtService;
@@ -35,10 +35,10 @@ public class MemberService {
 	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
-	public void signUp(SignUpReq signUpReq) {
-		validateDuplicateEmail(signUpReq.email());
-		String encryptedPassword = passwordEncoder.encode(signUpReq.password());
-		Member member = signUpReq.toEntity(encryptedPassword);
+	public void signUp(LocalSignUpReq localSignUpReq) {
+		validateDuplicateEmail(localSignUpReq.email());
+		String encryptedPassword = passwordEncoder.encode(localSignUpReq.password());
+		Member member = localSignUpReq.toEntity(encryptedPassword);
 
 		memberRepository.save(member);
 	}
@@ -72,10 +72,10 @@ public class MemberService {
 	}
 
 	@Transactional
-	public Member generateOrGetSocialMember(SignUpDto signUpDto) {
-		Optional<Member> member = memberRepository.findByEmail(signUpDto.email());
+	public Member generateOrGetSocialMember(OAuthSignUpDto OAuthSignUpDto) {
+		Optional<Member> member = memberRepository.findByEmail(OAuthSignUpDto.email());
 
-		return member.orElseGet(() -> memberRepository.save(signUpDto.toEntity(BLANK)));
+		return member.orElseGet(() -> memberRepository.save(OAuthSignUpDto.toEntity(BLANK)));
 	}
 
 	public MemberDto findMemberDtoByEmail(String email) {

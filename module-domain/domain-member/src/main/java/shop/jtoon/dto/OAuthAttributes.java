@@ -4,7 +4,6 @@ import static shop.jtoon.type.ErrorStatus.*;
 
 import java.util.Map;
 import java.util.UUID;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import shop.jtoon.entity.LoginType;
@@ -56,8 +55,8 @@ public record OAuthAttributes(
 		return null;
 	}
 
-	public SignUpDto toSignUpDto() {
-		return SignUpDto.builder()
+	public OAuthSignUpDto toSignUpDto() {
+		return OAuthSignUpDto.builder()
 			.email(this.email)
 			.password(UUID.randomUUID().toString())
 			.name(this.name)
