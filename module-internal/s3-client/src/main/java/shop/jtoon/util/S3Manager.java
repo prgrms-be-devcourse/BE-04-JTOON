@@ -14,7 +14,7 @@ import shop.jtoon.type.ErrorStatus;
 
 @Component
 @RequiredArgsConstructor
-public class S3Client {
+public class S3Manager {
 
 	private final S3Template s3Template;
 
