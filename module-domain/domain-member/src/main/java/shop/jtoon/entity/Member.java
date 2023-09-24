@@ -68,8 +68,16 @@ public class Member extends BaseTimeEntity {
 	private LocalDateTime lastLoginDate;
 
 	@Builder
-	private Member(String email, String password, String name, String nickname, Gender gender, String phone, Role role,
-		LoginType loginType) {
+	private Member(
+		String email,
+		String password,
+		String name,
+		String nickname,
+		Gender gender,
+		String phone,
+		Role role,
+		LoginType loginType
+	) {
 		this.email = requireNonNull(email, ErrorStatus.MEMBER_EMAIL_INVALID_FORMAT.getMessage());
 		this.password = requireNonNull(password, ErrorStatus.MEMBER_PASSWORD_INVALID_FORMAT.getMessage());
 		this.name = requireNonNull(name, ErrorStatus.MEMBER_NAME_INVALID_FORMAT.getMessage());
@@ -85,6 +93,6 @@ public class Member extends BaseTimeEntity {
 	}
 
 	public boolean isEqual(Long memberId) {
-		return Objects.equals(this.id, memberId);
+		return Objects.equals(this.getId(), memberId);
 	}
 }
