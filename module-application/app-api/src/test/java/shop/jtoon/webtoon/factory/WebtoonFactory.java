@@ -25,6 +25,7 @@ import shop.jtoon.webtoon.request.GetEpisodesReq;
 import shop.jtoon.webtoon.request.GetWebtoonsReq;
 
 public class WebtoonFactory {
+
 	public static Member createMember() {
 		return Member.builder()
 			.email("test@gmail.com")
@@ -49,18 +50,6 @@ public class WebtoonFactory {
 			.build();
 	}
 
-	public static Episode createEpisode(Webtoon webtoon, int no) {
-		return Episode.builder()
-			.no(no)
-			.title("회차 제목")
-			.mainUrl("https://webtoons/episodes/main")
-			.thumbnailUrl("https://webtoons/episodes/thumbnail")
-			.hasComment(true)
-			.openedAt(LocalDateTime.of(2023, 9, 20, 0, 0, 0))
-			.webtoon(webtoon)
-			.build();
-	}
-
 	public static CreateWebtoonReq createWebtoonReq() {
 		Set<DayOfWeek> dayOfWeeks = new HashSet<>();
 		dayOfWeeks.add(DayOfWeek.MON);
@@ -81,6 +70,18 @@ public class WebtoonFactory {
 		return GetWebtoonsReq.builder()
 			.day(DayOfWeek.MON)
 			.keyword("")
+			.build();
+	}
+
+	public static Episode createEpisode(Webtoon webtoon, int no) {
+		return Episode.builder()
+			.no(no)
+			.title("회차 제목")
+			.mainUrl("https://webtoons/episodes/main")
+			.thumbnailUrl("https://webtoons/episodes/thumbnail")
+			.hasComment(true)
+			.openedAt(LocalDateTime.of(2023, 9, 20, 0, 0, 0))
+			.webtoon(webtoon)
 			.build();
 	}
 
