@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RegExp {
 
-	public static final String EMAIL_PATTERN = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
-	public static final String PHONE_PATTERN = "^01([0|1|6|7|8|9])+?([0-9]{4})+?([0-9]{4})$";
-	public static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$";
-	public static final String ALLOW_ORIGIN_PATTERN = "[a-z]+\\.jtoon.shop";
+    public static final String EMAIL_PATTERN = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
+    public static final String PHONE_PATTERN = "^01([0|1|6|7|8|9])+?([0-9]{4})+?([0-9]{4})$";
+    public static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$";
+    public static final String ALLOW_ORIGIN_PATTERN = "[a-z]+\\.jtoon.shop";
 }
