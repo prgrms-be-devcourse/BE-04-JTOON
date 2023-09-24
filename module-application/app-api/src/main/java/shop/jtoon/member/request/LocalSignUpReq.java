@@ -11,7 +11,7 @@ import shop.jtoon.entity.LoginType;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.Role;
 
-public record SignUpReq(
+public record LocalSignUpReq(
 	@Pattern(regexp = EMAIL_PATTERN) String email,
 	@Pattern(regexp = PASSWORD_PATTERN) String password,
 	@NotBlank @Size(max = 10) String name,

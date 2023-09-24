@@ -14,7 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import shop.jtoon.member.application.EmailService;
 import shop.jtoon.member.application.MemberService;
-import shop.jtoon.member.request.SignUpReq;
+import shop.jtoon.member.request.LocalSignUpReq;
 import shop.jtoon.security.request.LoginReq;
 
 @RestController
@@ -27,8 +27,8 @@ public class MemberController {
 
 	@PostMapping("/sign-up")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void signUp(@RequestBody @Valid SignUpReq signUpReq) {
-		memberService.signUp(signUpReq);
+	public void signUp(@RequestBody @Valid LocalSignUpReq localSignUpReq) {
+		memberService.signUp(localSignUpReq);
 	}
 
 	@GetMapping("/email-authorization")
