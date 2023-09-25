@@ -1,7 +1,8 @@
-package shop.jtoon.payment.factory;
+package shop.jtoon.factory;
 
-import shop.jtoon.dto.MemberDto;
-import shop.jtoon.entity.*;
+import shop.jtoon.entity.CookieItem;
+import shop.jtoon.entity.Member;
+import shop.jtoon.entity.PaymentInfo;
 import shop.jtoon.payment.request.CancelReq;
 import shop.jtoon.payment.request.PaymentReq;
 
@@ -53,31 +54,6 @@ public class PaymentFactory {
                 .reason("reason")
                 .checksum(CookieItem.COOKIE_ONE.getAmount())
                 .refundHolder(paymentReq.buyerEmail())
-                .build();
-    }
-
-    public static Member createMember(String email) {
-        return Member.builder()
-                .email(email)
-                .password("Qwe123!!")
-                .name("홍도산")
-                .nickname("개발을담다")
-                .gender(Gender.MALE)
-                .phone("01012331233")
-                .role(Role.USER)
-                .loginType(LoginType.LOCAL)
-                .build();
-    }
-
-    public static MemberDto createMemberDto(Long id, Member member) {
-        return MemberDto.builder()
-                .id(id)
-                .email(member.getEmail())
-                .name(member.getName())
-                .nickname(member.getNickname())
-                .gender(member.getGender())
-                .phone(member.getPhone())
-                .role(member.getRole())
                 .build();
     }
 }

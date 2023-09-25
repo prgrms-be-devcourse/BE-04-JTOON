@@ -10,7 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.PaymentInfo;
 import shop.jtoon.exception.DuplicatedException;
-import shop.jtoon.payment.factory.PaymentFactory;
+import shop.jtoon.factory.MemberFactory;
+import shop.jtoon.factory.PaymentFactory;
 import shop.jtoon.payment.request.PaymentReq;
 import shop.jtoon.payment.response.PaymentRes;
 import shop.jtoon.repository.PaymentInfoRepository;
@@ -49,7 +50,7 @@ class PaymentInfoServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        member = PaymentFactory.createMember("example123@naver.com");
+        member = MemberFactory.createMember();
         paymentReq = PaymentFactory.createPaymentReq("imp123", "mer123", member.getEmail());
     }
 

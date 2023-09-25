@@ -1,4 +1,4 @@
-package shop.jtoon.payment.factory;
+package shop.jtoon.factory;
 
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 

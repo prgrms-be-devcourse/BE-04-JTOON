@@ -9,8 +9,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import shop.jtoon.dto.MemberDto;
 import shop.jtoon.entity.Member;
+import shop.jtoon.factory.MemberFactory;
+import shop.jtoon.factory.PaymentFactory;
 import shop.jtoon.member.application.MemberService;
-import shop.jtoon.payment.factory.PaymentFactory;
 import shop.jtoon.payment.request.CancelReq;
 import shop.jtoon.payment.request.ConditionReq;
 import shop.jtoon.payment.request.PaymentReq;
@@ -52,8 +53,8 @@ class PaymentServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        member = PaymentFactory.createMember("exam123@naver.com");
-        memberDto = PaymentFactory.createMemberDto(1L, member);
+        member = MemberFactory.createMember();
+        memberDto = MemberFactory.createMemberDto(1L, member);
         paymentReq = PaymentFactory.createPaymentReq("imp123", "mer123", member.getEmail());
         cancelReq = PaymentFactory.createCancelReq(paymentReq);
     }
@@ -62,7 +63,7 @@ class PaymentServiceTest {
     @Test
     void validateAndCreatePayment_Amount() {
         // Given
-        given(memberService.findById(any(Long.class))).willReturn(member);
+        given(memberService.findByEmail(any(String.class))).willReturn(member);
 
         // When
         BigDecimal actual = paymentService.validateAndCreatePayment(paymentReq, memberDto);
@@ -94,7 +95,7 @@ class PaymentServiceTest {
         ConditionReq conditionReq = ConditionReq.builder()
                 .merchantsUid(Collections.emptyList())
                 .build();
-        given(memberService.findById(any(Long.class))).willReturn(member);
+        given(memberService.findByEmail(any(String.class))).willReturn(member);
         given(paymentInfoService.getPaymentsInfo(anyList(), any(Member.class))).willReturn(Collections.emptyList());
 
         // When

@@ -24,7 +24,7 @@ asciidoctor.doFirst {
     delete file('src/main/resources/static/docs')
 }
 
-task copyDocument(type: Copy) {
+tasks.register('copyDocument', Copy) {
     dependsOn asciidoctor
     from file("build/docs/asciidoc")
     into file("src/main/resources/static/docs")
@@ -60,7 +60,7 @@ dependencies {
     // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
-    
+
     // OAuth2
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
