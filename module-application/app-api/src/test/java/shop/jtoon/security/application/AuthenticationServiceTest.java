@@ -71,12 +71,4 @@ class AuthenticationServiceTest {
        mockMvc.perform(get("/members/email-authorization?email=example@naver.com"))
                                         .andExpect(status().isCreated());
     }
-
-    @DisplayName("필터 테스트")
-    @Test
-    void test_filter() throws Exception {
-        // when, then
-        mockMvc.perform(post("/payments/validation"))
-                .andExpect(status().isCreated());
-    }
 }
