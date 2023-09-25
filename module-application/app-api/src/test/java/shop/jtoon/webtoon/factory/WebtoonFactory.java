@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.mock.web.MockMultipartFile;
 
@@ -15,10 +17,14 @@ import shop.jtoon.entity.Member;
 import shop.jtoon.entity.Role;
 import shop.jtoon.entity.Webtoon;
 import shop.jtoon.entity.enums.AgeLimit;
+import shop.jtoon.entity.enums.DayOfWeek;
+import shop.jtoon.entity.enums.Genre;
 import shop.jtoon.webtoon.request.CreateEpisodeReq;
+import shop.jtoon.webtoon.request.CreateWebtoonReq;
 import shop.jtoon.webtoon.request.GetEpisodesReq;
+import shop.jtoon.webtoon.request.GetWebtoonsReq;
 
-public class CreatorFactory {
+public class WebtoonFactory {
 
 	public static Member createMember() {
 		return Member.builder()
@@ -41,6 +47,29 @@ public class CreatorFactory {
 			.thumbnailUrl("https://webtoons/thumbnail")
 			.cookieCount(3)
 			.author(member)
+			.build();
+	}
+
+	public static CreateWebtoonReq createWebtoonReq() {
+		Set<DayOfWeek> dayOfWeeks = new HashSet<>();
+		dayOfWeeks.add(DayOfWeek.MON);
+		Set<Genre> genres = new HashSet<>();
+		genres.add(Genre.ROMANCE);
+
+		return CreateWebtoonReq.builder()
+			.title("재윤이의 모험일기")
+			.description("재윤이의 개쩌는 모험이야기, 설레지")
+			.dayOfWeeks(dayOfWeeks)
+			.genres(genres)
+			.ageLimit(AgeLimit.ADULT)
+			.cookieCount(2)
+			.build();
+	}
+
+	public static GetWebtoonsReq getWebtoonsReq() {
+		return GetWebtoonsReq.builder()
+			.day(DayOfWeek.MON)
+			.keyword("")
 			.build();
 	}
 

@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import shop.jtoon.common.FileName;
 import shop.jtoon.common.ImageType;
 import shop.jtoon.dto.UploadImageDto;
@@ -19,6 +20,7 @@ import shop.jtoon.entity.enums.AgeLimit;
 import shop.jtoon.entity.enums.DayOfWeek;
 import shop.jtoon.entity.enums.Genre;
 
+@Builder
 public record CreateWebtoonReq(
 	@NotBlank String title,
 	@NotBlank String description,

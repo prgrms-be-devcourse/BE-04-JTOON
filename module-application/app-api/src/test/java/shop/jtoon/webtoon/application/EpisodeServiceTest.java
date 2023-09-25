@@ -33,7 +33,7 @@ import shop.jtoon.repository.PurchasedEpisodeRepository;
 import shop.jtoon.response.EpisodeInfoRes;
 import shop.jtoon.response.EpisodeItemRes;
 import shop.jtoon.service.S3Service;
-import shop.jtoon.webtoon.factory.CreatorFactory;
+import shop.jtoon.webtoon.factory.WebtoonFactory;
 import shop.jtoon.webtoon.request.CreateEpisodeReq;
 import shop.jtoon.webtoon.request.GetEpisodesReq;
 
@@ -69,9 +69,9 @@ class EpisodeServiceTest {
 
 	@BeforeEach
 	void beforeEach() {
-		member = spy(CreatorFactory.createMember());
+		member = spy(WebtoonFactory.createMember());
 		lenient().when(member.getId()).thenReturn(1L);
-		webtoon = spy(CreatorFactory.createWebtoon(member));
+		webtoon = spy(WebtoonFactory.createWebtoon(member));
 		lenient().when(webtoon.getId()).thenReturn(1L);
 	}
 
@@ -79,8 +79,8 @@ class EpisodeServiceTest {
 	@Test
 	void createEpisode_Void() {
 		// Given
-		CreateEpisodeReq request = CreatorFactory.createEpisodeReq();
-		MockMultipartFile image = CreatorFactory.createMultipartFile();
+		CreateEpisodeReq request = WebtoonFactory.createEpisodeReq();
+		MockMultipartFile image = WebtoonFactory.createMultipartFile();
 		given(webtoonService.getWebtoonById(webtoon.getId())).willReturn(webtoon);
 		given(s3Service.uploadImage(any(UploadImageDto.class))).willReturn("https://webtoons/episodes/image");
 
@@ -95,8 +95,8 @@ class EpisodeServiceTest {
 	@Test
 	void createEpisode_DuplicatedException() {
 		// Given
-		CreateEpisodeReq request = CreatorFactory.createEpisodeReq();
-		MockMultipartFile image = CreatorFactory.createMultipartFile();
+		CreateEpisodeReq request = WebtoonFactory.createEpisodeReq();
+		MockMultipartFile image = WebtoonFactory.createMultipartFile();
 		given(webtoonService.getWebtoonById(webtoon.getId())).willReturn(webtoon);
 		given(episodeRepository.existsByWebtoonAndNo(any(Webtoon.class), anyInt())).willReturn(true);
 
@@ -110,8 +110,8 @@ class EpisodeServiceTest {
 	@Test
 	void createEpisode_InvalidRequestException() {
 		// Given
-		CreateEpisodeReq request = CreatorFactory.createEpisodeReq();
-		MockMultipartFile image = CreatorFactory.createMultipartFile();
+		CreateEpisodeReq request = WebtoonFactory.createEpisodeReq();
+		MockMultipartFile image = WebtoonFactory.createMultipartFile();
 		given(webtoonService.getWebtoonById(webtoon.getId())).willReturn(webtoon);
 		given(s3Service.uploadImage(any(UploadImageDto.class))).willReturn("https://webtoons/episodes/image");
 		given(episodeRepository.save(any(Episode.class))).willThrow(new RuntimeException());
@@ -127,7 +127,7 @@ class EpisodeServiceTest {
 	@Test
 	void getEpisodes_EmptyList() {
 		// Given
-		GetEpisodesReq request = CreatorFactory.createGetEpisodesReq();
+		GetEpisodesReq request = WebtoonFactory.createGetEpisodesReq();
 		List<Episode> episodes = new ArrayList<>();
 		given(episodeSearchRepository.getEpisodes(webtoon.getId(), request.getSize(), request.getOffset()))
 			.willReturn(episodes);
@@ -143,10 +143,10 @@ class EpisodeServiceTest {
 	@Test
 	void getEpisodes_EpisodeItemResList() {
 		// Given
-		GetEpisodesReq request = CreatorFactory.createGetEpisodesReq();
+		GetEpisodesReq request = WebtoonFactory.createGetEpisodesReq();
 		List<Episode> episodes = new ArrayList<>();
-		episodes.add(CreatorFactory.createEpisode(webtoon, 1));
-		episodes.add(CreatorFactory.createEpisode(webtoon, 2));
+		episodes.add(WebtoonFactory.createEpisode(webtoon, 1));
+		episodes.add(WebtoonFactory.createEpisode(webtoon, 2));
 		given(episodeSearchRepository.getEpisodes(webtoon.getId(), request.getSize(), request.getOffset()))
 			.willReturn(episodes);
 
@@ -173,7 +173,7 @@ class EpisodeServiceTest {
 	@Test
 	void getEpisode_EpisodeInfoRes() {
 		// Given
-		Episode episode = CreatorFactory.createEpisode(webtoon, 1);
+		Episode episode = WebtoonFactory.createEpisode(webtoon, 1);
 		given(episodeRepository.findById(anyLong())).willReturn(Optional.of(episode));
 
 		// When
@@ -187,7 +187,7 @@ class EpisodeServiceTest {
 	@Test
 	void purchaseEpisode_Void() {
 		// Given
-		Episode episode = spy(CreatorFactory.createEpisode(webtoon, 1));
+		Episode episode = spy(WebtoonFactory.createEpisode(webtoon, 1));
 		given(episode.getId()).willReturn(1L);
 		given(memberService.findById(member.getId())).willReturn(member);
 		given(episodeRepository.findById(anyLong())).willReturn(Optional.of(episode));
