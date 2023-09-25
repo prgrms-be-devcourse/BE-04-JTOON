@@ -12,7 +12,7 @@ import shop.jtoon.entity.Member;
 import shop.jtoon.entity.MemberCookie;
 import shop.jtoon.exception.InvalidRequestException;
 import shop.jtoon.exception.NotFoundException;
-import shop.jtoon.payment.factory.CreatorFactory;
+import shop.jtoon.factory.MemberFactory;
 import shop.jtoon.repository.MemberCookieRepository;
 import shop.jtoon.type.ErrorStatus;
 
@@ -38,7 +38,7 @@ class MemberCookieServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        member = CreatorFactory.createMember("example123@naver.com");
+        member = MemberFactory.createMember();
     }
 
     @DisplayName("createMemberCookie - 한 회원의 쿠키 정보가 성공적으로 저장될 때, - Void")

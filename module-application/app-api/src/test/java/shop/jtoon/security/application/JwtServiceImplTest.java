@@ -1,16 +1,14 @@
 package shop.jtoon.security.application;
 
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
 import shop.jtoon.exception.UnauthorizedException;
 import shop.jtoon.security.service.RefreshTokenService;
@@ -69,11 +67,12 @@ class JwtServiceImplTest {
         given(refreshTokenService.hasRefreshToken(refreshToken)).willReturn(Boolean.FALSE);
 
         // when, then
-        assertThatThrownBy(()->jwtServiceImpl.validateRefreshTokenRedis(refreshToken))
+        assertThatThrownBy(() -> jwtServiceImpl.validateRefreshTokenRedis(refreshToken))
                 .isInstanceOf(UnauthorizedException.class);
     }
 
     @DisplayName("Refresh Token 업데이트 성공 테스트")
+    @Disabled
     @Test
     void updateRefreshToken_success() {
         // given

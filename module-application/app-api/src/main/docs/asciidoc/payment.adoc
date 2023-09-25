@@ -1,0 +1,19 @@
+== 결제(Payment)
+ 결제에 대한 검증/등록/조회/취소 기능을 제공합니다.
+
+=== 결제 검증 및 생성
+
+ 1) 실제 결제된 금액(IamportClient에서 제공)과 금액(amount)를 비교해 검증합니다.
+ 2) 실제 서버에서 알고 있는 금액(CookieItem.amount)과 금액(amount)를 비교해 검증합니다.
+ 3) 포트원 결제 고유번호(impUid)와 가맹점 주문번호(merchantUid)가 중복 됐는 지 검증합니다.
+ 4) 검증 후 결제 정보 생성 여부를 결정합니다.
+
+[discrete]
+==== 요청
+
+include::{snippets}/payments/validation/http-request.adoc[]
+
+[discrete]
+==== 응답
+
+include::{snippets}/payments/validation/http-response.adoc[]

@@ -19,13 +19,9 @@ import shop.jtoon.security.service.AuthorizationService;
 import shop.jtoon.security.service.RefreshTokenService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(
-        controllers = {MemberController.class, PaymentController.class},
-        properties = "jwt.secret.access-key=testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
-)
+@WebMvcTest(controllers = {MemberController.class, PaymentController.class})
 class AuthenticationServiceTest {
 
     @Autowired
@@ -53,10 +49,10 @@ class AuthenticationServiceTest {
     @BeforeEach
     void init() {
         authenticationFilter = new AuthenticationFilter(
-            handlerExceptionResolver,
-            new AuthorizationService(),
-            new AuthenticationServiceImpl(memberService),
-            new JwtServiceImpl(refreshTokenService)
+                handlerExceptionResolver,
+                new AuthorizationService(),
+                new AuthenticationServiceImpl(memberService),
+                new JwtServiceImpl(refreshTokenService)
         );
 
         mockMvc = MockMvcBuilders.standaloneSetup(memberController)
@@ -68,7 +64,7 @@ class AuthenticationServiceTest {
     @Test
     void noAuthentication_access_success() throws Exception {
         // given
-       mockMvc.perform(get("/members/email-authorization?email=example@naver.com"))
-                                        .andExpect(status().isCreated());
+        mockMvc.perform(get("/members/email-authorization?email=example@naver.com"))
+                .andExpect(status().isCreated());
     }
 }

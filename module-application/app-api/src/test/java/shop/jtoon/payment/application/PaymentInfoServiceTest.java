@@ -10,7 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.PaymentInfo;
 import shop.jtoon.exception.DuplicatedException;
-import shop.jtoon.payment.factory.CreatorFactory;
+import shop.jtoon.factory.MemberFactory;
+import shop.jtoon.factory.PaymentFactory;
 import shop.jtoon.payment.request.PaymentReq;
 import shop.jtoon.payment.response.PaymentRes;
 import shop.jtoon.repository.PaymentInfoRepository;
@@ -49,8 +50,8 @@ class PaymentInfoServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        member = CreatorFactory.createMember("example123@naver.com");
-        paymentReq = CreatorFactory.createPaymentReq("imp123", "mer123", member.getEmail());
+        member = MemberFactory.createMember();
+        paymentReq = PaymentFactory.createPaymentReq("imp123", "mer123", member.getEmail());
     }
 
     @DisplayName("createPaymentInfo - 한 회원의 결제 정보가 성공적으로 저장될 때, - Void")
@@ -83,8 +84,8 @@ class PaymentInfoServiceTest {
     void getPaymentsInfo_PaymentInfoResList() {
         // Given
         List<PaymentInfo> paymentInfos = new ArrayList<>();
-        paymentInfos.add(CreatorFactory.createPaymentInfo("imp123", "mer123", member));
-        paymentInfos.add(CreatorFactory.createPaymentInfo("imp456", "mer789", member));
+        paymentInfos.add(PaymentFactory.createPaymentInfo("imp123", "mer123", member));
+        paymentInfos.add(PaymentFactory.createPaymentInfo("imp456", "mer789", member));
         given(paymentInfoSearchRepository.searchByMerchantsUidAndEmail(anyList(), any(String.class)))
                 .willReturn(paymentInfos);
 
