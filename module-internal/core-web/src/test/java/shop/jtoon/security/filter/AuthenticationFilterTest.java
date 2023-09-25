@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+
+import org.springframework.test.context.TestPropertySource;
 import shop.jtoon.security.service.AuthenticationService;
 import shop.jtoon.security.service.AuthorizationService;
 import shop.jtoon.security.service.JwtService;
