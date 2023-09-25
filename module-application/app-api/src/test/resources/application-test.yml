@@ -1,0 +1,82 @@
+jwt:
+  secret:
+    access-key: test-Secret-Key-test-Secret-Key-test-Secret-Key
+  iss: test-iss
+  access-expire: 100
+  refresh-expire: 100
+
+pg:
+  kg-inicis:
+    rest-api-key: rest-api-key
+    rest-api-secret: rest-api-secret-rest-api-secret-rest-api-secret-rest-api-secret
+
+spring:
+
+  data:
+    redis:
+      host: localhost
+      port: 1234
+
+  mail:
+    host: smtp.gmail.com
+    port: 123
+    username: username@gmail.com
+    password: password-password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
+
+  cloud:
+    aws:
+      region:
+        static: test-static
+      s3:
+        bucket: test-bucket
+        url: s3://test/
+      cloud-front:
+        url: https://test.net/
+      credentials:
+        access-key: access-key
+        secret-key: secret-key
+      max-request-size: 1MB
+
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
+
+  datasource:
+    url: jdbc:h2:~/jtoon;MODE=MYSQL;DB_CLOSE_ON_EXIT=FALSE;
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+  security:
+    oauth2:
+      client:
+        registration:
+          naver:
+            client-name: test
+            client-id: client-id
+            client-secret: client-secret
+            authorization-grant-type: authorization_grant-type
+            redirect-uri: redirect-uri
+
+        provider:
+          naver:
+            authorizationUri: test-uri
+            token-uri: token-uri
+            user-info-uri: user-info-uri
+            user-name-attribute: user-name
+
+logging.level:
+  org.hibernate.SQL: debug
