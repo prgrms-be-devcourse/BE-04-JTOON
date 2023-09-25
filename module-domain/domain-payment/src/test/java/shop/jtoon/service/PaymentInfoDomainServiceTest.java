@@ -38,7 +38,7 @@ class PaymentInfoDomainServiceTest {
                 .isThrownBy(() -> paymentInfoDomainService.validatePaymentInfo(itemName, amount));
     }
 
-    @DisplayName("validatePaymentInfo - 결제 정보의 쿠키 가격과 실제 서버에 존재하는 쿠키 가격이 다를 때, - InvalidRequestException")
+    @DisplayName("validatePaymentInfo - 결제 정보의 쿠키 가격과 실제 서버에서 알고 있는 쿠키 가격이 다를 때, - InvalidRequestException")
     @Test
     void validatePaymentInfo_InvalidRequestException() {
         // When, Then

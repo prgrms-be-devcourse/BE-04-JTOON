@@ -7,7 +7,7 @@ import shop.jtoon.payment.request.PaymentReq;
 
 import java.math.BigDecimal;
 
-public class CreatorFactory {
+public class PaymentFactory {
 
     public static PaymentInfo createPaymentInfo(String impUid, String merchantUid, Member member) {
         return PaymentInfo.builder()
@@ -27,6 +27,19 @@ public class CreatorFactory {
                 .payMethod("card")
                 .itemName(CookieItem.COOKIE_ONE.getItemName())
                 .amount(CookieItem.COOKIE_ONE.getAmount())
+                .buyerEmail(email)
+                .buyerName("홍도산")
+                .buyerPhone("01012311231")
+                .build();
+    }
+
+    public static PaymentReq createPaymentReq(String impUid, String merchantUid, BigDecimal amount, String email) {
+        return PaymentReq.builder()
+                .impUid(impUid)
+                .merchantUid(merchantUid)
+                .payMethod("card")
+                .itemName(CookieItem.COOKIE_ONE.getItemName())
+                .amount(amount)
                 .buyerEmail(email)
                 .buyerName("홍도산")
                 .buyerPhone("01012311231")
