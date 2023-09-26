@@ -38,7 +38,7 @@
 │   └── 결제 내역 조회
 │
 ├── 웹툰
-│   ├── 웹툰 생성 (작가 권한 필요)
+│   ├── 웹툰 생성
 │   ├── 회차 생성
 │   ├── s3 이미지 업로드
 │   ├── s3 이미지 삭제
@@ -130,6 +130,19 @@
 
 <br><br>
 
-## 🌈 협업을 잘하는 방법
+## 🌈 협업
 
 <img width="1060" alt="image" src="https://github.com/prgrms-be-devcourse/BE-04-JTOON/assets/87688023/db950edb-df7a-455f-9980-d95ded1d5b4e">
+
+### Git Convention
+- 기본적으로 Git flow 전략 채택
+- JIRA 티켓 발급을 통한 커밋 관리
+  - `[JT-1] Commit Name: Commit-Message`
+- [Git convention 노션 링크](https://www.notion.so/backend-devcourse/Git-Convention-24ad4010aaa14422a01f9e60f1fd60ce?pvs=4)
+
+<br>
+
+### Code Convention
+- 기본적으로 Naver Code Convention 채택
+- 클래스 밑 무조건 한줄 띄우기, Builder 패턴, Validator, Lombok 등 구체적으로 명시
+- [Code convention 노션 링크](https://www.notion.so/backend-devcourse/Git-Convention-24ad4010aaa14422a01f9e60f1fd60ce?pvs=4)
