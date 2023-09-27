@@ -4,9 +4,12 @@ import shop.jtoon.entity.CookieItem;
 import shop.jtoon.entity.Member;
 import shop.jtoon.entity.PaymentInfo;
 import shop.jtoon.payment.request.CancelReq;
+import shop.jtoon.payment.request.ConditionReq;
 import shop.jtoon.payment.request.PaymentReq;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PaymentFactory {
 
@@ -54,6 +57,24 @@ public class PaymentFactory {
                 .reason("reason")
                 .checksum(CookieItem.COOKIE_ONE.getAmount())
                 .refundHolder(paymentReq.buyerEmail())
+                .build();
+    }
+
+    public static CancelReq createCancelReq(String impUid, String merchantUid, String name) {
+        return CancelReq.builder()
+                .impUid(impUid)
+                .merchantUid(merchantUid)
+                .reason("reason")
+                .checksum(CookieItem.COOKIE_ONE.getAmount())
+                .refundHolder(name)
+                .build();
+    }
+
+    public static ConditionReq createConditionReq(String... merchantUid) {
+        List<String> merchantsUid = new ArrayList<>(List.of(merchantUid));
+
+        return ConditionReq.builder()
+                .merchantsUid(merchantsUid)
                 .build();
     }
 }

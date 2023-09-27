@@ -500,13 +500,100 @@ Content-Length: 22
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_결제_취소">결제 취소</h3>
+<div class="literalblock">
+<div class="content">
+<pre>1) 결제 금액(IamportClient에서 제공)과 취소될 금액(checksum)를 비교해 검증합니다.
+2) 검증 후 결제 취소합니다.</pre>
+</div>
+</div>
+<h4 id="_요청_2" class="discrete">요청</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /payments/cancel HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 137
+Host: localhost:8080
+
+{
+  "impUid" : "impUid123",
+  "merchantUid" : "merchant123",
+  "reason" : "reason",
+  "checksum" : 1000,
+  "refundHolder" : "홍도산"
+}</code></pre>
+</div>
+</div>
+<h4 id="_응답_2" class="discrete">응답</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 500 Internal Server Error
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 22
+
+{
+  "message" : null
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_결제_내역_조회">결제 내역 조회</h3>
+<div class="literalblock">
+<div class="content">
+<pre>1) 데이터베이스에 저장된 결제 내역을 조회합니다.</pre>
+</div>
+</div>
+<h4 id="_요청_3" class="discrete">요청</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /payments/search HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 43
+Host: localhost:8080
+
+{
+  "merchantsUid" : [ "empty merchant" ]
+}</code></pre>
+</div>
+</div>
+<h4 id="_응답_3" class="discrete">응답</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 3
+
+[ ]</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-09-25 16:39:36 +0900
+Last updated 2023-09-27 15:45:23 +0900
 </div>
 </div>
 </body>
