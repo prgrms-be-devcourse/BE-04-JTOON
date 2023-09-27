@@ -1,4 +1,5 @@
 == 결제(Payment)
+
  결제에 대한 검증/등록/조회/취소 기능을 제공합니다.
 
 === 결제 검증 및 생성
@@ -17,3 +18,32 @@ include::{snippets}/payments/validation/http-request.adoc[]
 ==== 응답
 
 include::{snippets}/payments/validation/http-response.adoc[]
+
+=== 결제 취소
+
+ 1) 결제 금액(IamportClient에서 제공)과 취소될 금액(checksum)를 비교해 검증합니다.
+ 2) 검증 후 결제 취소합니다.
+
+[discrete]
+==== 요청
+
+include::{snippets}/payments/cancel/http-request.adoc[]
+
+[discrete]
+==== 응답
+
+include::{snippets}/payments/cancel/http-response.adoc[]
+
+=== 결제 내역 조회
+
+ 1) 데이터베이스에 저장된 결제 내역을 조회합니다.
+
+[discrete]
+==== 요청
+
+include::{snippets}/payments/search/http-request.adoc[]
+
+[discrete]
+==== 응답
+
+include::{snippets}/payments/search/http-response.adoc[]
