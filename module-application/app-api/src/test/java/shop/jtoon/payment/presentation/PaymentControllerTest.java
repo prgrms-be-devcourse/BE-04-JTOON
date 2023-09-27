@@ -20,6 +20,7 @@ import shop.jtoon.exception.IamportException;
 import shop.jtoon.factory.MemberFactory;
 import shop.jtoon.factory.PaymentFactory;
 import shop.jtoon.factory.PaymentSnippetFactory;
+import shop.jtoon.payment.request.CancelReq;
 import shop.jtoon.payment.request.PaymentReq;
 import shop.jtoon.repository.MemberRepository;
 import shop.jtoon.repository.PaymentInfoRepository;
@@ -94,7 +95,7 @@ class PaymentControllerTest {
                 .andExpect(content().string(paymentReq.amount().toString()));
     }
 
-    @DisplayName("POST: /payments/validation - 결제 승인 정보가 조회되지 않거나 실제 결제 금액과 요청 금액이 다를 때, - IamportException")
+    @DisplayName("POST: /payments/validation - 아임포트 서버에서 결제 정보가 조회되지 않거나, 조회된 결제 금액과 환불될 금액이 다를 때, - IamportException")
     @WithCurrentUser
     @Test
     void validatePayment_IamportException() throws Exception {
@@ -116,7 +117,7 @@ class PaymentControllerTest {
                 .andExpect(status().isInternalServerError());
     }
 
-    @DisplayName("POST: /payments/validation - 결제 정보의 쿠키 가격과 실제 서버에서 알고 있는 쿠키 가격이 다를 때, - InvalidRequestException")
+    @DisplayName("POST: /payments/validation - 결제된 금액과 서버에서 알고 있는 금액이 다를 때, - InvalidRequestException")
     @WithCurrentUser
     @Test
     void validatePayment_InvalidRequestException() throws Exception {
@@ -187,5 +188,74 @@ class PaymentControllerTest {
                         PaymentSnippetFactory.PAYMENT_REQUEST))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value(PAYMENT_MERCHANT_UID_DUPLICATED.getMessage()));
+    }
+
+    @DisplayName("POST: /payments/cancel - 결제 취소 요청 후 결제 취소 정보에 대해 검증 및 취소 요청이 성공적으로 됐을 때, - Void")
+    @Test
+    void cancelPayment_Void() throws Exception {
+        // Given
+        CancelReq cancelReq = PaymentFactory.createCancelReq(impUid, merchantUid, member.getName());
+        willDoNothing()
+                .given(iamportService)
+                .validateIamport(any(String.class), any(BigDecimal.class));
+        willDoNothing()
+                .given(iamportService)
+                .cancelIamport(any(String.class), any(String.class), any(BigDecimal.class), any(String.class));
+
+        // When, Then
+        mockMvc.perform(post("/payments/cancel")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cancelReq)))
+                .andDo(print())
+                .andDo(document("payments/cancel",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        PaymentSnippetFactory.CANCEL_REQUEST))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("POST: /payments/cancel - 아임포트 서버에서 결제 취소 요청을 실패할 때, - IamportException")
+    @Test
+    void cancelPayment_IamportException() throws Exception {
+        // Given
+        CancelReq cancelReq = PaymentFactory.createCancelReq(impUid, merchantUid, member.getName());
+        willThrow(IamportException.class)
+                .given(iamportService)
+                .validateIamport(any(String.class), any(BigDecimal.class));
+
+        // When, Then
+        mockMvc.perform(post("/payments/cancel")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cancelReq)))
+                .andDo(print())
+                .andDo(document("payments/cancel",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        PaymentSnippetFactory.CANCEL_REQUEST))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @DisplayName("POST: /payments/cancel - 아임포트 서버에서 조회된 결제 금액과 환불될 금액이 다를 때, - IamportException")
+    @Test
+    void cancelPayment_validate_IamportException() throws Exception {
+        // Given
+        CancelReq cancelReq = PaymentFactory.createCancelReq(impUid, merchantUid, member.getName());
+        willDoNothing()
+                .given(iamportService)
+                .validateIamport(any(String.class), any(BigDecimal.class));
+        willThrow(IamportException.class)
+                .given(iamportService)
+                .cancelIamport(any(String.class), any(String.class), any(BigDecimal.class), any(String.class));
+
+        // When, Then
+        mockMvc.perform(post("/payments/cancel")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cancelReq)))
+                .andDo(print())
+                .andDo(document("payments/cancel",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        PaymentSnippetFactory.CANCEL_REQUEST))
+                .andExpect(status().isInternalServerError());
     }
 }

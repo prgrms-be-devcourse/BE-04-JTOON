@@ -18,4 +18,12 @@ public class PaymentSnippetFactory {
             fieldWithPath("buyerName").type(STRING).description("구매자 이름"),
             fieldWithPath("buyerPhone").type(STRING).description("구매자 전화번호")
     );
+
+    public static final RequestFieldsSnippet CANCEL_REQUEST = requestFields(
+            fieldWithPath("impUid").type(STRING).description("포트원 결제 고유번호"),
+            fieldWithPath("merchantUid").type(STRING).description("가맹점 주문번호"),
+            fieldWithPath("reason").type(STRING).description("환불 사유"),
+            fieldWithPath("checksum").type(NUMBER).description("환불 가능 금액"),
+            fieldWithPath("refundHolder").type(STRING).description("환불 수령자")
+    );
 }

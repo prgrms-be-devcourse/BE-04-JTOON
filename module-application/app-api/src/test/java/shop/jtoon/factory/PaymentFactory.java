@@ -56,4 +56,14 @@ public class PaymentFactory {
                 .refundHolder(paymentReq.buyerEmail())
                 .build();
     }
+
+    public static CancelReq createCancelReq(String impUid, String merchantUid, String name) {
+        return CancelReq.builder()
+                .impUid(impUid)
+                .merchantUid(merchantUid)
+                .reason("reason")
+                .checksum(CookieItem.COOKIE_ONE.getAmount())
+                .refundHolder(name)
+                .build();
+    }
 }
